@@ -1,0 +1,723 @@
+/* ===========================================================
+   Galería de arte — estética de sala de exposición
+   Pared oscura · obras enmarcadas · serif Cormorant · acento latón
+   =========================================================== */
+
+.art-gallery,
+.artwork {
+    --wall: #0a0a0b;
+    --wall-2: #141416;
+    --mat: #f4f1e9;          /* paspartú */
+    --ink: #ece8df;          /* texto claro */
+    --muted: #9b968a;
+    --brass: #c2a878;        /* acento latón sobrio */
+    --line: rgba(255, 255, 255, 0.08);
+
+    min-height: 100vh;
+    background:
+        radial-gradient(140% 60% at 50% -10%, #18181b 0%, transparent 60%),
+        var(--wall);
+    color: var(--ink);
+    font-family: 'Jost', sans-serif;
+    padding: 90px 32px 110px;
+}
+
+/* ---------- Cabecera ---------- */
+.art-gallery .ag-header {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 56px;
+}
+
+    .ag-eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        font-size: 0.72rem;
+        font-weight: 500;
+        color: var(--brass);
+        margin: 0 0 14px;
+    }
+
+    .art-gallery .ag-header h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 500;
+        font-size: clamp(2.6rem, 6vw, 4rem);
+        line-height: 1.05;
+        margin: 0;
+        color: #fff;
+        letter-spacing: 0.5px;
+    }
+
+    .ag-sub {
+        color: var(--muted);
+        font-weight: 300;
+        font-size: 1rem;
+        margin: 14px 0 0;
+    }
+
+    .ag-rule {
+        display: block;
+        width: 56px;
+        height: 1px;
+        margin: 30px auto 0;
+        background: var(--brass);
+    }
+
+    /* Botón "Subir obra" (vista Mis obras) */
+    .art-gallery .ag-upload {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 28px;
+        text-decoration: none;
+        color: #11100c;
+        background: var(--brass);
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 14px 30px;
+        border-radius: 2px;
+        transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+        .art-gallery .ag-upload:hover {
+            background: #d4bd92;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(194, 168, 120, 0.25);
+        }
+
+/* ---------- Filtros / colecciones ---------- */
+.ag-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 28px;
+    margin-bottom: 28px;
+}
+
+    .ag-filters a {
+        position: relative;
+        text-decoration: none;
+        color: var(--muted);
+        font-size: 0.86rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 6px 2px;
+        transition: color 0.25s ease;
+    }
+
+        .ag-filters a span {
+            font-size: 0.66rem;
+            vertical-align: super;
+            color: var(--brass);
+        }
+
+        .ag-filters a::after {
+            content: "";
+            position: absolute;
+            left: 0; bottom: 0;
+            width: 0; height: 1px;
+            background: var(--brass);
+            transition: width 0.3s ease;
+        }
+
+        .ag-filters a:hover { color: var(--ink); }
+        .ag-filters a.active { color: #fff; }
+        .ag-filters a.active::after,
+        .ag-filters a:hover::after { width: 100%; }
+
+/* ---------- Gestión de colecciones (artista) ---------- */
+.ag-manage {
+    max-width: 720px;
+    margin: 0 auto 50px;
+    text-align: center;
+}
+
+    .ag-manage-toggle {
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-family: inherit;
+        font-size: 0.78rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 10px 20px;
+        border-radius: 2px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+        .ag-manage-toggle:hover,
+        .ag-manage-toggle.open {
+            color: var(--ink);
+            border-color: var(--brass);
+        }
+
+        .ag-manage-toggle > i { margin-right: 8px; color: var(--brass); }
+
+    .ag-manage-panel {
+        margin-top: 18px;
+        padding: 28px;
+        text-align: left;
+        background: var(--wall-2);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+    }
+
+    .ag-cat-add,
+    .ag-cat-edit { display: flex; gap: 8px; }
+
+    .ag-cat-add { margin-bottom: 20px; }
+
+    .ag-manage-panel input[type="text"] {
+        flex: 1;
+        padding: 11px 14px;
+        background: var(--wall);
+        border: 1px solid var(--line);
+        border-radius: 2px;
+        color: var(--ink);
+        font-family: inherit;
+        font-size: 0.9rem;
+        outline: none;
+        transition: border-color 0.2s ease;
+    }
+
+        .ag-manage-panel input[type="text"]:focus { border-color: var(--brass); }
+
+    .ag-manage-panel button {
+        border: none;
+        border-radius: 2px;
+        padding: 0 16px;
+        background: var(--brass);
+        color: #1a1813;
+        font-family: inherit;
+        font-size: 0.82rem;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        white-space: nowrap;
+    }
+
+        .ag-manage-panel button:hover { background: #d4bd92; }
+
+    .ag-cat-list { list-style: none; margin: 0 0 18px; padding: 0; }
+
+        .ag-cat-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .ag-cat-list .ag-cat-edit { flex: 1; }
+
+        .ag-cat-list .ag-cat-edit button {
+            background: transparent;
+            color: var(--muted);
+            padding: 0 10px;
+        }
+
+            .ag-cat-list .ag-cat-edit button:hover { color: var(--brass); }
+
+        .ag-cat-count {
+            font-size: 0.78rem;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .ag-cat-del {
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+            .ag-cat-del:hover { color: #d98c8c; }
+
+        .ag-muted { color: var(--muted); border: none; justify-content: center; }
+
+    .ag-add-work {
+        display: inline-block;
+        text-decoration: none;
+        color: var(--brass);
+        font-size: 0.82rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+        .ag-add-work:hover { color: #d4bd92; }
+
+/* ---------- Pared de obras (masonry) ---------- */
+.ag-wall {
+    max-width: 1640px;
+    margin: 0 auto;
+    columns: 3 420px;
+    column-gap: 64px;
+}
+
+    .ag-piece {
+        margin: 0 0 72px;
+        break-inside: avoid;
+    }
+
+    .ag-frame {
+        display: block;
+        position: relative;
+        background: var(--mat);
+        padding: 22px;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        box-shadow:
+            0 2px 4px rgba(0, 0, 0, 0.4),
+            0 26px 55px rgba(0, 0, 0, 0.55);
+        transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                    box-shadow 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        will-change: transform;
+    }
+
+        /* Lienzo: contiene el zoom de la obra y el velo */
+        .ag-canvas {
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ag-frame img {
+            display: block;
+            width: 100%;
+            height: auto;
+            transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                        filter 0.6s ease;
+        }
+
+        .ag-frame::after {
+            /* bisel interior del marco, por encima de la obra */
+            content: "";
+            position: absolute;
+            inset: 22px;
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        /* Velo elegante sobre la obra */
+        .ag-hover {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            display: flex;
+            align-items: flex-end;
+            padding: 26px;
+            background: linear-gradient(to top,
+                rgba(8, 8, 9, 0.72) 0%,
+                rgba(8, 8, 9, 0.12) 45%,
+                transparent 70%);
+            opacity: 0;
+            transition: opacity 0.55s ease;
+        }
+
+            .ag-hover-inner {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                transform: translateY(14px);
+                transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            .ag-hover-cat {
+                color: var(--mat);
+                font-size: 0.7rem;
+                letter-spacing: 2.5px;
+                text-transform: uppercase;
+                opacity: 0.85;
+            }
+
+            .ag-hover-view {
+                display: inline-flex;
+                align-items: center;
+                gap: 9px;
+                color: #fff;
+                font-size: 0.74rem;
+                letter-spacing: 2.5px;
+                text-transform: uppercase;
+                padding-bottom: 3px;
+                border-bottom: 1px solid var(--brass);
+            }
+
+                .ag-hover-view i { color: var(--brass); transition: transform 0.4s ease; }
+
+    /* ---------- Estado HOVER profesional ---------- */
+    .ag-piece:hover .ag-frame {
+        transform: translateY(-10px);
+        box-shadow:
+            0 6px 14px rgba(0, 0, 0, 0.45),
+            0 50px 90px rgba(0, 0, 0, 0.7);
+    }
+
+    .ag-piece:hover .ag-frame img { transform: scale(1.07); }
+    .ag-piece:hover .ag-hover { opacity: 1; }
+    .ag-piece:hover .ag-hover-inner { transform: translateY(0); }
+    .ag-piece:hover .ag-hover-view i { transform: translateX(4px); }
+
+    .ag-piece-tools {
+        position: absolute;
+        top: 32px; right: 32px;
+        z-index: 4;
+        display: flex;
+        gap: 8px;
+        opacity: 0;
+        transform: translateY(-4px);
+        transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+        .ag-piece:hover .ag-piece-tools { opacity: 1; transform: translateY(0); }
+
+    .ag-tool {
+        width: 38px; height: 38px;
+        display: grid;
+        place-items: center;
+        background: rgba(10, 10, 11, 0.9);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 50%;
+        font-size: 0.76rem;
+        cursor: pointer;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+        .ag-tool:hover { background: var(--brass); color: #1a1813; border-color: var(--brass); }
+        .ag-tool-del:hover { background: #c0392b; color: #fff; border-color: #c0392b; }
+
+    .ag-piece figcaption {
+        text-align: center;
+        margin-top: 22px;
+    }
+
+        .ag-piece figcaption h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 1.6rem;
+            color: #fff;
+            margin: 0 0 5px;
+            transition: color 0.3s ease;
+        }
+
+        .ag-piece:hover figcaption h3 { color: var(--brass); }
+
+        .ag-piece figcaption p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.88rem;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+    .ag-empty {
+        text-align: center;
+        color: var(--muted);
+        font-size: 1.1rem;
+        font-style: italic;
+    }
+
+    /* ---------- Modo reordenar (Mi galería) ---------- */
+    .ag-reorder-hint {
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.86rem;
+        margin: 0 0 36px;
+    }
+
+        .ag-reorder-hint i { color: var(--brass); margin-right: 7px; }
+
+    .ag-wall--reorder {
+        columns: auto;                 /* anula el masonry */
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 28px;
+    }
+
+        .ag-wall--reorder .ag-piece { margin: 0; break-inside: auto; }
+        .ag-wall--reorder .ag-canvas img { height: 220px; object-fit: cover; }
+        .ag-wall--reorder .ag-piece-tools { opacity: 1; transform: none; }
+
+    .ag-piece.dragging { opacity: 0.4; }
+
+    .ag-tool-move { cursor: grab; }
+    .ag-tool-move:active { cursor: grabbing; }
+
+/* ---------- Paginación ---------- */
+.ag-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 26px;
+    margin-top: 40px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+}
+
+    .ag-pagination a {
+        width: 46px; height: 46px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        color: var(--ink);
+        text-decoration: none;
+        border: 1px solid var(--line);
+        transition: all 0.25s ease;
+    }
+
+        .ag-pagination a:hover {
+            border-color: var(--brass);
+            color: var(--brass);
+        }
+
+/* ===========================================================
+   Página de obra individual
+   =========================================================== */
+.artwork { padding-top: 60px; }
+
+.aw-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    transition: color 0.25s ease;
+}
+
+    .aw-back:hover { color: var(--brass); }
+
+.aw-stage {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 64px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: start;
+}
+
+    .aw-frame {
+        background: var(--mat);
+        padding: 28px;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.4), 0 40px 80px rgba(0,0,0,0.6);
+        position: relative;
+    }
+
+        .aw-frame::after {
+            content: "";
+            position: absolute;
+            inset: 28px;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15);
+            pointer-events: none;
+        }
+
+        .aw-frame img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+/* Ficha de la obra */
+.aw-info { padding-top: 10px; }
+
+    .aw-owner {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 26px;
+        padding-bottom: 22px;
+        border-bottom: 1px solid var(--line);
+    }
+
+        .aw-owner a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 0.74rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 9px 16px;
+            border: 1px solid var(--line);
+            border-radius: 2px;
+            transition: all 0.2s ease;
+        }
+
+            .aw-owner a:hover { color: var(--brass); border-color: var(--brass); }
+            .aw-owner .aw-owner-del:hover { color: #d98c8c; border-color: #d98c8c; }
+
+    .aw-collection {
+        display: inline-block;
+        text-decoration: none;
+        color: var(--brass);
+        font-size: 0.74rem;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+    }
+
+        .aw-collection:hover { text-decoration: underline; }
+
+    .aw-info h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 500;
+        font-size: 2.8rem;
+        line-height: 1.1;
+        color: #fff;
+        margin: 0 0 6px;
+    }
+
+    .aw-artist {
+        color: var(--muted);
+        font-style: italic;
+        font-weight: 300;
+        margin: 0 0 28px;
+    }
+
+    .aw-desc {
+        color: #cfcabf;
+        line-height: 1.8;
+        font-weight: 300;
+        margin: 0 0 30px;
+    }
+
+    .aw-specs {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0;
+        margin: 0 0 28px;
+        border-top: 1px solid var(--line);
+    }
+
+        .aw-specs dt {
+            padding: 13px 24px 13px 0;
+            color: var(--muted);
+            font-size: 0.74rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .aw-specs dd {
+            padding: 13px 0;
+            margin: 0;
+            color: var(--ink);
+            font-size: 0.98rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+    .aw-status {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+        .aw-avail, .aw-sold {
+            font-size: 0.82rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .aw-avail { color: #8fc7a0; }
+        .aw-sold  { color: var(--muted); }
+        .aw-avail > i, .aw-sold > i { font-size: 0.5rem; vertical-align: middle; margin-right: 7px; }
+
+        .aw-price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            color: #fff;
+            margin-left: auto;
+        }
+
+    .aw-enquire {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        background: var(--brass);
+        color: #1a1813;
+        font-size: 0.82rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 15px 30px;
+        border-radius: 2px;
+        transition: background 0.25s ease, transform 0.25s ease;
+    }
+
+        .aw-enquire:hover { background: #d4bd92; transform: translateY(-2px); }
+
+/* Obras relacionadas */
+.aw-related {
+    max-width: 1200px;
+    margin: 96px auto 0;
+    border-top: 1px solid var(--line);
+    padding-top: 48px;
+}
+
+    .aw-related h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 500;
+        font-size: 1.8rem;
+        color: #fff;
+        margin: 0 0 28px;
+        text-align: center;
+    }
+
+    .aw-related-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 28px;
+    }
+
+        .aw-related-grid a {
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .aw-related-grid img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            background: var(--mat);
+            padding: 8px;
+            box-shadow: 0 16px 30px rgba(0,0,0,0.5);
+            transition: transform 0.35s ease;
+        }
+
+        .aw-related-grid a:hover img { transform: translateY(-4px); }
+
+        .aw-related-grid span {
+            display: block;
+            margin-top: 12px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: var(--ink);
+        }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+    .ag-wall { columns: 2 360px; column-gap: 48px; }
+}
+
+@media (max-width: 760px) {
+    .ag-wall { columns: 1; column-gap: 0; }
+    .ag-piece { margin-bottom: 56px; }
+    .aw-stage { grid-template-columns: 1fr; gap: 36px; }
+    .aw-info h1 { font-size: 2.2rem; }
+}
+
+@media (max-width: 520px) {
+    .art-gallery, .artwork { padding: 64px 18px 80px; }
+    .ag-frame { padding: 16px; }
+    .ag-frame::after { inset: 16px; }
+}

@@ -1,0 +1,129 @@
+/* ==========================
+   SECCIÓN EDITAR CATEGORÍA
+========================== */
+.editcategory {
+    width: 100%;
+    max-width: 500px;
+    margin: 4rem auto;
+    padding: 2.5rem 2rem;
+    background: linear-gradient(135deg, #1c1c28, #2a2a3d);
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    color: #f1f5f9;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+}
+
+.editcategory h2 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 2rem;
+    background: linear-gradient(90deg, #3cffb0, #7a5cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ==========================
+   FORMULARIO
+========================== */
+.editcategory form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Campos individuales */
+.editcategory .form-field {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.editcategory label {
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.editcategory input[type="text"] {
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #f8fafc;
+    font-size: 1rem;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.editcategory input[type="text"]::placeholder {
+    color: #94a3b8;
+}
+
+.editcategory input[type="text"]:focus {
+    background: rgba(255, 255, 255, 0.22);
+    box-shadow: 0 0 0 2px #3cffb066;
+}
+
+/* ==========================
+   BOTONES
+========================== */
+.editcategory .form-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.editcategory button,
+.editcategory a {
+    padding: 12px 28px;
+    border-radius: 999px;
+    border: none;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    text-decoration: none;
+    text-align: center;
+}
+
+/* Botón guardar */
+.editcategory button {
+    background: linear-gradient(135deg, #3cffb0, #7a5cff);
+    color: #020617;
+}
+
+.editcategory button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(60, 255, 176, 0.35);
+}
+
+/* Enlace cancelar */
+.editcategory a {
+    background: rgba(255, 255, 255, 0.14);
+    color: #cbd5e1;
+}
+
+.editcategory a:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+@media (max-width: 600px) {
+    .editcategory {
+        margin: 2rem 1rem;
+        padding: 2rem 1.5rem;
+    }
+
+    .editcategory .form-buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+}

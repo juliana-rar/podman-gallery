@@ -1,0 +1,17 @@
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/blogs/categoty_blog_card.css' %}">
+{% endblock extra_css %}
+{% block content %}
+<div class="category_blog_card">
+    <a href="{% url 'blog:blog_details' blog.slug %}">
+        <div>
+            <img class="fixed-size" src="{{ blog.banner.url }}" alt="">
+        </div>
+        <div>
+            <span>{{ blog.category.title }}</span>
+            <h4>{{ blog.title }}</h4>
+        </div>
+    </a>
+</div>
+{% endblock content %}

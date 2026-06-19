@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 from django.contrib.auth.decorators import login_required
@@ -8,6 +8,8 @@ from .models import Blog
 from django.http import JsonResponse
 from django.db.models import Q
 from user_profile.models import User
+from events.models import Event, EventCategory
+from django.shortcuts import render, get_object_or_404, redirect
 
 from .models import (
     Blog,
@@ -19,11 +21,13 @@ from .models import (
 from .forms import TextForm, AddBlogForm
 
 def home(request):
-    blogs = Blog.objects.order_by('-created_date')[:3]
-    tags = Tag.objects.order_by('-created_date')
+    blogs = Blog.objects.order_by('-created_date')[:4]
+    events = Event.objects.order_by('-id')[:4]
+    event_categories = EventCategory.objects.all()
     context = {
         "blogs" : blogs,
-        "tags" : tags
+        "events": events,
+        "event_categories": event_categories,
     }
     return render(request, 'home.html', context)
 
@@ -32,6 +36,7 @@ def blogs(request):
     tags = Tag.objects.order_by('-created_date')
     page = request.GET.get('page', 1)
     paginator = Paginator(queryset, 4)
+    
     
     try:
         blogs = paginator.page(page)
@@ -44,16 +49,17 @@ def blogs(request):
     context = {
         "blogs" : blogs,
         "tags" : tags,
+        "page_obj": blogs,
         "paginator" : paginator
     }
-    return render(request, 'blogs.html', context)
+    return render(request, 'blogs/blogs.html', context)
 
 def category_blogs(request, slug):
     category = get_object_or_404(Category, slug=slug)
     queryset = category.category_blogs.all()
     tags = Tag.objects.order_by("-created_date")[:5]
     page = request.GET.get('page', 1)
-    paginator = Paginator(queryset, 2)
+    paginator = Paginator(queryset, 6) 
     all_blogs = Blog.objects.order_by('-created_date')[:5]
     
     try:
@@ -71,7 +77,7 @@ def category_blogs(request, slug):
         "category": category
 
     }
-    return render(request, 'category_blogs.html', context)
+    return render(request, 'blogs/category_blogs.html', context)
 
 
 def tag_blogs(request, slug):
@@ -88,7 +94,7 @@ def tag_blogs(request, slug):
         blogs = paginator.page(1)
     except PageNotAnInteger:
         blogs = paginator.page(1)
-        return redirect('blogs')
+        return redirect('blog:blogs')
       
     context = {
         "blogs": blogs,
@@ -96,7 +102,7 @@ def tag_blogs(request, slug):
         "all_blogs": all_blogs
 
     }
-    return render(request, 'category_blogs.html', context)
+    return render(request, 'blogs/category_blogs.html', context)
 
 
 def blog_details(request, slug):
@@ -106,7 +112,7 @@ def blog_details(request, slug):
     related_blogs = category.category_blogs.all()
 
     tags = Tag.objects.order_by('-created_date')[:5]
-    recent_posts = Blog.objects.order_by('-created_date')[:5]  # Obteen los 5 posts mas recientes
+    recent_posts = Blog.objects.order_by('-created_date')[:5]
 
     liked_by = request.user in blog.likes.all()
 
@@ -118,7 +124,7 @@ def blog_details(request, slug):
                 blog=blog,
                 text=form.cleaned_data.get('text')
             )
-            return redirect('blog_details', slug=slug)
+            return redirect('blog:blog_details', slug=slug)
     context = {
         "blog": blog,
         "related_blogs": related_blogs,
@@ -128,7 +134,7 @@ def blog_details(request, slug):
         "recent_posts": recent_posts  
 
     }
-    return render(request, 'blog_details.html', context)
+    return render(request, 'blogs/blog_details.html', context)
 
 
 @login_required(login_url="login")
@@ -144,7 +150,7 @@ def add_reply(request, blog_id, comment_id):
                 comment=comment,
                 text=form.cleaned_data.get('text')
             )
-    return redirect('blog_details', slug=blog.slug)
+    return redirect('blog:blog_details', slug=blog.slug)
 
 @login_required(login_url='login')
 def like_blog(request, pk):
@@ -182,7 +188,7 @@ def search_blogs(request):
         }
         return render(request, 'search.html', context)
     else:
-        return redirect('home')
+        return redirect('blog:home')
     
 
 
@@ -199,11 +205,11 @@ def my_blogs(request):
        
         blog = get_object_or_404(Blog, pk=delete)
         if request.user.pk != blog.user.pk:
-            return redirect('home')
+            return redirect('blog:home')
         
         blog.delete()
         messages.success(request, "your blog has been deleted!")
-        return redirect('my_blogs')
+        return redirect('blogs:my_blogs')
 
     try:
         blogs = paginator.page(page)
@@ -215,10 +221,11 @@ def my_blogs(request):
     
     context = {
         "blogs": blogs,
+        "page_obj": blogs,
         "paginator": paginator
     }
 
-    return render(request, 'my_blogs.html', context)
+    return render(request, 'blogs/my_blogs.html', context)
 
 
 
@@ -236,6 +243,7 @@ def add_blog(request):
             category = get_object_or_404(Category, pk=request.POST['category'])
             blog = form.save(commit=False)
             blog.user = user
+            
             blog.category = category
             blog.save()
 
@@ -258,7 +266,7 @@ def add_blog(request):
 
 
             messages.success(request, "blog addedd successfully")
-            return redirect('blog_details', slug=blog.slug)
+            return redirect('blog:blog_details', slug=blog.slug)
         else:
             print(form.errors)
 
@@ -266,7 +274,7 @@ def add_blog(request):
         "form": form
 
     }
-    return render(request, 'add_blog.html', context)
+    return render(request, 'blogs/add_blog.html', context)
 
 @login_required(login_url='login')
 def update_blog(request, slug):
@@ -279,7 +287,7 @@ def update_blog(request, slug):
         if form.is_valid():
             
             if request.user.pk != blog.user.pk:
-                return redirect('home')
+                return redirect('blog:home')
 
             tags = request.POST['tags'].split(',')
             user = get_object_or_404(User, pk=request.user.pk)
@@ -307,16 +315,17 @@ def update_blog(request, slug):
                         blog.tags.add(new_tag)
 
             messages.success(request, "Blog updated successfully")
-            return redirect('blog_details', slug=blog.slug)
+            return redirect('blog:blog_details', slug=blog.slug)
         else:
             print(form.errors)
 
 
     context = {
         "form": form,
-        "blog": blog
+        "blog": blog,
+        'blog_categories': Category.objects.all().order_by('title')
     }
-    return render(request, 'update_blog.html', context)
+    return render(request, 'blogs/update_blog.html', context)
 
 
 def manage_categories(request):
@@ -324,10 +333,10 @@ def manage_categories(request):
         title = request.POST.get("title")
         if title:
             Category.objects.get_or_create(title=title)  
-        return redirect("manage_categories")
+        return redirect("blog:manage_categories")
 
     categories = Category.objects.all().order_by("-created_date")
-    return render(request, "manage_categories.html", {"categories": categories})
+    return render(request, "blogs/manage_categories.html", {"categories": categories})
 
 
 def edit_category(request, category_id):
@@ -337,11 +346,11 @@ def edit_category(request, category_id):
         if new_title:
             category.title = new_title
             category.save()
-            return redirect("manage_categories")  # volver a la lista
-    return render(request, "edit_category.html", {"category": category})
+            return redirect("blog:manage_categories")  # volver a la lista
+    return render(request, "blogs/edit_category.html", {"category": category})
 
 @login_required
 def delete_category(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     category.delete()
-    return redirect("manage_categories")
+    return redirect("blog:manage_categories")

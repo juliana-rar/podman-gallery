@@ -1,0 +1,120 @@
+/* ===========================================================
+   Hero Photos — gestión (lista de fotos de portada)
+   Complementa a gallery/add_image.css
+   =========================================================== */
+
+.hp-manage {
+    --brass: #c2a878;
+    --ink: #ece8df;
+    --muted: #9b968a;
+    --line: rgba(255, 255, 255, 0.08);
+
+    flex-direction: column;
+    align-items: center;
+}
+
+.hp-manage .gf-card { margin-bottom: 56px; }
+
+.hp-manage .hp-list-wrap {
+    width: 100%;
+    max-width: 1000px;
+}
+
+    .hp-manage .hp-list-wrap h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 500;
+        font-size: 1.8rem;
+        color: #fff;
+        margin: 0 0 24px;
+        text-align: center;
+    }
+
+.hp-manage .hp-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 22px;
+}
+
+.hp-manage .hp-card {
+    margin: 0;
+    background: #1c1a14;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.25s ease, opacity 0.25s ease;
+}
+
+    .hp-manage .hp-card.is-hidden { opacity: 0.5; }
+
+    .hp-manage .hp-card img {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        display: block;
+    }
+
+    .hp-manage .hp-card figcaption {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 16px;
+    }
+
+    .hp-manage .hp-card-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        overflow: hidden;
+    }
+
+        .hp-manage .hp-card-info strong {
+            color: var(--ink);
+            font-size: 0.92rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hp-manage .hp-card-info span {
+            color: var(--muted);
+            font-size: 0.72rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+    .hp-manage .hp-card-actions {
+        display: flex;
+        gap: 6px;
+        flex: 0 0 auto;
+    }
+
+        .hp-manage .hp-card-actions a {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: var(--muted);
+            text-decoration: none;
+            border: 1px solid var(--line);
+            transition: all 0.2s ease;
+        }
+
+            .hp-manage .hp-card-actions a:hover {
+                color: var(--brass);
+                border-color: var(--brass);
+            }
+
+            .hp-manage .hp-card-actions .hp-del:hover {
+                color: #d98c8c;
+                border-color: #d98c8c;
+            }
+
+.hp-manage .hp-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--muted);
+    font-style: italic;
+}

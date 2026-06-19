@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+    {% block extra_css %}
+        <link rel="stylesheet" href="{% static 'css/projects/idea_mejorar.css' %}">
+    {% endblock extra_css %}
+{% block content %}
+
+<div class="container-idea">
+  <h1>Mejora de tu idea </h1>
+
+  <div class="idea-card mb-5">
+    <div class="card-header">
+      <h3>Tu versión original</h3>
+    </div>
+    <div class="card-body">
+      <h4>{{ idea.titulo }}</h4>
+      <p>{{ idea.categoria|linebreaks }}</p>
+    </div>
+  </div>
+
+  <!-- Versión Mejorada -->
+  <div class="idea-card">
+    <div class="card-header">
+      <h3>Versión mejorada por IA <small>(en proceso...)</small></h3>
+    </div>
+    <div id="resultado-ia" class="card-body loading">
+      <div class="spinner-border text-primary" role="status"></div>
+      <span>Mejorando descripción profesionalmente...</span>
+    </div>
+  </div>
+
+  <!-- Botones -->
+  <div class="action-buttons">
+    <button id="btn-regenerar" class="btn-modern btn-regenerar">Regenerar</button>
+    <button id="btn-aceptar" class="btn-modern btn-aceptar">Aceptar y publicar</button>
+  </div>
+</div>
+
+<script>
+const ideaId = "{{ idea.id }}";
+const originalText = `{{ idea.categoria|escapejs }}`;
+
+async function mejorarConIA() {
+    const container = document.getElementById('resultado-ia');
+    container.innerHTML = '<div class="spinner-border text-primary" role="status"></div> Mejorando...';
+
+    try {
+        const res = await fetch('/api/mejorar-descripcion/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                texto: originalText,
+                idea_id: ideaId
+            })
+        });
+
+        const data = await res.json();
+        
+        if (data.ok) {
+            container.innerHTML = `<h5>Descripción profesional:</h5>
+                                  <p>${data.descripcion_mejorada.replace(/\n/g, '<br>')}</p>`;
+        } else {
+            container.innerHTML = '<p class="text-danger">Error al mejorar la descripción</p>';
+        }
+    } catch (e) {
+        container.innerHTML = '<p class="text-danger">No se pudo conectar con el servicio de IA</p>';
+    }
+}
+
+// Ejecutar al cargar la página
+document.addEventListener('DOMContentLoaded', mejorarConIA);
+
+// Botón regenerar
+document.getElementById('btn-regenerar')?.addEventListener('click', mejorarConIA);
+</script>
+
+{% endblock %}

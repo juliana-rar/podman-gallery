@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestionar hero{% endblock title %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/gallery/add_image.css' %}">
+<link rel="stylesheet" href="{% static 'css/herophotos/manage.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="gallery-form hp-manage">
+    <div class="gf-card">
+        <p class="gf-eyebrow">Portada</p>
+        <h1>Fotos del hero</h1>
+
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="gf-field">
+                <label><i class="fa-solid fa-image"></i> Imagen (apaisada, alta resolución)</label>
+                <label class="gf-drop" id="gfDrop">
+                    <input type="file" name="image" id="gfFile" accept="image/*" required hidden>
+                    <img id="gfPreview" alt="">
+                    <span id="gfPlaceholder"><i class="fa-solid fa-cloud-arrow-up"></i> Haz clic o arrastra una imagen aquí</span>
+                </label>
+                <p class="gf-err">{{ form.image.errors }}</p>
+            </div>
+
+            <div class="gf-field">
+                <label><i class="fa-solid fa-heading"></i> Título (opcional)</label>
+                <input type="text" name="title" value="{{ form.data.title|default:'' }}">
+            </div>
+
+            <div class="gf-field">
+                <label><i class="fa-solid fa-quote-left"></i> Subtítulo (opcional)</label>
+                <input type="text" name="subtitle" value="{{ form.data.subtitle|default:'' }}">
+            </div>
+
+            <div class="gf-row">
+                <div class="gf-field">
+                    <label><i class="fa-solid fa-arrow-down-1-9"></i> Orden</label>
+                    <input type="number" name="order" value="{{ form.data.order|default:'0' }}">
+                </div>
+                <div class="gf-field gf-check">
+                    <label class="gf-switch">
+                        <input type="checkbox" name="is_active" checked>
+                        <span></span> Visible en la portada
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="gf-submit"><i class="fa-solid fa-plus"></i> Añadir al hero</button>
+        </form>
+    </div>
+
+    <!-- Fotos existentes -->
+    <div class="hp-list-wrap">
+        <h2>En la portada</h2>
+        <div class="hp-list">
+            {% for photo in photos %}
+            <figure class="hp-card{% if not photo.is_active %} is-hidden{% endif %}">
+                <img src="{{ photo.image.url }}" alt="{{ photo.title }}">
+                <figcaption>
+                    <div class="hp-card-info">
+                        <strong>{{ photo.title|default:"(sin título)" }}</strong>
+                        <span>Orden {{ photo.order }}</span>
+                    </div>
+                    <div class="hp-card-actions">
+                        <a href="{% url 'herophotos:toggle_photo' photo.pk %}" title="{% if photo.is_active %}Ocultar{% else %}Mostrar{% endif %}">
+                            <i class="fa-solid {% if photo.is_active %}fa-eye{% else %}fa-eye-slash{% endif %}"></i>
+                        </a>
+                        <a href="{% url 'herophotos:delete_photo' photo.pk %}" class="hp-del" title="Eliminar"
+                           onclick="return confirm('¿Eliminar esta foto del hero?');">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </div>
+                </figcaption>
+            </figure>
+            {% empty %}
+            <p class="hp-empty">Aún no hay fotos en la portada.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<script>
+    const file = document.getElementById('gfFile');
+    const preview = document.getElementById('gfPreview');
+    const placeholder = document.getElementById('gfPlaceholder');
+    const drop = document.getElementById('gfDrop');
+    file.addEventListener('change', () => {
+        const f = file.files[0];
+        if (!f) return;
+        preview.src = URL.createObjectURL(f);
+        preview.style.display = 'block';
+        placeholder.style.display = 'none';
+        drop.classList.add('has-image');
+    });
+    ['dragover', 'dragenter'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('dragging'); }));
+    ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('dragging'); }));
+    drop.addEventListener('drop', e => {
+        if (e.dataTransfer.files.length) { file.files = e.dataTransfer.files; file.dispatchEvent(new Event('change')); }
+    });
+</script>
+{% endblock content %}

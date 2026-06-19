@@ -1,0 +1,78 @@
+﻿.update_event {
+    min-height: 100vh;
+    padding: 60px 20px;
+    background: #0a0a0a;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.update_event > div:nth-child(1) {
+    width: 100%;
+    max-width: 950px;
+    background: #111;
+    padding: 60px;
+    
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+/* Cada campo del form */
+.update_event form > div {
+    margin-bottom: 40px;
+}
+
+/* Label - centrado */
+.update_event label {
+    display: block;
+    margin-bottom: 16px;
+    font-weight: 700;
+    color: #70d2c1;
+    font-size: 1.2rem;
+    letter-spacing: 0.8px;
+    text-align: center;
+}
+
+/* Inputs, textarea y select */
+.update_event input[type="text"],
+.update_event input[type="file"],
+.update_event textarea,
+.update_event select {
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: none;
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 4px 10px rgba(0,0,0,0.4);
+}
+
+.update_event input:focus,
+.update_event textarea:focus,
+.update_event select:focus {
+    background: #222;
+    box-shadow: inset 0 4px 10px rgba(0,0,0,0.5), 0 0 0 3px rgba(112, 210, 193, 0.3);
+}
+
+
+@media (max-width: 768px) {
+    .update_event > div:nth-child(1) {
+        padding: 40px 30px;
+    }
+
+    .update_event .cke_editable {
+        min-height: 350px !important;
+    }
+
+    .update_event form > div:last-child > button {
+        max-width: 100%;
+        padding: 16px;
+    }
+
+    .update_event form > div:nth-child(4) img {
+        max-height: 250px;
+    }
+}

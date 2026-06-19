@@ -1,0 +1,41 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/blogs/my_blogs.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="my_blogs">
+    <div>
+        <!-- contenidor -->
+        <div>
+            <!-- grid de blogs -->
+            {% for blog in blogs %}
+            <div>
+                <!-- targeta -->
+                <img src="{{ blog.banner.url }}" alt="{{ blog.title }}">
+                <div>
+                    <!-- cos -->
+                    <p>
+                        {{ blog.title|truncatechars:30 }}
+                        <span>
+                            <a href="{% url 'blog:update_blog' blog.slug %}">
+
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="?delete={{ blog.pk }}">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </span>
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div>
+            {% include 'pagination.html' %}
+        </div>
+    </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,179 @@
+# -*- coding: utf-8 -*-
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib import messages
+from django.db.models import Count
+from django.http import JsonResponse
+from django.utils.text import slugify
+
+from .models import GalleryImage, GalleryCategory
+from .forms import GalleryImageForm
+
+
+def _paginate(request, queryset, per_page=12):
+    paginator = Paginator(queryset, per_page)
+    page = request.GET.get('page', 1)
+    try:
+        return paginator.page(page)
+    except PageNotAnInteger:
+        return paginator.page(1)
+    except EmptyPage:
+        return paginator.page(paginator.num_pages)
+
+
+def _gallery_context(request, queryset, active_slug=None, category=None, mine=False):
+    categories = (GalleryCategory.objects
+                  .annotate(num=Count('category_gallery'))
+                  .order_by('title'))
+    return {
+        "images": _paginate(request, queryset),
+        "categories": categories,
+        "total_count": queryset.count(),
+        "active_slug": active_slug,
+        "category": category,
+        "mine": mine,
+    }
+
+
+def gallery_list(request):
+    queryset = GalleryImage.objects.order_by('order', '-created_date')
+    context = _gallery_context(request, queryset)
+    return render(request, "gallery/gallery.html", context)
+
+
+def category_gallery(request, slug):
+    category = get_object_or_404(GalleryCategory, slug=slug)
+    queryset = category.category_gallery.all().order_by('order', '-created_date')
+    context = _gallery_context(request, queryset, active_slug=slug, category=category)
+    return render(request, "gallery/gallery.html", context)
+
+
+def image_details(request, slug):
+    image = get_object_or_404(GalleryImage, slug=slug)
+    related = (GalleryImage.objects
+               .filter(category=image.category)
+               .exclude(pk=image.pk)[:4]) if image.category else GalleryImage.objects.none()
+    context = {"image": image, "related": related}
+    return render(request, "gallery/image_details.html", context)
+
+
+@login_required(login_url="user_profile:login")
+def add_image(request):
+    form = GalleryImageForm()
+    gallery_categories = GalleryCategory.objects.all()
+
+    if request.method == "POST":
+        form = GalleryImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.save(commit=False)
+            image.user = request.user
+            image.save()
+            messages.success(request, "Obra publicada correctamente")
+            return redirect("gallery:gallery_list")
+        else:
+            print(form.errors)
+
+    context = {
+        "form": form,
+        "gallery_categories": gallery_categories,
+    }
+    return render(request, "gallery/add_image.html", context)
+
+
+@login_required(login_url='user_profile:login')
+def my_gallery(request):
+    queryset = request.user.user_gallery.all().order_by('order', '-created_date')
+    delete = request.GET.get('delete')
+
+    if delete:
+        image = get_object_or_404(GalleryImage, pk=delete)
+        if request.user.pk != image.user.pk:
+            return redirect('gallery:gallery_list')
+        image.delete()
+        messages.success(request, "Obra eliminada")
+        return redirect('gallery:my_gallery')
+
+    context = _gallery_context(request, queryset, mine=True)
+    return render(request, "gallery/gallery.html", context)
+
+
+@login_required(login_url='user_profile:login')
+def edit_image(request, pk):
+    image = get_object_or_404(GalleryImage, pk=pk)
+    if request.user.pk != image.user.pk:
+        return redirect('gallery:image_details', slug=image.slug)
+
+    form = GalleryImageForm(instance=image)
+    gallery_categories = GalleryCategory.objects.all()
+
+    if request.method == "POST":
+        form = GalleryImageForm(request.POST, request.FILES, instance=image)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Obra actualizada")
+            return redirect('gallery:image_details', slug=image.slug)
+        else:
+            print(form.errors)
+
+    context = {
+        "form": form,
+        "image": image,
+        "gallery_categories": gallery_categories,
+    }
+    return render(request, "gallery/edit_image.html", context)
+
+
+@login_required(login_url='user_profile:login')
+def reorder_gallery(request):
+    """Recibe el nuevo orden de las obras (lista de IDs) y lo guarda.
+    Solo afecta a obras del propio usuario."""
+    if request.method != "POST":
+        return JsonResponse({"ok": False}, status=405)
+
+    ids = [i for i in (request.POST.get("order", "").split(",")) if i]
+    for index, img_id in enumerate(ids):
+        GalleryImage.objects.filter(pk=img_id, user=request.user).update(order=index)
+    return JsonResponse({"ok": True, "count": len(ids)})
+
+
+@login_required(login_url='user_profile:login')
+def delete_image(request, pk):
+    image = get_object_or_404(GalleryImage, pk=pk)
+    if request.user.pk != image.user.pk:
+        return redirect('gallery:image_details', slug=image.slug)
+    image.delete()
+    messages.success(request, "Obra eliminada")
+    return redirect('gallery:gallery_list')
+
+
+# ---------- Gestión de categorías (desde la propia galería) ----------
+
+@login_required(login_url='user_profile:login')
+def manage_gallery_categories(request):
+    if request.method == "POST":
+        title = (request.POST.get("title") or "").strip()
+        if title:
+            GalleryCategory.objects.get_or_create(title=title, slug=slugify(title))
+            messages.success(request, "Colección creada")
+    return redirect("gallery:gallery_list")
+
+
+@login_required(login_url='user_profile:login')
+def edit_gallery_category(request, category_id):
+    category = get_object_or_404(GalleryCategory, id=category_id)
+    if request.method == "POST":
+        new_title = (request.POST.get("title") or "").strip()
+        if new_title:
+            category.title = new_title
+            category.save()
+            messages.success(request, "Colección actualizada")
+    return redirect("gallery:gallery_list")
+
+
+@login_required(login_url='user_profile:login')
+def delete_gallery_category(request, category_id):
+    category = get_object_or_404(GalleryCategory, id=category_id)
+    category.delete()
+    messages.success(request, "Colección eliminada")
+    return redirect("gallery:gallery_list")

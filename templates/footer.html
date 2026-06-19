@@ -1,6 +1,8 @@
-<!-- Footer -->
-<footer class="hola">
-
-<p class="footer-text">Copyright 2024 Sigfrid Art</p>
-
+﻿{% load static %}
+    {% block extra_css %}
+        <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    {% endblock extra_css %}
+<footer>
+    <p>© 2026 {{ site_settings.site_title|default:"Sigfrid" }}</p>
 </footer>
+

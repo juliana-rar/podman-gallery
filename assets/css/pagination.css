@@ -1,0 +1,90 @@
+.page-numbers {
+    list-style: none;
+    padding: 0;
+    margin: 3rem auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.page-numbers li {
+    display: inline-block;
+}
+
+/* Enlaces normales */
+.page-numbers a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    min-width: 42px;
+    height: 42px;
+    padding: 0 8px;
+    
+    background: #111111;
+    color: #888888;
+    font-size: 0.95rem;
+    font-weight: 500;
+    
+    border: 1px solid #222222;
+    border-radius: 10px;
+    
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+/* Hover en enlaces normales */
+.page-numbers a:hover {
+    background: #1a1a1a;
+    color: #dddddd;
+    border-color: #444444;
+    transform: translateY(-2px);
+}
+
+/* Página actual (activa) */
+.page-numbers .active a {
+    background: #222222;
+    color: #ffffff;
+    font-weight: 700;
+    border-color: #555555;
+    cursor: default;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.08) inset;
+}
+
+/* Flechas (anterior / siguiente) */
+.page-numbers a i {
+    font-size: 1.1rem;
+}
+
+/* Flecha siguiente se mueve un poco al hover */
+.page-numbers a[href*="next"] i {
+    transition: transform 0.3s ease;
+}
+
+.page-numbers a[href*="next"]:hover i {
+    transform: translateX(4px);
+}
+
+/* Flecha anterior (rotamos el icono si usas el mismo) */
+.page-numbers a[href*="previous"] i {
+    transform: rotate(180deg);
+}
+
+.page-numbers a[href*="previous"]:hover i {
+    transform: rotate(180deg) translateX(4px);
+}
+
+/* Responsive - cuando hay muchas páginas */
+@media (max-width: 480px) {
+    .page-numbers {
+        gap: 6px;
+    }
+    
+    .page-numbers a {
+        min-width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
+}

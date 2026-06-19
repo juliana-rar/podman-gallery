@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ image.title }}{% endblock title %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/gallery/gallery.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="artwork">
+    <a class="aw-back" href="{% url 'gallery:gallery_list' %}"><i class="fa-solid fa-arrow-left"></i> Galería</a>
+
+    <div class="aw-stage">
+        <div class="aw-frame">
+            <img src="{{ image.image.url }}" alt="{{ image.title }}">
+        </div>
+
+        <aside class="aw-info">
+            {% if request.user.is_authenticated and image.user_id == request.user.id %}
+            <div class="aw-owner">
+                <a href="{% url 'gallery:edit_image' image.id %}"><i class="fa-solid fa-pen"></i> Editar</a>
+                <a class="aw-owner-del" href="{% url 'gallery:delete_image' image.id %}"
+                   onclick="return confirm('¿Eliminar «{{ image.title|escapejs }}»?');"><i class="fa-solid fa-trash"></i> Eliminar</a>
+            </div>
+            {% endif %}
+            {% if image.category %}
+            <a class="aw-collection" href="{% url 'gallery:category_gallery' image.category.slug %}">{{ image.category.title }}</a>
+            {% endif %}
+            <h1>{{ image.title }}</h1>
+            <p class="aw-artist">{{ image.user.get_full_name|default:image.user.username }}{% if image.year %}, {{ image.year }}{% endif %}</p>
+
+            {% if image.description %}
+            <p class="aw-desc">{{ image.description }}</p>
+            {% endif %}
+
+            <dl class="aw-specs">
+                {% if image.technique %}<dt>Técnica</dt><dd>{{ image.technique }}</dd>{% endif %}
+                {% if image.dimensions %}<dt>Dimensiones</dt><dd>{{ image.dimensions }}</dd>{% endif %}
+                {% if image.year %}<dt>Año</dt><dd>{{ image.year }}</dd>{% endif %}
+            </dl>
+
+            <div class="aw-status">
+                {% if image.available %}
+                <span class="aw-avail"><i class="fa-solid fa-circle"></i> Disponible</span>
+                {% else %}
+                <span class="aw-sold"><i class="fa-solid fa-circle"></i> Vendido</span>
+                {% endif %}
+                {% if image.price %}<span class="aw-price">{{ image.price }} €</span>{% endif %}
+            </div>
+
+            {% if image.available %}
+            <a class="aw-enquire" href="mailto:?subject=Consulta sobre la obra «{{ image.title }}»">
+                <i class="fa-solid fa-envelope"></i> Consultar disponibilidad
+            </a>
+            {% endif %}
+        </aside>
+    </div>
+
+    {% if related %}
+    <div class="aw-related">
+        <h2>Más de esta colección</h2>
+        <div class="aw-related-grid">
+            {% for r in related %}
+            <a href="{% url 'gallery:image_details' r.slug %}">
+                <img src="{{ r.image.url }}" alt="{{ r.title }}" loading="lazy">
+                <span>{{ r.title }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</section>
+{% endblock content %}

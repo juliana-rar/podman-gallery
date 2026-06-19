@@ -1,0 +1,180 @@
+.manage_categories {
+    min-height: 100vh;
+    padding: 50px 20px;
+    background: #0a0a0a;
+    color: #e0e0e0;
+}
+
+/* Título */
+.manage_categories > h2 {
+    text-align: center;
+    margin-bottom: 45px;
+    color: #72d9c5;
+    font-size: 2.1rem;
+    font-weight: 600;
+}
+
+/* Formulario */
+.manage_categories > form {
+    max-width: 580px;
+    margin: 0 auto 60px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.manage_categories > form > div {
+    flex: 1;
+    min-width: 320px;
+}
+
+.manage_categories > form > div > label {
+    display: block;
+    margin-bottom: 8px;
+    color: #72d9c5;
+    font-weight: 500;
+    font-size: 1.05rem;
+}
+
+.manage_categories > form > div > input[type="text"] {
+    width: 100%;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 10px;
+    background: #1a1a1a;
+    color: #f0f0f0;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
+}
+
+.manage_categories > form > div > input[type="text"]:focus {
+    background: #202020;
+    box-shadow: 0 0 0 3px rgba(114, 217, 197, 0.25);
+}
+
+.manage_categories > form > button {
+    padding: 14px 32px;
+    background: #72d9c5;
+    color: #000;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 3px 12px rgba(114, 217, 197, 0.3);
+}
+
+.manage_categories > form > button:hover {
+    background: #5cc0ac;
+    transform: translateY(-2px);
+}
+
+/* Tabla */
+.manage_categories > table {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+}
+
+.manage_categories > table > thead > tr {
+    background: #111;
+}
+
+.manage_categories > table > thead th {
+    padding: 16px 20px;
+    text-align: left;
+    color: #72d9c5;
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.manage_categories > table > tbody > tr {
+    background: #111111;
+    transition: all 0.2s ease;
+}
+
+.manage_categories > table > tbody > tr:hover {
+    background: #181818;
+    transform: translateY(-2px);
+}
+
+.manage_categories > table td {
+    padding: 18px 20px;
+    border-top: 1px solid #222;
+}
+
+/* Columnas específicas con nth-child */
+.manage_categories > table > tbody td:nth-child(1) {
+    font-weight: 500;
+    color: #f0f0f0;
+}
+
+.manage_categories > table > tbody td:nth-child(2) {
+    color: #888;
+    font-size: 0.95rem;
+    font-family: monospace;
+}
+
+.manage_categories > table > tbody td:nth-child(3) {
+    color: #aaa;
+    font-size: 0.94rem;
+}
+
+.manage_categories > table > tbody td:nth-child(4) {
+    white-space: nowrap;
+}
+
+.manage_categories > table > tbody td:nth-child(4) > a {
+    margin-right: 24px;
+    color: #72d9c5;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.manage_categories > table > tbody td:nth-child(4) > a:hover {
+    color: #a0e0d5;
+    text-decoration: underline;
+}
+
+.manage_categories > table > tbody td:nth-child(4) > a:last-child {
+    color: #ff7070;
+}
+
+.manage_categories > table > tbody td:nth-child(4) > a:last-child:hover {
+    color: #ff8a8a;
+}
+
+/* Mensaje cuando no hay categorías */
+.manage_categories > table > tbody > tr > td[colspan="4"] {
+    text-align: center;
+    padding: 40px;
+    color: #777;
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .manage_categories > form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .manage_categories > table td,
+    .manage_categories > table th {
+        padding: 14px 12px;
+        font-size: 0.92rem;
+    }
+
+    .manage_categories > table > tbody td:nth-child(4) > a {
+        margin-right: 16px;
+        display: inline-block;
+        margin-bottom: 6px;
+    }
+}

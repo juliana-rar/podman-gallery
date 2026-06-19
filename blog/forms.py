@@ -7,7 +7,7 @@ class TextForm(forms.Form):
     text = forms.CharField(widget=forms.Textarea, required=True)
 
 class AddBlogForm(forms.ModelForm):
-    description = RichTextField()
+    # description = RichTextField()
     class Meta:
         model = Blog
         fields = (
@@ -16,7 +16,7 @@ class AddBlogForm(forms.ModelForm):
             "banner",
             "description"
         )
-        widgets = {
-            'description': forms.Textarea(attrs={'class': 'form-control'}),
-            # para que tenga el mismo aspecto que todo el resto
-        }
+        # widgets = {
+        #     'description': forms.Textarea(attrs={'class': 'form-control'}),
+        #     # para que tenga el mismo aspecto que todo el resto
+        # }

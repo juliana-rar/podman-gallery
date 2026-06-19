@@ -1,0 +1,103 @@
+/* ===========================================================
+   Tarjeta de Tip — variante "póster" (título sobre la imagen)
+   Mismo lenguaje (latón/serif/negro) pero distinto de Eportfolios
+   =========================================================== */
+
+.event_card {
+    --brass: #c2a878;
+    --line: rgba(255, 255, 255, 0.08);
+
+    position: relative;
+    height: 100%;
+    min-height: 440px;
+    background: #111113;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    font-family: 'Jost', sans-serif;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.35s ease, box-shadow 0.5s ease;
+    will-change: transform;
+}
+
+.event_card a {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+    position: relative;
+    height: 100%;
+    min-height: 440px;
+}
+
+/* Imagen a sangre (rellena toda la tarjeta) */
+.event_card > a > div:first-child,
+.event_card .event-image-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+    .event_card > a > div:first-child img.fixed-size {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .event_card:hover > a > div:first-child img.fixed-size { transform: scale(1.06); }
+
+    /* Placeholder sin imagen */
+    .event-image-container:has(img[src*="placeholder-event.jpg"]) {
+        background: linear-gradient(135deg, #1b1b1e 0%, #0e0e10 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+/* Cartela superpuesta sobre la imagen */
+.event_card > a > div:last-child {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 2;
+    padding: 70px 26px 26px;
+    background: linear-gradient(to top,
+        rgba(8, 8, 9, 0.92) 0%,
+        rgba(8, 8, 9, 0.35) 55%,
+        transparent 100%);
+    transition: transform 0.4s ease;
+}
+
+    .event_card > a > div:last-child span {
+        display: inline-block;
+        color: #11100c;
+        background: var(--brass);
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border-radius: 100px;
+        margin-bottom: 12px;
+    }
+
+    .event_card > a > div:last-child h4 {
+        font-family: 'Cormorant Garamond', serif;
+        color: #fff;
+        font-size: 1.7rem;
+        font-weight: 600;
+        margin: 0;
+        line-height: 1.18;
+        justify-content: flex-start;
+    }
+
+/* Hover de la pieza */
+.event_card:hover {
+    transform: translateY(-8px);
+    border-color: var(--brass);
+    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.6),
+                0 0 0 1px rgba(194, 168, 120, 0.15);
+}
+
+    .event_card:hover > a > div:last-child { transform: translateY(-4px); }

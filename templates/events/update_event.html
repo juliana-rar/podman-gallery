@@ -1,0 +1,55 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/events/update_event.css' %}">
+{% endblock extra_css %}
+{% block content %}
+
+<section class="update_event">
+    <div>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div>
+                <label for="title">Event Title</label>
+                <input type="text" name="title" value="{{ form.instance.title }}">
+                <p>{{ form.instance.title.errors }}</p>
+            </div>
+
+            <div>
+                <label for="category">Event Category</label>
+                <select name="category" id="category_id">
+                    {% for category in event_categories %}
+                    <option value="{{ category.id }}" {% if form.instance.category.pk == category.pk %}selected{% endif %}>
+                        {{ category.title }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <p>{{ form.instance.category.errors }}</p>
+            </div>
+
+            <div>
+                <label for="description">Description</label>
+                {{ form.description|safe }}
+                <p>{{ form.description.errors }}</p>
+            </div>
+
+            <!-- CAMPO DE IMAGEN SIN PREVISUALIZACIÓN -->
+            <div>
+                <label for="image">Event Image</label>
+                <input type="file" name="image">
+                <p>{{ form.instance.image.errors }}</p>
+            </div>
+
+            <div>
+                <button type="submit">Update Event</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% block extra_head %}
+{{ form.media }}
+{% endblock extra_head %}
+
+{% endblock content %}

@@ -1,28 +1,144 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
-{% load static sass_tags %}
 
-{% block title %} Home {% endblock title %}
+{% block extra_css %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/components/home_showcase.css' %}">
+{% endblock extra_css %}
 
 {% block content %}
-<section class="blog-posts d-flex align-items-center justify-content-center" style="min-height: 100vh;">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 text-center">
-                <div class="all-blog-posts">
-                    <div class="row">
-                        {% for blog in blogs|slice:"20" %}
-                        {% include 'blog_card.html' %}
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <div class="main-button">
-                        <a href="{% url 'blog:blogs' %}">Ver todos los Posts</a>
-                    </div>
-                </div>
-            </div>
+
+{% include 'components/herophotos.html' %}
+{% include 'components/gallery_carousel.html' %}
+
+<!-- ============ Eportfolios (coverflow) ============ -->
+<section class="home-showcase">
+    <div class="sc-head">
+        <div>
+            <p class="sc-eyebrow">Portafolio</p>
+            <h2 class="sc-title">{{ site_settings.nav_blogs|default:"Eportfolios" }}</h2>
         </div>
+        <a class="sc-all" href="{% url 'blog:blogs' %}">Ver todos <i class="fa-solid fa-arrow-right"></i></a>
     </div>
+
+    {% if blogs %}
+    <div class="sc-stage">
+        <button class="sc-nav sc-prev" aria-label="Anterior"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="sc-track">
+            {% for blog in blogs %}
+            <a class="sc-slide" href="{% url 'blog:blog_details' blog.slug %}" data-i="{{ forloop.counter0 }}">
+                <div class="sc-frame">
+                    <img src="{{ blog.banner.url }}" alt="{{ blog.title }}" loading="lazy">
+                </div>
+                <div class="sc-info">
+                    {% if blog.category %}<span class="sc-cat">{{ blog.category.title }}</span>{% endif %}
+                    <h3>{{ blog.title }}</h3>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <button class="sc-nav sc-next" aria-label="Siguiente"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+    <div class="sc-dots"></div>
+    {% else %}
+    <p class="sc-empty">No hay eportfolios disponibles.</p>
+    {% endif %}
+
+    {% include 'components/blogcategories.html' %}
 </section>
+
+<!-- ============ Tips (coverflow) ============ -->
+<section class="home-showcase">
+    <div class="sc-head">
+        <div>
+            <p class="sc-eyebrow">Consejos</p>
+            <h2 class="sc-title">{{ site_settings.nav_events|default:"Tips" }}</h2>
+        </div>
+        <a class="sc-all" href="/events/">Ver todos <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    {% if events %}
+    <div class="sc-stage">
+        <button class="sc-nav sc-prev" aria-label="Anterior"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="sc-track">
+            {% for event in events %}
+            <a class="sc-slide" href="{% url 'events:event_details' event.slug %}" data-i="{{ forloop.counter0 }}">
+                <div class="sc-frame">
+                    {% if event.image %}
+                    <img src="{{ event.image.url }}" alt="{{ event.title }}" loading="lazy">
+                    {% else %}
+                    <div class="sc-noimg"></div>
+                    {% endif %}
+                </div>
+                <div class="sc-info">
+                    {% if event.category %}<span class="sc-cat">{{ event.category.title }}</span>{% endif %}
+                    <h3>{{ event.title }}</h3>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <button class="sc-nav sc-next" aria-label="Siguiente"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+    <div class="sc-dots"></div>
+    {% else %}
+    <p class="sc-empty">No hay tips disponibles.</p>
+    {% endif %}
+
+    {% include 'components/eventcategories.html' %}
+</section>
+
+{% include 'components/home_component2.html' %}
+
+<script>
+(function () {
+    document.querySelectorAll('.home-showcase').forEach(function (sc) {
+        const stage = sc.querySelector('.sc-stage');
+        if (!stage) return;
+        const slides = Array.from(stage.querySelectorAll('.sc-slide'));
+        if (!slides.length) return;
+        const prev = stage.querySelector('.sc-prev');
+        const next = stage.querySelector('.sc-next');
+        const dotsWrap = sc.querySelector('.sc-dots');
+        let index = 0, timer = null;
+        const n = slides.length;
+
+        slides.forEach((_, i) => {
+            const d = document.createElement('button');
+            d.className = 'sc-dot' + (i === 0 ? ' active' : '');
+            d.addEventListener('click', () => go(i, true));
+            dotsWrap.appendChild(d);
+        });
+        const dots = Array.from(dotsWrap.children);
+
+        function render() {
+            slides.forEach((s, i) => {
+                s.classList.remove('is-active', 'is-prev', 'is-next');
+                let diff = i - index;
+                if (diff > n / 2) diff -= n;
+                if (diff < -n / 2) diff += n;
+                if (diff === 0) s.classList.add('is-active');
+                else if (diff === -1) s.classList.add('is-prev');
+                else if (diff === 1) s.classList.add('is-next');
+            });
+            dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        }
+        function go(i, user) { index = (i + n) % n; render(); if (user) restart(); }
+        function restart() { clearInterval(timer); timer = setInterval(() => go(index + 1), 5000); }
+
+        if (prev) prev.addEventListener('click', () => go(index - 1, true));
+        if (next) next.addEventListener('click', () => go(index + 1, true));
+        // Clic en una pieza lateral: la trae al centro (no navega)
+        slides.forEach((s, i) => s.addEventListener('click', function (e) {
+            if (!s.classList.contains('is-active')) { e.preventDefault(); go(i, true); }
+        }));
+        stage.addEventListener('mouseenter', () => clearInterval(timer));
+        stage.addEventListener('mouseleave', restart);
+
+        render();
+        if (n > 1) restart();
+    });
+})();
+</script>
+
 {% endblock content %}

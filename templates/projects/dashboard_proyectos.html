@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Proyectos más visitados</title>
+    <style>
+        body { background: #222; color: white; font-family: Arial; padding: 40px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 15px; text-align: left; border: 1px solid #444; }
+        th { background: #333; }
+        tr:hover { background: #333; }
+    </style>
+</head>
+<body>
+    <h2>Proyectos más visitados 🔥</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Categoría</th>
+                <th>Visitas</th>
+            </tr>
+        </thead>
+        <tbody id="proyectos-lista">
+            <tr><td colspan="3">Cargando proyectos...</td></tr>
+        </tbody>
+    </table>
+
+    <script>
+    // ¡IMPORTANTE! Usar URL relativa para que funcione en producción también
+    fetch('/api/proyectos/')
+        .then(response => response.json())
+        .then(data => {
+            const lista = document.getElementById('proyectos-lista');
+            lista.innerHTML = '';  // limpiar el "cargando"
+            if (data.length === 0) {
+                lista.innerHTML = '<tr><td colspan="3">No hay proyectos aún</td></tr>';
+                return;
+            }
+            data.forEach(p => {
+                const row = lista.insertRow();
+                row.insertCell(0).textContent = p.titulo;
+                row.insertCell(1).textContent = p.categoria;
+                row.insertCell(2).textContent = p.visitas;
+            });
+        })
+        .catch(err => {
+            document.getElementById('proyectos-lista').innerHTML = 
+                '<tr><td colspan="3">Error al cargar proyectos 😢</td></tr>';
+            console.error(err);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+/* ===========================================================
+   Galería — formulario de obra (estética de sala)
+   =========================================================== */
+
+.gallery-form {
+    --wall: #0a0a0b;
+    --wall-2: #141416;
+    --ink: #ece8df;
+    --muted: #9b968a;
+    --brass: #c2a878;
+    --line: rgba(255, 255, 255, 0.08);
+
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 90px 24px 110px;
+    background:
+        radial-gradient(140% 60% at 50% -10%, #18181b 0%, transparent 60%),
+        var(--wall);
+    color: var(--ink);
+    font-family: 'Jost', sans-serif;
+}
+
+.gallery-form .gf-card {
+    width: 100%;
+    max-width: 640px;
+    background: var(--wall-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 50px 48px;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+}
+
+    .gallery-form .gf-eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        font-size: 0.7rem;
+        color: var(--brass);
+        margin: 0 0 10px;
+    }
+
+    .gallery-form .gf-card h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 500;
+        font-size: 2.1rem;
+        color: #fff;
+        margin: 0 0 34px;
+    }
+
+.gallery-form .gf-field { margin-bottom: 22px; }
+
+.gallery-form .gf-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+    .gallery-form label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 9px;
+        font-size: 0.72rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--muted);
+    }
+
+    .gallery-form label > i { width: 16px; margin-right: 9px; color: var(--brass); }
+
+    .gallery-form input[type="text"],
+    .gallery-form input[type="number"],
+    .gallery-form select,
+    .gallery-form textarea {
+        width: 100%;
+        padding: 13px 16px;
+        border-radius: 2px;
+        border: 1px solid var(--line);
+        background: var(--wall);
+        color: var(--ink);
+        font-family: inherit;
+        font-size: 0.95rem;
+        outline: none;
+        box-sizing: border-box;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+        .gallery-form input:focus,
+        .gallery-form select:focus,
+        .gallery-form textarea:focus {
+            border-color: var(--brass);
+            box-shadow: 0 0 0 3px rgba(194, 168, 120, 0.12);
+        }
+
+    .gallery-form textarea { resize: vertical; }
+
+/* Zona de subida / preview */
+.gallery-form .gf-drop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+    padding: 20px;
+    border: 1px dashed rgba(194, 168, 120, 0.35);
+    border-radius: 3px;
+    background: var(--wall);
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+    transition: all 0.25s ease;
+    overflow: hidden;
+}
+
+    .gallery-form .gf-drop:hover,
+    .gallery-form .gf-drop.dragging {
+        border-color: var(--brass);
+        background: rgba(194, 168, 120, 0.05);
+        color: var(--brass);
+    }
+
+    .gallery-form .gf-drop.has-image { padding: 14px; border-style: solid; background: var(--mat, #f4f1e9); }
+
+    .gallery-form .gf-drop #gfPlaceholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        text-align: center;
+    }
+
+    .gallery-form .gf-drop #gfPlaceholder i { font-size: 2rem; }
+
+    .gallery-form .gf-drop #gfPreview {
+        display: none;
+        width: 100%;
+        max-height: 360px;
+        object-fit: contain;
+    }
+
+.gallery-form .gf-err { color: #d98c8c; font-size: 0.82rem; margin: 6px 0 0; }
+
+.gallery-form .gf-hint { color: var(--muted); font-size: 0.78rem; font-style: italic; margin: 8px 0 0; }
+
+.gallery-form .gf-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 14px;
+}
+
+    .gallery-form .gf-actions .gf-submit { margin-top: 0; flex: 1; }
+
+    .gallery-form .gf-cancel {
+        text-decoration: none;
+        color: var(--muted);
+        font-size: 0.8rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 16px 22px;
+        border: 1px solid var(--line);
+        border-radius: 2px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+        .gallery-form .gf-cancel:hover { color: var(--ink); border-color: var(--muted); }
+
+/* Switch disponible */
+.gallery-form .gf-check { margin-top: 4px; }
+
+.gallery-form .gf-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--ink);
+    font-size: 0.9rem;
+}
+
+    .gallery-form .gf-switch input { display: none; }
+
+    .gallery-form .gf-switch span {
+        width: 44px;
+        height: 24px;
+        border-radius: 100px;
+        background: var(--wall);
+        border: 1px solid var(--line);
+        position: relative;
+        transition: background 0.25s ease;
+    }
+
+        .gallery-form .gf-switch span::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 3px;
+            transform: translateY(-50%);
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            background: var(--muted);
+            transition: all 0.25s ease;
+        }
+
+    .gallery-form .gf-switch input:checked + span { background: rgba(194, 168, 120, 0.25); }
+    .gallery-form .gf-switch input:checked + span::after { left: 23px; background: var(--brass); }
+
+.gallery-form .gf-submit {
+    width: 100%;
+    margin-top: 14px;
+    padding: 16px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #1a1813;
+    background: var(--brass);
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+    .gallery-form .gf-submit:hover {
+        background: #d4bd92;
+        transform: translateY(-2px);
+    }
+
+    .gallery-form .gf-submit > i { margin-right: 10px; }
+
+@media (max-width: 520px) {
+    .gallery-form .gf-card { padding: 38px 24px; }
+    .gallery-form .gf-row { grid-template-columns: 1fr; }
+}

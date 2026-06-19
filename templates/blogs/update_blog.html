@@ -1,0 +1,58 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/blogs/update_blog.css' %}">
+{% endblock extra_css %}
+{% block content %}
+
+<section class="update-blog">
+    <div>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+                <label for="title">Título del blog</label>
+                <input type="text" name="title" value="{{ form.instance.title }}">
+                <p>{{ form.instance.title.errors }}</p>
+            </div>
+            <div>
+                <label for="category">Categoria del blog</label>
+                <select name="category" id="category_id">
+                    {% for category in blog_categories %}
+                    <option value="{{ category.id }}" {% if form.instance.category.pk == category.pk %}selected{% endif %}>
+                        {{ category.title }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <p>{{ form.instance.category.errors }}</p>
+            </div>
+
+            <div>
+                <label for="description">Descripción</label>
+                {{ form.description|safe }}
+                <p>{{ form.description.errors }}</p>
+            </div>
+
+            <div>
+                <label for="banner">Banner</label>
+                <input type="file" name="banner" value="{{ form.instance.banner.url }}">
+                <p>{{ form.instance.banner.errors }}</p>
+            </div>
+
+            <div>
+                <label for="tags">Etiquetas</label>
+                <textarea name="tags" rows="1" placeholder="Escribe etiquetas separadas por comas">{% if form.instance.pk and form.instance.tags.exists %}{% for tag in form.instance.tags.all %}{{ tag.title|default:tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}</textarea>
+                <p>{{ form.tags.errors }}</p>
+            </div>
+
+            <div>
+                <button type="submit">Actualiza el blog</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+
+  {% block extra_head %}
+{{ form.media }}
+  {% endblock extra_head %}
+{% endblock content %}

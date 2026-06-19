@@ -1,0 +1,99 @@
+/* ===========================================================
+   Lista de Tips — estética de galería de arte
+   =========================================================== */
+
+.art-list {
+    --brass: #c2a878;
+    --ink: #ece8df;
+    --muted: #9b968a;
+    --line: rgba(255, 255, 255, 0.08);
+
+    min-height: 80vh;
+    padding: 90px 24px 110px;
+    color: var(--ink);
+    font-family: 'Jost', sans-serif;
+}
+
+/* ---------- Cabecera editorial ---------- */
+.art-list .al-head {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 56px;
+}
+
+    .art-list .al-eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        font-size: 0.72rem;
+        font-weight: 500;
+        color: var(--brass);
+        margin: 0 0 14px;
+    }
+
+    .art-list .al-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 500;
+        font-size: clamp(2.6rem, 6vw, 4rem);
+        line-height: 1.05;
+        letter-spacing: 0.5px;
+        color: #fff;
+        margin: 0;
+    }
+
+    .art-list .al-rule {
+        display: block;
+        width: 56px;
+        height: 1px;
+        margin: 30px auto 0;
+        background: var(--brass);
+    }
+
+    .art-list .al-empty {
+        text-align: center;
+        color: var(--muted);
+        font-style: italic;
+        font-size: 1.1rem;
+    }
+
+/* ---------- Grid de tips ---------- */
+.eventss > div,
+.eventss > div > div {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.eventss > div > div > div {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 34px 28px;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+    .eventss > div > div > div > div { width: 100%; }
+
+    .eventss .event_card {
+        width: 100% !important;
+        margin: 0 !important;
+        display: block !important;
+        height: 100%;
+    }
+
+    /* La paginación ocupa toda la fila */
+    .eventss > div > div > div > div:last-child {
+        grid-column: 1 / -1;
+        margin-top: 28px;
+        display: flex;
+        justify-content: center;
+    }
+
+@media (max-width: 600px) {
+    .art-list { padding: 64px 16px 80px; }
+    .eventss > div > div > div {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+}

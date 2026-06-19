@@ -1,0 +1,79 @@
+# Orquestacion de PRODUCCION de "sigfrid".
+# Uso:  podman compose -f compose.prod.yaml --env-file .env.prod up -d --build
+#
+# Diferencias clave con compose.yaml (desarrollo):
+#   - gunicorn en vez de runserver, DEBUG=False
+#   - el codigo va HORNEADO en la imagen (sin montar el host)
+#   - nginx sirve estaticos/media y hace de reverse proxy
+
+# Nombre de proyecto propio: asi prod NO pisa los contenedores de desarrollo.
+name: sigfrid-prod
+
+services:
+  # ---------- Base de datos: PostgreSQL ----------
+  db:
+    image: postgres:16-alpine
+    container_name: sigfrid-db-prod
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    # Sin puertos publicados: solo accesible dentro de la red de compose.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  # ---------- Aplicacion: Django + gunicorn ----------
+  web:
+    build:
+      context: .
+      dockerfile: Containerfile
+    container_name: sigfrid-web-prod
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    environment:
+      DB_HOST: db
+    volumes:
+      # Volumenes COMPARTIDOS con nginx (no se monta el codigo del host).
+      - static:/app/staticfiles
+      - media:/app/media
+    # Sin puertos publicados: solo nginx llega a gunicorn.
+    depends_on:
+      db:
+        condition: service_healthy
+    # Migra, recolecta estaticos y arranca gunicorn (3 workers).
+    # OJO: gunicorn va en UNA sola linea. Si se parte (YAML folded), el shell
+    # ejecuta "gunicorn ..." sin sus flags y arranca en 127.0.0.1 -> nginx da 502.
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py collectstatic --noinput &&
+             gunicorn blog_website.wsgi:application --bind 0.0.0.0:8000 --workers 3 --access-logfile - --error-logfile -"
+
+  # ---------- Reverse proxy: nginx ----------
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: sigfrid-nginx-prod
+    restart: unless-stopped
+    ports:
+      # Unico puerto expuesto al host. Cambia 8090 por 80 si el host lo tiene libre.
+      - "8090:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - static:/vol/static:ro
+      - media:/vol/media:ro
+    depends_on:
+      - web
+
+volumes:
+  dbdata:
+    name: sigfrid_dbdata_prod
+  static:
+    name: sigfrid_static_prod
+  media:
+    name: sigfrid_media_prod

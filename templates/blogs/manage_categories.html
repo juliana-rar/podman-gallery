@@ -1,0 +1,47 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/blogs/manage_categories.css' %}">
+{% endblock extra_css %}
+{% block content %}
+<section class="manage_categories">
+    <h2>Gestionar Categorias</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="title">Nueva categoria</label>
+            <input type="text" name="title" placeholder="Nombre de la categoria" required>
+        </div>
+        <button type="submit">Añadir</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Slug</th>
+                <th>Fecha creación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td>{{ category.title }}</td>
+                <td>{{ category.slug }}</td>
+                <td>{{ category.created_date }}</td>
+                <td>
+                    <a href="{% url 'blog:edit_category' category.id %}">Editar</a>
+                    <a href="{% url 'blog:delete_category' category.id %}" onclick="return confirm('Seguro que quieres eliminar esta categoria?')">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No hay categorias todavía</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock content %}

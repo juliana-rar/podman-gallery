@@ -1,0 +1,48 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/events/my_events.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="my-events">
+    <div>
+        <!-- container -->
+        <div>
+            <!-- row principal -->
+            {% for event in events %}
+            <div>
+                <!-- columna -->
+                <div>
+                    <!-- tarjeta -->
+                    {% if event.image %}
+                    <img src="{{ event.image.url }}" alt="{{ event.title }}">
+                    {% else %}
+                    <img src="{% static 'default_event_image.jpg' %}" alt="{{ event.title }}">
+                    {% endif %}
+                    <div>
+                        <!-- cuerpo -->
+                        <p>
+                            {{ event.title }}
+                            <span>
+                                <a href="{% url 'events:update_event' event.slug %}">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <a href="?delete={{ event.pk }}">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div> 
+             {% include 'pagination.html' %}
+        </div>
+
+    </div>
+</section>
+{% endblock content %}

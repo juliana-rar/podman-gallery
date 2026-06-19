@@ -1,0 +1,62 @@
+# Orquestacion de "sigfrid" con Podman Compose (DESARROLLO).
+# Uso:  podman compose up -d   |   podman compose down
+
+# Proyecto propio: dev (sigfrid) y prod (sigfrid-prod) conviven sin pisarse.
+name: sigfrid
+
+services:
+  # ---------- Base de datos: PostgreSQL ----------
+  db:
+    image: postgres:16-alpine
+    container_name: sigfrid-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      # 5432 del host ya lo usa el PostgreSQL local (EnterpriseDB); exponemos en 5433.
+      - "5433:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  # ---------- Aplicacion: Django ----------
+  web:
+    build:
+      context: .
+      dockerfile: Containerfile
+    container_name: sigfrid-web
+    restart: unless-stopped
+    env_file:
+      - .env
+    # DB_HOST se fija aqui para que apunte al servicio "db" dentro de la red de compose.
+    environment:
+      DB_HOST: db
+    volumes:
+      # Codigo montado para recarga en caliente durante el desarrollo.
+      - .:/app
+      # Persistir archivos subidos por usuarios.
+      - media:/app/media
+    ports:
+      # Desarrollo en 8091 (prod usa 8090 con nginx; asi conviven sin chocar).
+      - "8091:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    # Migra y levanta el servidor de desarrollo.
+    # Para produccion: cambia por collectstatic + gunicorn (whitenoise ya esta instalado).
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py runserver 0.0.0.0:8000"
+
+volumes:
+  dbdata:
+    # Nombre fijo del volumen para que NO dependa del nombre de la carpeta/proyecto.
+    name: sigfrid_dbdata
+  media:
+    name: sigfrid_media

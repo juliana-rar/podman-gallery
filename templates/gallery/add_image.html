@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Añadir obra{% endblock title %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/gallery/add_image.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="gallery-form">
+    <div class="gf-card">
+        <p class="gf-eyebrow">Nueva pieza</p>
+        <h1>Añadir obra a la galería</h1>
+
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="gf-field">
+                <label><i class="fa-solid fa-image"></i> Imagen de la obra</label>
+                <label class="gf-drop" id="gfDrop">
+                    <input type="file" name="image" id="gfFile" accept="image/*" required hidden>
+                    <img id="gfPreview" alt="">
+                    <span id="gfPlaceholder"><i class="fa-solid fa-cloud-arrow-up"></i> Haz clic o arrastra una imagen aquí</span>
+                </label>
+                <p class="gf-err">{{ form.image.errors }}</p>
+            </div>
+
+            <div class="gf-field">
+                <label><i class="fa-solid fa-heading"></i> Título de la obra</label>
+                <input type="text" name="title" value="{{ form.data.title|default:'' }}" required>
+                <p class="gf-err">{{ form.title.errors }}</p>
+            </div>
+
+            <div class="gf-field">
+                <label><i class="fa-solid fa-layer-group"></i> Colección</label>
+                <select name="category">
+                    <option value="">— Sin colección —</option>
+                    {% for category in gallery_categories %}
+                    <option value="{{ category.id }}">{{ category.title }}</option>
+                    {% endfor %}
+                </select>
+                <p class="gf-err">{{ form.category.errors }}</p>
+            </div>
+
+            <div class="gf-row">
+                <div class="gf-field">
+                    <label><i class="fa-solid fa-brush"></i> Técnica</label>
+                    <input type="text" name="technique" placeholder="Óleo sobre lienzo" value="{{ form.data.technique|default:'' }}">
+                </div>
+                <div class="gf-field">
+                    <label><i class="fa-solid fa-ruler-combined"></i> Dimensiones</label>
+                    <input type="text" name="dimensions" placeholder="100 × 80 cm" value="{{ form.data.dimensions|default:'' }}">
+                </div>
+            </div>
+
+            <div class="gf-row">
+                <div class="gf-field">
+                    <label><i class="fa-solid fa-calendar"></i> Año</label>
+                    <input type="text" name="year" placeholder="2026" value="{{ form.data.year|default:'' }}">
+                </div>
+                <div class="gf-field">
+                    <label><i class="fa-solid fa-euro-sign"></i> Precio (opcional)</label>
+                    <input type="number" step="0.01" name="price" placeholder="0.00" value="{{ form.data.price|default:'' }}">
+                </div>
+            </div>
+
+            <div class="gf-field gf-check">
+                <label class="gf-switch">
+                    <input type="checkbox" name="available" checked>
+                    <span></span> Disponible para venta
+                </label>
+            </div>
+
+            <div class="gf-field">
+                <label><i class="fa-solid fa-align-left"></i> Descripción</label>
+                <textarea name="description" rows="3" placeholder="Inspiración, contexto, serie…">{{ form.data.description|default:'' }}</textarea>
+                <p class="gf-err">{{ form.description.errors }}</p>
+            </div>
+
+            <button type="submit" class="gf-submit"><i class="fa-solid fa-paint-roller"></i> Publicar obra</button>
+        </form>
+    </div>
+</section>
+
+<script>
+    const file = document.getElementById('gfFile');
+    const preview = document.getElementById('gfPreview');
+    const placeholder = document.getElementById('gfPlaceholder');
+    const drop = document.getElementById('gfDrop');
+
+    file.addEventListener('change', () => {
+        const f = file.files[0];
+        if (!f) return;
+        preview.src = URL.createObjectURL(f);
+        preview.style.display = 'block';
+        placeholder.style.display = 'none';
+        drop.classList.add('has-image');
+    });
+    ['dragover', 'dragenter'].forEach(ev =>
+        drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('dragging'); }));
+    ['dragleave', 'drop'].forEach(ev =>
+        drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('dragging'); }));
+    drop.addEventListener('drop', e => {
+        if (e.dataTransfer.files.length) {
+            file.files = e.dataTransfer.files;
+            file.dispatchEvent(new Event('change'));
+        }
+    });
+</script>
+{% endblock content %}

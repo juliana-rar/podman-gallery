@@ -6,7 +6,7 @@ from django.utils.text import slugify
 
 def generate_unique_slug(instance, title):
     slug = slugify(title)
-    ModelClass = instance.__class__  #  la classe correcta
+    ModelClass = instance.__class__  
     num = 1
 
     while ModelClass.objects.filter(slug=slug).exists():

@@ -1,0 +1,14 @@
+# Mantener la imagen ligera: excluir entornos y artefactos locales
+venv/
+env/
+.venv/
+.git/
+.vs/
+.idea/
+.vscode/
+__pycache__/
+*.pyc
+*.pyo
+*.log
+media/
+db.sqlite3

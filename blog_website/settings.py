@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 from pathlib import Path
 import environ
 import os
@@ -8,8 +8,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
     DEBUG=(bool, False)
 )
+CSRF_TRUSTED_ORIGINS = env.list(
+    "CSRF_TRUSTED_ORIGINS",
+    default=['http://localhost:3000', 'http://127.0.0.1:8000'],
+)
 
-env_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config.env')
+env_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
 environ.Env.read_env(env_file)
 
 SECRET_KEY = env("SECRET_KEY")
@@ -26,29 +30,25 @@ DATABASES = {
         'PORT': env("DB_PORT"),
     }
 }
+STATIC_URL = '/static/'
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'assets')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
-STATICFILES_DIRS = [BASE_DIR / 'assets' ]
 MEDIA_ROOT = BASE_DIR / 'media'
-STATIC_ROOT = BASE_DIR / 'staticfiles' 
-    #entorno de producción
-    # STATIC_ROOT = BASE_DIR / "static"
+
+SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'assets')
+SASS_PROCESSOR_ENABLED = False
+SASS_PROCESSOR_AUTO_INCLUDE = False
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user_profile.User'
 
-
-
 CKEDITOR_UPLOAD_PATH = "uploads/"
-SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'static')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=['127.0.0.1', 'localhost'])
 
    
 LANGUAGE_CODE = 'en-us'
@@ -64,28 +64,28 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
+    'events',
+    'gallery',
+    'herophotos',
+    'projects',
     'user_profile',
     'ckeditor',
-    'notification',
     'ckeditor_uploader',
-    'sass_processor',
-    'events'
-
+    'rest_framework',  
 ]
+
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'sass_processor.finders.CssFinder',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',   # este da error al intentar iniciar sesion  error 403? @csrf token?
+    'django.middleware.csrf.CsrfViewMiddleware', 
   
 ]
 ROOT_URLCONF = 'blog_website.urls'
@@ -101,7 +101,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'blog.context_processors.get_all_categories',
-                'user_profile.context_processors.user_notifications'
+                'gallery.context_processors.gallery_context',
+                'herophotos.context_processors.hero_photos',
+                'user_profile.context_processors.site_settings',
             ],
         },
     },

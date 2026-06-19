@@ -5,7 +5,6 @@ from ckeditor.fields import RichTextField
 from .slugs import generate_unique_slug  
 from user_profile.models import User
 
-
 class EventCategory(models.Model): 
     title = models.CharField(max_length=150)
     slug = models.SlugField(null=True, blank=True)
@@ -17,7 +16,6 @@ class EventCategory(models.Model):
     def save(self,*args, **kwargs):
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
-
 
 class Event(models.Model):
     user = models.ForeignKey(
@@ -39,11 +37,7 @@ class Event(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        if not self.slug:  #  correcto indentado
+        if not self.slug:  
             from events.slugs import generate_unique_slug
             self.slug = generate_unique_slug(self, self.title)
-        super().save(*args, **kwargs)  # aqui acaba la funcion
-
-
-
-
+        super().save(*args, **kwargs) 

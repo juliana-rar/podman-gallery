@@ -1,0 +1,37 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ blog.title }}{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/blogs/blog_details.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="blog_details">
+    <article class="post">
+        <img src="{{ blog.banner.url }}" alt="{{ blog.title }}" class="post-banner">
+
+        <header class="post-header">
+            <span class="post-category">{{ blog.category.title }}</span>
+            <h1 class="post-title">{{ blog.title }}</h1>
+        </header>
+
+        <div class="post-body">
+            {{ blog.description|safe }}
+        </div>
+
+        <footer class="post-footer">
+            <p class="post-share-label">Compartir:</p>
+            <ul class="post-share">
+                <li><a href="#"><i class="fa fa-facebook"></i> Facebook</a></li>
+                <li><a href="#"><i class="fa fa-twitter"></i> Twitter</a></li>
+            </ul>
+        </footer>
+    </article>
+</section>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/like_blog.js' %}"></script>
+{% endblock scripts %}

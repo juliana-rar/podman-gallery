@@ -1,0 +1,115 @@
+{% load static %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/components/gallery_carousel.css' %}">
+
+{% if gallery_images %}
+<section class="home-gallery">
+    <div class="hg-inner">
+
+        <header class="hg-head">
+            <div>
+                <p class="hg-eyebrow">{{ site_settings.nav_gallery|default:"Galería" }}</p>
+                <h2>Obra destacada</h2>
+            </div>
+            <a class="hg-all" href="{% url 'gallery:gallery_list' %}">Ver toda la colección <i class="fa-solid fa-arrow-right"></i></a>
+        </header>
+
+        <div class="hg-stage" id="hgStage">
+            <button class="hg-nav hg-prev" id="hgPrev" aria-label="Anterior"><i class="fa-solid fa-arrow-left"></i></button>
+
+            <div class="hg-slides" id="hgSlides">
+                {% for img in gallery_images %}
+                <article class="hg-slide{% if forloop.first %} is-active{% endif %}" data-index="{{ forloop.counter0 }}">
+                    <a class="hg-art" href="{% url 'gallery:image_details' img.slug %}">
+                        <span class="hg-spot"></span>
+                        <span class="hg-frame">
+                            <img src="{{ img.image.url }}" alt="{{ img.title }}" loading="lazy">
+                        </span>
+                    </a>
+                    <div class="hg-meta">
+                        {% if img.category %}<span class="hg-collection">{{ img.category.title }}</span>{% endif %}
+                        <h3>{{ img.title }}</h3>
+                        <p class="hg-artist">
+                            {{ img.user.get_full_name|default:img.user.username }}{% if img.year %}, {{ img.year }}{% endif %}
+                        </p>
+                        {% if img.technique or img.dimensions %}
+                        <p class="hg-tech">
+                            {{ img.technique }}{% if img.technique and img.dimensions %} · {% endif %}{{ img.dimensions }}
+                        </p>
+                        {% endif %}
+                        <div class="hg-status">
+                            {% if img.available %}<span class="hg-avail">Disponible</span>{% else %}<span class="hg-sold">Vendido</span>{% endif %}
+                            {% if img.price %}<span class="hg-price">{{ img.price }} €</span>{% endif %}
+                        </div>
+                        <a class="hg-view" href="{% url 'gallery:image_details' img.slug %}">Ver obra <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+
+            <button class="hg-nav hg-next" id="hgNext" aria-label="Siguiente"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <div class="hg-footer">
+            <div class="hg-counter"><span id="hgCurrent">01</span><i></i><span id="hgTotal">01</span></div>
+            <div class="hg-thumbs" id="hgThumbs">
+                {% for img in gallery_images %}
+                <button class="hg-thumb{% if forloop.first %} active{% endif %}" data-index="{{ forloop.counter0 }}" aria-label="{{ img.title }}">
+                    <img src="{{ img.image.url }}" alt="{{ img.title }}" loading="lazy">
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+(function () {
+    const stage = document.getElementById('hgStage');
+    if (!stage) return;
+    const slides = Array.from(document.querySelectorAll('#hgSlides .hg-slide'));
+    const thumbs = Array.from(document.querySelectorAll('#hgThumbs .hg-thumb'));
+    const prev = document.getElementById('hgPrev');
+    const next = document.getElementById('hgNext');
+    const current = document.getElementById('hgCurrent');
+    const total = document.getElementById('hgTotal');
+    let index = 0;
+    let timer = null;
+
+    const pad = n => String(n + 1).padStart(2, '0');
+    total.textContent = pad(slides.length - 1);
+
+    function go(i, user) {
+        index = (i + slides.length) % slides.length;
+        slides.forEach((s, n) => s.classList.toggle('is-active', n === index));
+        thumbs.forEach((t, n) => t.classList.toggle('active', n === index));
+        current.textContent = pad(index);
+        const active = thumbs[index];
+        const wrap = document.getElementById('hgThumbs');
+        if (active && wrap) {
+            // Desplaza SOLO la tira de miniaturas en horizontal (nunca la página)
+            const target = active.getBoundingClientRect().left - wrap.getBoundingClientRect().left
+                         + wrap.scrollLeft - (wrap.clientWidth - active.clientWidth) / 2;
+            wrap.scrollTo({ left: target, behavior: 'smooth' });
+        }
+        if (user) restart();
+    }
+
+    function restart() {
+        clearInterval(timer);
+        timer = setInterval(() => go(index + 1), 5500);
+    }
+
+    prev.addEventListener('click', () => go(index - 1, true));
+    next.addEventListener('click', () => go(index + 1, true));
+    thumbs.forEach(t => t.addEventListener('click', () => go(+t.dataset.index, true)));
+    stage.addEventListener('mouseenter', () => clearInterval(timer));
+    stage.addEventListener('mouseleave', restart);
+
+    go(0);
+    restart();
+})();
+</script>
+{% endif %}

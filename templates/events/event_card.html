@@ -1,0 +1,22 @@
+﻿{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/events/event_card.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="event_card">  
+    <a href="{% url 'events:event_details' event.slug %}">
+        <div class="event-image-container">
+            {% if event.image %}
+                <img class="fixed-size" src="{{ event.image.url }}" alt="{{ event.title }}">
+            {% else %}
+                <img class="fixed-size" src="{% static 'images/placeholder-event.jpg' %}">
+            {% endif %}
+        </div>
+        <div>
+            <span>{{ event.category.title }}</span>
+            <h4>{{ event.title }}</h4>
+        </div>
+    </a>
+</div>
+{% endblock content %}

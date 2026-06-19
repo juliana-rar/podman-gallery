@@ -1,0 +1,26 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/blogs/category_blog_card.css' %}">
+{% endblock extra_css %}
+{% block content %}
+<div class="category_blogs">
+    <div>
+        <div class="category_title">
+            {{ category.title }}
+        </div>
+
+        <section>
+            <div>
+                {% for blog in blogs %}
+                    {% include 'blogs/category_blog_card.html' %}
+                {% endfor %}
+            </div>
+
+            {% include 'pagination.html' %}
+        </section>
+
+    </div>
+</div>
+
+{% endblock content %}

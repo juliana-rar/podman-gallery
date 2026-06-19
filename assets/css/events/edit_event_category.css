@@ -1,0 +1,115 @@
+/* ==========================
+   CONTENEDOR PRINCIPAL
+========================== */
+.edit_event_category {
+    max-width: 500px;
+    margin: 4rem auto;
+    padding: 2.5rem 2rem;
+    background: #1a1a1a; /* Fondo negro oscuro */
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    color: #f1f1f1;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+}
+
+/* Título */
+.edit_event_category h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #ffffff;
+}
+
+/* ==========================
+   FORMULARIO
+========================== */
+.edit_event_category form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Campos individuales */
+.edit_event_category label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #cfcfcf;
+    text-align: left;
+}
+
+.edit_event_category input[type="text"] {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background: #2a2a2a; /* Fondo gris oscuro */
+    color: #f1f1f1;
+    font-size: 1rem;
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.edit_event_category input[type="text"]::placeholder {
+    color: #888;
+}
+
+.edit_event_category input[type="text"]:focus {
+    background: #3a3a3a;
+    box-shadow: 0 0 0 2px #3cffb066;
+    transform: scale(1.02);
+}
+
+/* ==========================
+   BOTONES
+========================== */
+.edit_event_category button[type="submit"],
+.edit_event_category .btn-secondary {
+    padding: 12px 25px;
+    border-radius: 999px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Botón guardar */
+.edit_event_category button[type="submit"] {
+    background: linear-gradient(135deg, #3cffb0, #7a5cff);
+    color: #020617;
+}
+
+.edit_event_category button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(60, 255, 176, 0.35);
+}
+
+/* Botón cancelar */
+.edit_event_category .btn-secondary {
+    background: rgba(255, 255, 255, 0.12);
+    color: #cfcfcf;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.edit_event_category .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.22);
+    color: #ffffff;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+@media (max-width: 600px) {
+    .edit_event_category {
+        margin: 2rem 1rem;
+        padding: 2rem 1.5rem;
+    }
+    
+    .edit_event_category button[type="submit"],
+    .edit_event_category .btn-secondary {
+        width: 100%;
+        text-align: center;
+    }
+}

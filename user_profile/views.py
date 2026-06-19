@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
@@ -15,8 +15,30 @@ from .forms import (
 from .decorators import  (
     not_logged_in_required
 )
-from .models import Follow, User
-from notification.models import Notification
+from .models import Follow, User, SiteSettings
+
+
+@login_required(login_url='login')
+def update_site_settings(request):
+    settings_obj = SiteSettings.load()
+    if request.method == "POST":
+        site_title = (request.POST.get("site_title") or "").strip()
+        if site_title:
+            settings_obj.site_title = site_title
+        if request.FILES.get("favicon"):
+            settings_obj.favicon = request.FILES["favicon"]
+        nav_blogs = (request.POST.get("nav_blogs") or "").strip()
+        nav_events = (request.POST.get("nav_events") or "").strip()
+        nav_gallery = (request.POST.get("nav_gallery") or "").strip()
+        if nav_blogs:
+            settings_obj.nav_blogs = nav_blogs
+        if nav_events:
+            settings_obj.nav_events = nav_events
+        if nav_gallery:
+            settings_obj.nav_gallery = nav_gallery
+        settings_obj.save()
+        messages.success(request, "Nombres del menú actualizados")
+    return redirect("user_profile:profile")
 
 
 @never_cache
@@ -40,7 +62,7 @@ def login_user(request):
     context = {
         "form": form
     }
-    return render(request, 'login.html', context)
+    return render(request, 'user_profile/login.html', context)
 
 
 def logout_user(request):
@@ -65,7 +87,7 @@ def register_user(request):
     context = {
         "form": form
     }
-    return render(request, 'registration.html', context)
+    return render(request, 'user_profile/registration.html', context)
 
 
 @login_required(login_url='login')
@@ -89,7 +111,7 @@ def profile(request):
         "account": account,
         "form": form
     }
-    return render(request, 'profile.html', context)
+    return render(request, 'user_profile/profile.html', context)
 
 
 @login_required
@@ -143,61 +165,6 @@ def view_user_information(request, username):
         "following": following,
         "muted": muted
     }
-    return render(request, "user_information.html", context)
-
-
-@login_required(login_url = "login")
-def follow_or_unfollow_user(request, user_id):
-    followed = get_object_or_404(User, id=user_id)
-    followed_by = get_object_or_404(User, id=request.user.id)
-
-    follow, created = Follow.objects.get_or_create(
-        followed=followed,
-        followed_by=followed_by
-    )
-
-    if created:
-        followed.followers.add(follow)
-
-    else:
-        followed.followers.remove(follow)
-        follow.delete()
-
-    return redirect("view_user_information", username=followed.username)
-
-
-@login_required(login_url='login')
-def user_notifications(request):
-    notifications = Notification.objects.filter(
-        user=request.user,
-        is_seen=False
-    )
-
-    for notification in notifications:
-        notification.is_seen = True
-        notification.save()
-        
-    return render(request, 'notifications.html')
-
-
-@login_required(login_url='login')
-def mute_or_unmute_user(request, user_id):
-    user = get_object_or_404(User, pk=user_id)
-    follower = get_object_or_404(User, pk=request.user.pk)
-    instance = get_object_or_404(
-        Follow,
-        followed=user,
-        followed_by=follower
-    )
-
-    if instance.muted:
-        instance.muted = False
-        instance.save()
-
-    else:
-        instance.muted = True
-        instance.save()
-
-    return redirect('view_user_information', username=user.username)
+    return render(request, "user_profile/user_information.html", context)
 
 

@@ -1,0 +1,159 @@
+.hero-introduccion {
+  padding: 0.1rem 0 1.1rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+    background: transparent;
+}
+
+/* El navbar flota SOBRE el hero (el hero queda por debajo) — solo en páginas con hero */
+body:has(.herophotos) .hero-introduccion {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 60;
+    padding-top: 14px;
+}
+
+    .hero-introduccion > div {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px 20px; /* Solo un poco de padding lateral, y ahora también vertical para dar aire A LA CAJA */
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+        /* La caja del nav - ahora con su propio "aire" interno */
+        .hero-introduccion > div > nav {
+            position: relative;
+            padding: 24px 30px; /* Más padding interno para que los enlaces respiren */
+            width: 100%;
+            max-width: 1200px;
+            border-radius: 24px; /* Un poco más redondeada para que quede premium */
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.4); /* Ombra moderna */
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+            /* Tint translúcid: deixa veure el hero per sota */
+            .hero-introduccion > div > nav::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: rgba(14, 14, 16, 0.18);
+                border-radius: 24px;
+                border: 1px solid rgba(255, 255, 255, 0.14);
+            }
+
+            /* Cristall esmerilat (transparent, difumina el hero) */
+            .hero-introduccion > div > nav::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: rgba(255, 255, 255, 0.04);
+                backdrop-filter: blur(16px) saturate(130%);
+                -webkit-backdrop-filter: blur(16px) saturate(130%);
+                border-radius: 24px;
+            }
+
+    /* Enlaces encima de todo */
+    .hero-introduccion nav ul {
+        position: relative;
+        z-index: 1;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+        .hero-introduccion nav ul li a {
+            position: relative;
+            padding: 14px 28px;
+            font-weight: 600;
+            font-size: 17px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: rgba(255, 255, 255, 0.95);
+            text-decoration: none;
+            display: block;
+            border-radius: 14px;
+            transition: all 0.4s ease;
+            white-space: nowrap;
+            z-index: 2;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
+        }
+
+            .hero-introduccion nav ul li a::after {
+                content: '';
+                position: absolute;
+                bottom: 8px;
+                left: 50%;
+                width: 0;
+                height: 3px;
+                background: #3cffb055;
+                border-radius: 2px;
+                transition: all 0.4s ease;
+                transform: translateX(-50%);
+            }
+
+            .hero-introduccion nav ul li a:hover {
+                color: white;
+                background: rgba(255, 255, 255, 0.25);
+                transform: translateY(-3px);
+            }
+
+                .hero-introduccion nav ul li a:hover::after {
+                    width: 70%;
+                }
+
+/* MÓVIL - Compacto y bonito */
+@media (max-width: 768px) {
+    .hero-introduccion > div {
+        padding: 15px 15px; /* Menos aire lateral en móvil */
+    }
+
+        .hero-introduccion > div > nav {
+            padding: 20px 20px;
+            border-radius: 20px;
+        }
+
+            .hero-introduccion > div > nav::before,
+            .hero-introduccion > div > nav::after {
+                border-radius: 20px;
+            }
+
+    .hero-introduccion nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+        .hero-introduccion nav ul li {
+            width: 100%;
+            max-width: 320px;
+        }
+
+            .hero-introduccion nav ul li a {
+                width: 100%;
+                padding: 18px 20px;
+                text-align: center;
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+                .hero-introduccion nav ul li a:hover {
+                    background: rgba(255, 215, 0, 0.35);
+                    color: #3cffb055;
+                    transform: translateY(-2px);
+                }
+
+                .hero-introduccion nav ul li a::after {
+                    display: none;
+                }
+}

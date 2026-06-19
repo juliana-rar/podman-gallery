@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% load static %}
 {% block title %} {% endblock title %}
 
@@ -16,7 +16,7 @@
           <div class="all-blog-posts">
             <div class="row">
               {% for blog in blogs %}
-              {% include 'blog_card.html' %}
+              {% include 'blogs/blog_card.html' %}
               {% endfor %}
             </div>
           </div>

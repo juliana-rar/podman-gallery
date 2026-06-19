@@ -1,0 +1,19 @@
+{% load static %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/components/blogcategories.css' %}">
+
+<div class="cat-block">
+    <p class="cat-block-label">Temas</p>
+    <div class="blogcategories-grid">
+        <div>
+            <div>
+                {% for category in event_categories %}
+                <a href="{% url 'events:category_events' category.slug %}">{{ category.title }}</a>
+                {% empty %}
+                <p class="cat-empty">Aún no hay temas.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

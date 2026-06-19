@@ -1,0 +1,30 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block title %} {{ event.title }} {% endblock title %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/events/event_details.css' %}">
+{% endblock extra_css %}
+{% block content %}
+<!-- Títol fora de la targeta -->
+<div class="event_details_title">
+    {{ event.title }}
+</div>
+
+<section class="event_details"> 
+    <article>
+        <div>
+            {% if event.image %}
+            <img src="{{ event.image.url }}" alt="">
+            {% endif %}
+        </div>
+        <div>
+            <span>{{ event.category.title }}</span>
+            <p>{{ event.description|safe }}</p>
+
+   
+
+
+        </div>
+    </article>
+</section>
+{% endblock content %}

@@ -1,0 +1,26 @@
+:root {
+    /* Colores principales */
+    --color-principal: #70d2c1;
+    --color-secundario: #7a7a7a;
+
+    /* Variantes de blanco/gris claro */
+    --color-blanco: #CDCDCD;
+    --color-blanco2: #eee;
+    --color-blanco3: #fff;
+
+    /* Gris general */
+    --color-gris: #7a7a7a;
+
+    /* Texto y fondos específicos */
+    --color-logotext: #1e1e1e;
+    --header-background: #f7f7f7;
+    --footer-background: black;
+    --footer-text: #121212;
+
+    /* Tamaño de fuente para títulos de categoría */
+    --category-title-size: 19px;
+
+    /* Tus colores originales del gradiente (los mantenemos también) */
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+}

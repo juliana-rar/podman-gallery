@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 
 # Iniciar el proceso de sass --watch en segundo plano
 sass --watch assets/sass/main.scss:staticfiles/css/main.css &

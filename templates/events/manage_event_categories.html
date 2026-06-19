@@ -1,0 +1,47 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/events/manage_event_categories.css' %}">
+{% endblock extra_css %}
+{% block content %}
+<section class="manage_event_categories">
+    <h2>Gestionar Categorias de Eventos</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="title">Nueva categoría</label>
+            <input type="text" name="title" placeholder="Nombre de la categoria" required>
+        </div>
+        <button type="submit">Añadir</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Slug</th>
+                <th>Fecha creación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in event_categories %}
+            <tr>
+                <td>{{ category.title }}</td>
+                <td>{{ category.slug }}</td>
+                <td>{{ category.created_date }}</td>
+                <td>
+                    <a href="{% url 'events:edit_event_category' category.id %}">Editar</a>
+                    <a href="{% url 'events:delete_event_category' category.id %}" onclick="return confirm('Seguro que quieres eliminar esta categoria?')">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No hay categorias todavía</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock content %}

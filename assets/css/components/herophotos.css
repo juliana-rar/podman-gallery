@@ -1,0 +1,214 @@
+/* ===========================================================
+   Hero Photos — slideshow cinematográfico a pantalla completa
+   Efecto Ken Burns · overlay editorial · acento latón
+   =========================================================== */
+
+.herophotos {
+    --brass: #c2a878;
+    --ink: #f4f1e9;
+
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100svh;                  /* altura real del viewport en móvil */
+    min-height: 600px;
+    overflow: hidden;
+    background: #0a0a0b;
+    font-family: 'Jost', sans-serif;
+}
+
+.herophotos .hp-slides {
+    position: absolute;
+    inset: 0;
+}
+
+.herophotos .hp-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1.4s ease, visibility 1.4s;
+}
+
+    .herophotos .hp-slide.is-active {
+        opacity: 1;
+        visibility: visible;
+        z-index: 1;
+    }
+
+    .herophotos .hp-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transform: scale(1.05);
+    }
+
+    /* Ken Burns lento en la diapositiva activa */
+    .herophotos .hp-slide.is-active img {
+        animation: hpZoom 8s ease-out forwards;
+    }
+
+@keyframes hpZoom {
+    from { transform: scale(1.05); }
+    to   { transform: scale(1.16); }
+}
+
+    .herophotos .hp-overlay {
+        position: absolute;
+        inset: 0;
+        background:
+            linear-gradient(to top, rgba(8, 7, 6, 0.78) 0%, rgba(8, 7, 6, 0.15) 45%, rgba(8, 7, 6, 0.35) 100%);
+    }
+
+/* ---------- Texto editorial ---------- */
+.herophotos .hp-caption {
+    position: absolute;
+    left: 0; right: 0; bottom: 14%;
+    z-index: 3;
+    padding: 0 8vw;
+    max-width: 1000px;
+}
+
+    .herophotos .hp-eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--brass);
+        margin: 0 0 16px;
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    .herophotos .hp-caption h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 500;
+        font-size: clamp(2.8rem, 7vw, 6rem);
+        line-height: 1.02;
+        color: #fff;
+        margin: 0 0 28px;
+        letter-spacing: 0.5px;
+        max-width: 14ch;
+        opacity: 0;
+        transform: translateY(22px);
+        text-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .herophotos .hp-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: #1a1813;
+        background: var(--brass);
+        font-size: 0.82rem;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        padding: 16px 34px;
+        border-radius: 2px;
+        opacity: 0;
+        transform: translateY(22px);
+        transition: background 0.25s ease, gap 0.25s ease;
+    }
+
+        .herophotos .hp-cta:hover { background: #d4bd92; gap: 18px; }
+
+    /* Animación de entrada del texto en la activa */
+    .herophotos .hp-slide.is-active .hp-eyebrow { animation: hpRise 0.8s ease 0.3s forwards; }
+    .herophotos .hp-slide.is-active .hp-caption h1 { animation: hpRise 0.9s ease 0.45s forwards; }
+    .herophotos .hp-slide.is-active .hp-cta { animation: hpRise 0.9s ease 0.65s forwards; }
+
+@keyframes hpRise {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Flechas ---------- */
+.herophotos .hp-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 4;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(15, 13, 10, 0.25);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: all 0.25s ease;
+}
+
+    .herophotos .hp-arrow:hover {
+        background: var(--brass);
+        color: #1a1813;
+        border-color: var(--brass);
+    }
+
+    .herophotos .hp-prev { left: 28px; }
+    .herophotos .hp-next { right: 28px; }
+
+/* ---------- Dots ---------- */
+.herophotos .hp-dots {
+    position: absolute;
+    right: 8vw;
+    bottom: 8%;
+    z-index: 4;
+    display: flex;
+    gap: 12px;
+}
+
+    .herophotos .hp-dot {
+        width: 36px;
+        height: 3px;
+        padding: 0;
+        border: none;
+        background: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+        .herophotos .hp-dot.active { background: var(--brass); }
+
+/* ---------- Indicador de scroll ---------- */
+.herophotos .hp-scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 26px;
+    transform: translateX(-50%);
+    z-index: 4;
+    width: 26px;
+    height: 42px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    display: grid;
+    place-items: start center;
+    padding-top: 8px;
+}
+
+    .herophotos .hp-scroll span {
+        width: 3px;
+        height: 8px;
+        border-radius: 3px;
+        background: #fff;
+        animation: hpScroll 1.6s ease-in-out infinite;
+    }
+
+@keyframes hpScroll {
+    0%   { opacity: 0; transform: translateY(0); }
+    40%  { opacity: 1; }
+    80%  { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 0; }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .herophotos { height: 100vh; height: 100svh; }
+    .herophotos .hp-arrow { display: none; }
+    .herophotos .hp-caption { bottom: 16%; padding: 0 24px; }
+    .herophotos .hp-dots { right: 24px; bottom: 7%; }
+}

@@ -1,0 +1,32 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block title %} Logeate {% endblock title %}
+    {% block extra_css %}
+        <link rel="stylesheet" href="{% static 'css/user_profile/login.css' %}">
+    {% endblock extra_css %}
+{% block content %}
+<section class="login-section">
+    <div>
+        <h2>Inicia sesión en tu cuenta</h2>
+
+        <form action="" method="POST" novalidate>
+            {% csrf_token %}
+            <div>
+                <input name="username" type="text" id="username_id" placeholder="Tu nombre o Email">
+                <p class="error">{{ form.username.errors }}</p>
+            </div>
+
+            <div>
+                <input name="password" type="password" id="password_id" placeholder="Tu contraseña">
+                <p class="error">{{ form.password.errors }}</p>
+            </div>
+
+            <div>
+                <button type="submit">Iniciar sesión</button>
+                <a href="{% url 'user_profile:register_user' %}">Registrarse</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock content %}

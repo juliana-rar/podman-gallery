@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Galería{% endblock title %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/gallery/gallery.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="art-gallery">
+
+    <header class="ag-header">
+        <p class="ag-eyebrow">Colección de obra</p>
+        <h1>{% if category %}{{ category.title }}{% elif mine %}Mis obras{% else %}Galería{% endif %}</h1>
+        <p class="ag-sub">
+            {% if category %}{{ total_count }} obra{{ total_count|pluralize }} en esta colección
+            {% else %}Una selección de pinturas originales{% endif %}
+        </p>
+        <span class="ag-rule"></span>
+        {% if mine %}
+        <a class="ag-upload" href="{% url 'gallery:add_image' %}"><i class="fa-solid fa-plus"></i> Subir obra</a>
+        {% endif %}
+    </header>
+
+    <!-- Filtros por colección -->
+    <nav class="ag-filters">
+        <a href="{% url 'gallery:gallery_list' %}" class="{% if not active_slug and not mine %}active{% endif %}">Todas</a>
+        {% for cat in categories %}
+        <a href="{% url 'gallery:category_gallery' cat.slug %}" class="{% if active_slug == cat.slug %}active{% endif %}">
+            {{ cat.title }} <span>{{ cat.num }}</span>
+        </a>
+        {% endfor %}
+    </nav>
+
+    {% if request.user.is_authenticated %}
+    <!-- Gestión de colecciones (solo artista) -->
+    <div class="ag-manage">
+        <button type="button" class="ag-manage-toggle" id="agManageToggle">
+            <i class="fa-solid fa-sliders"></i> Gestionar colecciones
+        </button>
+        <div class="ag-manage-panel" id="agManagePanel" hidden>
+            <form method="POST" action="{% url 'gallery:manage_gallery_categories' %}" class="ag-cat-add">
+                {% csrf_token %}
+                <input type="text" name="title" placeholder="Nueva colección…" required>
+                <button type="submit"><i class="fa-solid fa-plus"></i> Crear</button>
+            </form>
+            <ul class="ag-cat-list">
+                {% for cat in categories %}
+                <li>
+                    <form method="POST" action="{% url 'gallery:edit_gallery_category' cat.id %}" class="ag-cat-edit">
+                        {% csrf_token %}
+                        <input type="text" name="title" value="{{ cat.title }}">
+                        <button type="submit" title="Guardar"><i class="fa-solid fa-check"></i></button>
+                    </form>
+                    <span class="ag-cat-count">{{ cat.num }} obra{{ cat.num|pluralize }}</span>
+                    <a href="{% url 'gallery:delete_gallery_category' cat.id %}" class="ag-cat-del"
+                       title="Eliminar colección"
+                       onclick="return confirm('¿Eliminar la colección «{{ cat.title }}»? Las obras no se borran.');">
+                        <i class="fa-solid fa-trash"></i>
+                    </a>
+                </li>
+                {% empty %}
+                <li class="ag-muted">Aún no hay colecciones.</li>
+                {% endfor %}
+            </ul>
+            <a class="ag-add-work" href="{% url 'gallery:add_image' %}"><i class="fa-solid fa-plus"></i> Añadir nueva obra</a>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if mine and images %}
+    <p class="ag-reorder-hint"><i class="fa-solid fa-up-down-left-right"></i> Arrastra el icono de cada obra para cambiar su posición.</p>
+    {% endif %}
+
+    <!-- Pared de obras -->
+    <div class="ag-wall{% if mine %} ag-wall--reorder{% endif %}"{% if mine %} data-reorder-url="{% url 'gallery:reorder_gallery' %}" data-csrf="{{ csrf_token }}"{% endif %}>
+        {% for img in images %}
+        <figure class="ag-piece" data-id="{{ img.id }}">
+            <a href="{% url 'gallery:image_details' img.slug %}" class="ag-frame">
+                <span class="ag-canvas">
+                    <img src="{{ img.image.url }}" alt="{{ img.title }}" loading="lazy">
+                    <span class="ag-hover">
+                        <span class="ag-hover-inner">
+                            {% if img.category %}<span class="ag-hover-cat">{{ img.category.title }}</span>{% endif %}
+                            <span class="ag-hover-view">Ver obra <i class="fa-solid fa-arrow-right"></i></span>
+                        </span>
+                    </span>
+                </span>
+                {% if request.user.is_authenticated and img.user_id == request.user.id %}
+                <span class="ag-piece-tools">
+                    {% if mine %}<span class="ag-tool ag-tool-move" draggable="true" title="Arrastra para reordenar"><i class="fa-solid fa-up-down-left-right"></i></span>{% endif %}
+                    <span class="ag-tool" title="Editar obra"
+                          onclick="event.preventDefault(); event.stopPropagation(); window.location='{% url 'gallery:edit_image' img.id %}';">
+                        <i class="fa-solid fa-pen"></i>
+                    </span>
+                    <span class="ag-tool ag-tool-del" title="Eliminar obra"
+                          onclick="event.preventDefault(); event.stopPropagation(); if(confirm('¿Eliminar «{{ img.title|escapejs }}»?')) window.location='{% url 'gallery:delete_image' img.id %}';">
+                        <i class="fa-solid fa-trash"></i>
+                    </span>
+                </span>
+                {% endif %}
+            </a>
+            <figcaption>
+                <h3>{{ img.title }}</h3>
+                <p>
+                    {% if img.technique %}{{ img.technique }}{% endif %}
+                    {% if img.year %} · {{ img.year }}{% endif %}
+                </p>
+            </figcaption>
+        </figure>
+        {% empty %}
+        <p class="ag-empty">Todavía no hay obras expuestas.</p>
+        {% endfor %}
+    </div>
+
+    {% if images.has_other_pages %}
+    <div class="ag-pagination">
+        {% if images.has_previous %}<a href="?page={{ images.previous_page_number }}"><i class="fa-solid fa-arrow-left"></i></a>{% endif %}
+        <span>{{ images.number }} / {{ images.paginator.num_pages }}</span>
+        {% if images.has_next %}<a href="?page={{ images.next_page_number }}"><i class="fa-solid fa-arrow-right"></i></a>{% endif %}
+    </div>
+    {% endif %}
+
+</section>
+
+<script>
+    (function () {
+        const t = document.getElementById('agManageToggle');
+        const p = document.getElementById('agManagePanel');
+        if (t && p) t.addEventListener('click', () => {
+            p.hidden = !p.hidden;
+            t.classList.toggle('open', !p.hidden);
+        });
+    })();
+
+    // Reordenar obras por arrastre (solo en Mi galería)
+    (function () {
+        const wall = document.querySelector('.ag-wall--reorder');
+        if (!wall) return;
+        const url = wall.dataset.reorderUrl;
+        const csrf = wall.dataset.csrf;
+        let dragEl = null;
+
+        // Evita el arrastre nativo de imágenes/enlaces
+        wall.querySelectorAll('img, .ag-frame').forEach(el => el.setAttribute('draggable', 'false'));
+
+        wall.querySelectorAll('.ag-tool-move').forEach(function (handle) {
+            const piece = handle.closest('.ag-piece');
+            handle.addEventListener('dragstart', function (e) {
+                dragEl = piece;
+                piece.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                try { e.dataTransfer.setData('text/plain', piece.dataset.id); } catch (err) {}
+                try { e.dataTransfer.setDragImage(piece, 30, 30); } catch (err) {}
+            });
+            handle.addEventListener('dragend', function () {
+                if (!dragEl) return;
+                dragEl.classList.remove('dragging');
+                dragEl = null;
+                saveOrder();
+            });
+        });
+
+        wall.querySelectorAll('.ag-piece').forEach(function (piece) {
+            piece.addEventListener('dragover', function (e) {
+                if (!dragEl || piece === dragEl) return;
+                e.preventDefault();
+                const box = piece.getBoundingClientRect();
+                const after = (e.clientY - box.top) / box.height > 0.5
+                           || (e.clientX - box.left) / box.width > 0.5;
+                if (after) piece.after(dragEl); else piece.before(dragEl);
+            });
+        });
+
+        function saveOrder() {
+            const ids = Array.from(wall.querySelectorAll('.ag-piece')).map(p => p.dataset.id);
+            fetch(url, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': csrf, 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'order=' + ids.join(',')
+            }).catch(() => {});
+        }
+    })();
+</script>
+{% endblock content %}

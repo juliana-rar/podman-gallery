@@ -1,0 +1,552 @@
+/* ===========================================================
+   Perfil — acorde a la galería de arte (serif + latón + negro)
+   =========================================================== */
+
+:root {
+    --accent: #c2a878;
+    --accent-soft: rgba(194, 168, 120, 0.14);
+    --panel: #0e0e10;
+    --surface: #141416;
+    --surface-2: #0c0c0d;
+    --line: rgba(255, 255, 255, 0.07);
+    --line-strong: rgba(255, 255, 255, 0.1);
+    --text: #ece8df;
+    --muted: #9b968a;
+}
+
+/* Fondo general */
+.profile {
+    min-height: 100vh;
+    padding: 72px 24px;
+    background:
+        radial-gradient(120% 80% at 50% -5%, #18181b 0%, transparent 55%),
+        #0a0a0b;
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    font-family: 'Jost', sans-serif;
+}
+
+    /* ---------- Panel único que une ambas columnas ---------- */
+    .profile > div:nth-child(1) {
+        width: 100%;
+        max-width: 1080px;
+        display: grid;
+        grid-template-columns: minmax(320px, 0.85fr) 1.15fr;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 30px 70px rgba(0,0,0,0.5);
+    }
+
+    /* ---------- Columna izquierda: identidad + formulario ---------- */
+    .profile > div > div:nth-child(1) {
+        text-align: center;
+        padding: 48px 40px;
+        border-right: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(194,168,120,0.05) 0%, transparent 220px);
+    }
+
+    /* Avatar con botón de cámara flotante */
+    .avatar-wrap {
+        position: relative;
+        width: 128px;
+        margin: 0 auto;
+    }
+
+    .profile img {
+        width: 128px;
+        height: 128px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--line-strong);
+        padding: 4px;
+        background: var(--surface);
+        transition: transform 0.35s ease, border-color 0.35s ease;
+    }
+
+        .profile img:hover {
+            transform: scale(1.03);
+            border-color: var(--accent);
+        }
+
+    .avatar-wrap > #openModal {
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        width: 38px;
+        height: 38px;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        font-size: 0.9rem;
+        color: #06110f;
+        background: var(--accent);
+        border: 3px solid var(--panel);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform 0.25s ease, background 0.25s ease;
+    }
+
+        .avatar-wrap > #openModal:hover {
+            transform: scale(1.08);
+            background: #d4bd92;
+        }
+
+        .avatar-wrap > #openModal > i { margin: 0; }
+
+    /* Nombre y handle */
+    .profile-name {
+        margin: 22px 0 4px;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2.1rem;
+        font-weight: 600;
+        color: #fff;
+        letter-spacing: 0.3px;
+        line-height: 1.05;
+    }
+
+    .profile-handle {
+        margin: 0;
+        color: var(--accent);
+        font-size: 0.82rem;
+        font-weight: 500;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    /* Conteo de posts — píldora */
+    .profile > div > div:nth-child(1) > p:nth-of-type(2) {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 18px 0 0;
+        padding: 7px 16px;
+        font-size: 0.85rem;
+        color: var(--muted);
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+        border-radius: 100px;
+    }
+
+    .profile strong { color: var(--text); font-weight: 700; }
+    .profile p > i { color: var(--accent); }
+
+    /* ---------- Formulario ---------- */
+    .profile form {
+        margin-top: 36px;
+        text-align: left;
+    }
+
+        .profile form > div { margin-bottom: 18px; }
+
+        .profile form label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--muted);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .profile form label > i {
+            width: 16px;
+            margin-right: 9px;
+            color: var(--accent);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .profile form input {
+            width: 100%;
+            padding: 13px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            background: var(--surface-2);
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+            .profile form input:focus {
+                border-color: var(--accent);
+                box-shadow: 0 0 0 3px var(--accent-soft);
+            }
+
+        /* Errores: solo el <p> justo tras un input */
+        .profile form input + p {
+            color: #ff7a7a;
+            font-size: 0.82rem;
+            margin: 6px 0 0;
+        }
+
+        .profile form > div:last-child {
+            margin-top: 30px;
+            margin-bottom: 0;
+        }
+
+        .profile form > div:last-child > button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #06110f;
+            background: var(--accent);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+            .profile form > div:last-child > button:hover {
+                background: #d4bd92;
+                transform: translateY(-2px);
+                box-shadow: 0 10px 24px rgba(194, 168, 120, 0.22);
+            }
+
+    .profile button > i,
+    #profileModal button[type="submit"] > i { margin-right: 9px; }
+
+    /* ---------- Columna derecha: accesos rápidos ---------- */
+    .profile > div > div:nth-child(2) {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 1fr;
+        gap: 1px;
+        padding: 0;
+        background: var(--line);
+    }
+
+        .profile > div > div:nth-child(2) > a {
+            text-decoration: none;
+            color: var(--text);
+            text-align: center;
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            background: var(--panel);
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            min-height: 150px;
+            padding: 24px 18px;
+            box-sizing: border-box;
+            word-break: break-word;
+            transition: background 0.25s ease, transform 0.25s ease;
+        }
+
+            .profile > div > div:nth-child(2) > a > i {
+                font-size: 1.7rem;
+                color: var(--accent);
+                transition: transform 0.25s ease;
+            }
+
+            .profile > div > div:nth-child(2) > a > span {
+                line-height: 1.35;
+                color: var(--muted);
+                transition: color 0.25s ease;
+            }
+
+            .profile > div > div:nth-child(2) > a:hover {
+                background: var(--surface);
+            }
+
+                .profile > div > div:nth-child(2) > a:hover > i {
+                    transform: translateY(-3px) scale(1.1);
+                }
+
+                .profile > div > div:nth-child(2) > a:hover > span {
+                    color: var(--text);
+                }
+
+    /* ---------- Modal ---------- */
+    #profileModal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(6, 7, 8, 0.72);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+        #profileModal > div {
+            background: var(--panel);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid var(--line);
+            width: 90%;
+            max-width: 440px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+            position: relative;
+            text-align: center;
+        }
+
+        #profileModal h3 {
+            color: var(--text);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 26px;
+        }
+
+        #profileModal h3 > i { margin-right: 10px; color: var(--accent); }
+
+    #closeModal {
+        position: absolute;
+        top: 18px;
+        right: 22px;
+        background: none;
+        border: none;
+        font-size: 1.6rem;
+        line-height: 1;
+        color: var(--muted);
+        cursor: pointer;
+        transition: color 0.2s ease;
+    }
+
+        #closeModal:hover { color: var(--accent); }
+
+    #profileModal input {
+        width: 100%;
+        padding: 13px 16px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: var(--surface-2);
+        color: #fff;
+        font-size: 0.95rem;
+        margin-bottom: 22px;
+    }
+
+    #profileModal button[type="submit"] {
+        width: 100%;
+        padding: 15px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #06110f;
+        background: var(--accent);
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+        #profileModal button[type="submit"]:hover {
+            background: #d4bd92;
+            transform: translateY(-2px);
+        }
+
+    /* ---------- Icono de configuración (arriba-izquierda) ---------- */
+    .profile > div > div:nth-child(1) { position: relative; }
+
+    .profile-settings-btn {
+        position: absolute;
+        top: 18px;
+        left: 18px;
+        width: 38px;
+        height: 38px;
+        display: grid;
+        place-items: center;
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        color: var(--muted);
+        font-size: 0.95rem;
+        cursor: pointer;
+        z-index: 3;
+        transition: color 0.3s ease, border-color 0.3s ease, transform 0.4s ease;
+    }
+
+        .profile-settings-btn:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+            transform: rotate(45deg);
+        }
+
+    /* ---------- Modal: nombres del menú ---------- */
+    #settingsModal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(6, 7, 8, 0.72);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+        #settingsModal > div {
+            background: var(--panel);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid var(--line);
+            width: 90%;
+            max-width: 460px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+            position: relative;
+            text-align: left;
+        }
+
+        #settingsModal h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: #fff;
+            margin: 0 0 6px;
+            text-align: center;
+        }
+
+        #settingsModal h3 > i { margin-right: 10px; color: var(--accent); }
+
+        #settingsModal .set-help {
+            color: var(--muted);
+            font-size: 0.84rem;
+            text-align: center;
+            margin: 0 0 26px;
+        }
+
+    #closeSettings {
+        position: absolute;
+        top: 18px;
+        right: 22px;
+        background: none;
+        border: none;
+        font-size: 1.6rem;
+        line-height: 1;
+        color: var(--muted);
+        cursor: pointer;
+        transition: color 0.2s ease;
+    }
+
+        #closeSettings:hover { color: var(--accent); }
+
+    .set-field { margin-bottom: 16px; }
+
+    .set-field label small {
+        text-transform: none;
+        letter-spacing: 0;
+        color: var(--muted);
+        font-size: 0.72rem;
+        margin-left: 6px;
+    }
+
+    /* Subida de logo / favicon */
+    .set-favicon {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 14px;
+        border: 1px dashed var(--line);
+        border-radius: 12px;
+        background: var(--surface-2);
+        cursor: pointer;
+        text-transform: none;
+        letter-spacing: 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+        transition: border-color 0.25s ease, color 0.25s ease;
+    }
+
+        .set-favicon:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .set-favicon img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #000;
+            flex: 0 0 auto;
+        }
+
+        .set-favicon > span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .set-field label {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 7px;
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+        }
+
+        .set-field label > i { color: var(--accent); width: 16px; text-align: center; }
+
+    #settingsModal input {
+        width: 100%;
+        padding: 13px 16px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: var(--surface-2);
+        color: #fff;
+        font-size: 0.95rem;
+        box-sizing: border-box;
+        outline: none;
+        transition: all 0.25s ease;
+    }
+
+        #settingsModal input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+
+    #settingsModal button[type="submit"] {
+        width: 100%;
+        margin-top: 14px;
+        padding: 15px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #11100c;
+        background: var(--accent);
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+        #settingsModal button[type="submit"]:hover {
+            background: #d4bd92;
+            transform: translateY(-2px);
+        }
+
+        #settingsModal button[type="submit"] > i { margin-right: 9px; }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 880px) {
+        .profile { padding: 40px 16px; }
+
+        .profile > div:nth-child(1) {
+            grid-template-columns: 1fr;
+            max-width: 460px;
+        }
+
+        .profile > div > div:nth-child(1) {
+            border-right: none;
+            border-bottom: 1px solid var(--line);
+            padding: 40px 28px;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .profile > div > div:nth-child(2) {
+            grid-template-columns: 1fr;
+        }
+    }

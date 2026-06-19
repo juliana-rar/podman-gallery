@@ -1,0 +1,22 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/blogs/edit_category.css' %}">
+{% endblock extra_css %}
+{% block content %}
+<section class="editcategory">
+    <h2>Editar Categoria</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-field">
+            <label for="title">Nombre</label>
+            <input type="text" name="title" value="{{ category.title }}" required>
+        </div>
+        <div class="form-buttons">
+            <button type="submit">Guardar cambios</button>
+            <a href="{% url 'blog:manage_categories' %}">Cancelar</a>
+        </div>
+    </form>
+</section>
+
+{% endblock content %}

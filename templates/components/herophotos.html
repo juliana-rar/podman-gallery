@@ -1,0 +1,71 @@
+{% load static %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/components/herophotos.css' %}">
+
+{% if hero_photos %}
+<section class="herophotos" id="heroPhotos">
+    <div class="hp-slides">
+        {% for photo in hero_photos %}
+        <div class="hp-slide{% if forloop.first %} is-active{% endif %}" data-index="{{ forloop.counter0 }}">
+            <img src="{{ photo.image.url }}" alt="{{ photo.title }}" {% if not forloop.first %}loading="lazy"{% endif %}>
+            <div class="hp-overlay"></div>
+            {% if photo.title or photo.subtitle %}
+            <div class="hp-caption">
+                {% if photo.subtitle %}<p class="hp-eyebrow">{{ photo.subtitle }}</p>{% endif %}
+                {% if photo.title %}<h1>{{ photo.title }}</h1>{% endif %}
+                <a class="hp-cta" href="{% url 'gallery:gallery_list' %}">Ver la galería <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if hero_photos|length > 1 %}
+    <button class="hp-arrow hp-prev" id="hpPrev" aria-label="Anterior"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="hp-arrow hp-next" id="hpNext" aria-label="Siguiente"><i class="fa-solid fa-chevron-right"></i></button>
+
+    <div class="hp-dots" id="hpDots">
+        {% for photo in hero_photos %}
+        <button class="hp-dot{% if forloop.first %} active{% endif %}" data-index="{{ forloop.counter0 }}" aria-label="Foto {{ forloop.counter }}"></button>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <a class="hp-scroll" href="#heroScroll" aria-label="Desplazar"><span></span></a>
+</section>
+<span id="heroScroll"></span>
+
+<script>
+(function () {
+    const root = document.getElementById('heroPhotos');
+    if (!root) return;
+    const slides = Array.from(root.querySelectorAll('.hp-slide'));
+    if (slides.length < 2) return;
+    const dots = Array.from(root.querySelectorAll('.hp-dot'));
+    const prev = document.getElementById('hpPrev');
+    const next = document.getElementById('hpNext');
+    let index = 0;
+    let timer = null;
+
+    function go(i, user) {
+        index = (i + slides.length) % slides.length;
+        slides.forEach((s, n) => s.classList.toggle('is-active', n === index));
+        dots.forEach((d, n) => d.classList.toggle('active', n === index));
+        if (user) restart();
+    }
+    function restart() {
+        clearInterval(timer);
+        timer = setInterval(() => go(index + 1), 6000);
+    }
+
+    if (prev) prev.addEventListener('click', () => go(index - 1, true));
+    if (next) next.addEventListener('click', () => go(index + 1, true));
+    dots.forEach(d => d.addEventListener('click', () => go(+d.dataset.index, true)));
+    root.addEventListener('mouseenter', () => clearInterval(timer));
+    root.addEventListener('mouseleave', restart);
+
+    restart();
+})();
+</script>
+{% endif %}

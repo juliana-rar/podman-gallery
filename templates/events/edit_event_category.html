@@ -1,0 +1,21 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/events/edit_event_category.css' %}">
+{% endblock extra_css %}
+{% block content %}
+<div class="edit_event_category">
+    <h2>Editar Categoría</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="title">Nombre de la categoría</label>
+            <input type="text" name="title" class="form-control" value="{{ category.title }}" required>
+        </div>
+        <button type="submit">Guardar cambios</button>
+        <a href="{% url 'events:manage_event_categories' %}" class="btn btn-secondary mt-2">Cancelar</a>
+    </form>
+</div>
+{% endblock content %}
+

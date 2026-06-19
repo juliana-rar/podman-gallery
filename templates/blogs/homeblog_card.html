@@ -1,0 +1,94 @@
+﻿{% load static %}
+<div class="bc">
+    <a href="{% url 'blog:blog_details' blog.slug %}" class="bc-link">
+        <div class="bc-img">
+            <img src="{{ blog.banner.url }}" alt="{{ blog.title }}">
+            <div class="bc-overlay">
+                <span class="bc-category">{{ blog.category.title }}</span>
+            </div>
+        </div>
+        <div class="bc-content">
+            <h4 class="bc-title">{{ blog.title }}</h4>
+        </div>
+    </a>
+</div>
+
+<style>
+    /* Enllaç complet */
+    .bc-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    /* Targeta */
+    .bc {
+        background-color: #1c1c1c;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        width: 100%;
+    }
+
+        /* Hover efecte */
+        .bc:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+        }
+
+    /* Imatge */
+    .bc-img {
+        position: relative;
+        width: 100%;
+        height: 180px;
+        overflow: hidden;
+    }
+
+        .bc-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+    .bc:hover .bc-img img {
+        transform: scale(1.05);
+    }
+
+    /* Overlay de categoria */
+    .bc-overlay {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        background-color: rgba(255, 152, 0, 0.9);
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        color: #fff;
+    }
+
+    /* Contingut */
+    .bc-content {
+        padding: 15px 20px;
+    }
+
+    .bc-title {
+        font-size: 1.2rem;
+        color: #fff;
+        margin: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .bc-img {
+            height: 150px;
+        }
+
+        .bc-title {
+            font-size: 1rem;
+        }
+    }
+</style>
