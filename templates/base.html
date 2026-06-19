@@ -18,6 +18,10 @@
 {% endblock extra_css %}
 </head>
     <style>
+        /* Color de acento elegible desde Perfil → Configuración (se aplica a todo el sitio) */
+        :root {
+            --accent: {{ site_settings.accent_color|default:"#c2a878" }};
+        }
         /* Reset: sin margen por defecto (evita franja gris arriba) ni scroll lateral */
         html, body {
             margin: 0;

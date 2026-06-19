@@ -6,25 +6,29 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.utils.text import slugify
+from django.db.models import Count
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def event_list(request):
-    queryset = Event.objects.order_by('-id')   
+    queryset = Event.objects.order_by('-id')
     page = request.GET.get('page', 1)
-    paginator = Paginator(queryset, 4)         
+    paginator = Paginator(queryset, 4)
 
     try:
         events = paginator.page(page)
     except PageNotAnInteger:
         events = paginator.page(1)
     except EmptyPage:
-        events = paginator.page(paginator.num_pages)  
+        events = paginator.page(paginator.num_pages)
+
+    categories = EventCategory.objects.annotate(num=Count('category_events')).order_by('title')
 
     context = {
         "events": events,
         "page_obj": events,
-        "paginator": paginator,       
+        "paginator": paginator,
+        "categories": categories,
     }
     return render(request, "events/events.html", context)
 
@@ -42,11 +46,15 @@ def category_events(request, slug):
     except EmptyPage:
         events = paginator.page(paginator.num_pages)
 
+    categories = EventCategory.objects.annotate(num=Count('category_events')).order_by('title')
+
     context = {
         "events": events,
         "page_obj": events,
         "paginator": paginator,
         "category": category,
+        "categories": categories,
+        "active_slug": category.slug,
     }
     return render(request, "events/events.html", context)
 

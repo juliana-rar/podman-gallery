@@ -1,47 +1,45 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
+{% block title %}Categorías de {{ site_settings.nav_blogs|default:"Eportfolios" }}{% endblock title %}
 {% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/blogs/manage_categories.css' %}">
 {% endblock extra_css %}
 {% block content %}
-<section class="manage_categories">
-    <h2>Gestionar Categorias</h2>
-
-    <form method="POST">
-        {% csrf_token %}
+<section class="manage-cats">
+    <header class="mc-head">
         <div>
-            <label for="title">Nueva categoria</label>
-            <input type="text" name="title" placeholder="Nombre de la categoria" required>
+            <p class="mc-eyebrow">{{ site_settings.nav_blogs|default:"Eportfolios" }}</p>
+            <h1 class="mc-title">Categorías</h1>
         </div>
-        <button type="submit">Añadir</button>
+        <a class="mc-back" href="{% url 'blog:my_blogs' %}"><i class="fa-solid fa-arrow-left"></i> Mis {{ site_settings.nav_blogs|default:"Eportfolios" }}</a>
+    </header>
+
+    <form class="mc-add" method="POST">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Nueva categoría" required>
+        <button type="submit"><i class="fa-solid fa-plus"></i> Añadir</button>
     </form>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Slug</th>
-                <th>Fecha creación</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for category in categories %}
-            <tr>
-                <td>{{ category.title }}</td>
-                <td>{{ category.slug }}</td>
-                <td>{{ category.created_date }}</td>
-                <td>
-                    <a href="{% url 'blog:edit_category' category.id %}">Editar</a>
-                    <a href="{% url 'blog:delete_category' category.id %}" onclick="return confirm('Seguro que quieres eliminar esta categoria?')">Eliminar</a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4">No hay categorias todavía</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <ul class="mc-list">
+        {% for category in categories %}
+        <li class="mc-item">
+            <form class="mc-edit" method="POST" action="{% url 'blog:edit_category' category.id %}">
+                {% csrf_token %}
+                <input type="text" name="title" value="{{ category.title }}" aria-label="Nombre de la categoría">
+                <span class="mc-slug">/{{ category.slug }}</span>
+                <div class="mc-tools">
+                    <button type="submit" class="mc-save" title="Guardar"><i class="fa-solid fa-floppy-disk"></i></button>
+                    <a class="mc-del" href="{% url 'blog:delete_category' category.id %}"
+                       onclick="return confirm('¿Eliminar «{{ category.title|escapejs }}»?');"
+                       title="Eliminar"><i class="fa-solid fa-trash"></i></a>
+                </div>
+            </form>
+        </li>
+        {% empty %}
+        <li class="mc-empty">Aún no hay categorías.</li>
+        {% endfor %}
+    </ul>
 </section>
 {% endblock content %}

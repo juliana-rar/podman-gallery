@@ -9,7 +9,7 @@
             <img class="fixed-size" src="{{ blog.banner.url }}" alt="">
         </div>
         <div>
-            <span>{{ blog.category.title }}</span>
+            {% if not hide_category and blog.category %}<span>{{ blog.category.title }}</span>{% endif %}
             <h4>{{ blog.title }}</h4>
         </div>
     </a>

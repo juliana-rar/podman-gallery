@@ -3,7 +3,7 @@
    =========================================================== */
 
 .art-list {
-    --brass: #c2a878;
+    --brass: var(--accent, #c2a878);
     --ink: #ece8df;
     --muted: #9b968a;
     --line: rgba(255, 255, 255, 0.08);
@@ -54,6 +54,49 @@
         font-style: italic;
         font-size: 1.1rem;
     }
+
+/* ---------- Filtros por categoría (debajo del título) ---------- */
+.bl-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 28px;
+    max-width: 1100px;
+    margin: 0 auto 50px;
+}
+
+    .bl-filters a {
+        position: relative;
+        text-decoration: none;
+        color: var(--muted);
+        font-size: 0.86rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 6px 2px;
+        transition: color 0.25s ease;
+    }
+
+        .bl-filters a span {
+            font-size: 0.66rem;
+            vertical-align: super;
+            color: var(--brass);
+        }
+
+        .bl-filters a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 1px;
+            background: var(--brass);
+            transition: width 0.3s ease;
+        }
+
+        .bl-filters a:hover { color: var(--ink); }
+        .bl-filters a.active { color: #fff; }
+        .bl-filters a.active::after,
+        .bl-filters a:hover::after { width: 100%; }
 
 /* ---------- Grid de tips ---------- */
 .eventss > div,

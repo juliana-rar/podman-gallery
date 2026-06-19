@@ -36,8 +36,13 @@ def update_site_settings(request):
             settings_obj.nav_events = nav_events
         if nav_gallery:
             settings_obj.nav_gallery = nav_gallery
+        accent_color = (request.POST.get("accent_color") or "").strip()
+        if accent_color:
+            settings_obj.accent_color = accent_color
+        settings_obj.instagram_url = (request.POST.get("instagram_url") or "").strip()
+        settings_obj.tiktok_url = (request.POST.get("tiktok_url") or "").strip()
         settings_obj.save()
-        messages.success(request, "Nombres del menú actualizados")
+        messages.success(request, "Configuración actualizada")
     return redirect("user_profile:profile")
 
 

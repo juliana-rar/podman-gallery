@@ -14,7 +14,7 @@
             {% endif %}
         </div>
         <div>
-            <span>{{ event.category.title }}</span>
+            {% if not hide_category and event.category %}<span>{{ event.category.title }}</span>{% endif %}
             <h4>{{ event.title }}</h4>
         </div>
     </a>

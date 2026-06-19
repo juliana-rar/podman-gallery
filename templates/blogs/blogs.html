@@ -12,6 +12,16 @@
         <h1 class="al-title">{{ site_settings.nav_blogs|default:"Eportfolios" }}</h1>
         <span class="al-rule"></span>
     </header>
+
+    {% if categories %}
+    <nav class="bl-filters">
+        <a href="{% url 'blog:blogs' %}" class="{% if not active_slug %}active{% endif %}">Todas</a>
+        {% for cat in categories %}
+        <a href="{% url 'blog:category_blogs' cat.slug %}" class="{% if active_slug == cat.slug %}active{% endif %}">{{ cat.title }} <span>{{ cat.num }}</span></a>
+        {% endfor %}
+    </nav>
+    {% endif %}
+
     <div>
         <div>
             <div>

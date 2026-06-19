@@ -1,48 +1,57 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Mis {{ site_settings.nav_events|default:"Tips" }}{% endblock title %}
+
 {% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/events/my_events.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
 <section class="my-events">
-    <div>
-        <!-- container -->
+    <header class="me-head">
         <div>
-            <!-- row principal -->
-            {% for event in events %}
-            <div>
-                <!-- columna -->
-                <div>
-                    <!-- tarjeta -->
-                    {% if event.image %}
-                    <img src="{{ event.image.url }}" alt="{{ event.title }}">
-                    {% else %}
-                    <img src="{% static 'default_event_image.jpg' %}" alt="{{ event.title }}">
-                    {% endif %}
-                    <div>
-                        <!-- cuerpo -->
-                        <p>
-                            {{ event.title }}
-                            <span>
-                                <a href="{% url 'events:update_event' event.slug %}">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <a href="?delete={{ event.pk }}">
-                                    <i class="fa fa-trash"></i>
-                                </a>
-                            </span>
-                        </p>
-                    </div>
+            <p class="me-eyebrow">Tu colección</p>
+            <h1 class="me-title">Mis {{ site_settings.nav_events|default:"Tips" }}</h1>
+        </div>
+        <div class="me-actions-head">
+            <a class="me-btn--ghost" href="{% url 'events:manage_event_categories' %}">
+                <i class="fa-solid fa-tags"></i> Categorías
+            </a>
+            <a class="me-add" href="{% url 'events:add_event' %}">
+                <i class="fa-solid fa-plus"></i> Añadir {{ site_settings.nav_events|default:"Tip" }}
+            </a>
+        </div>
+    </header>
+
+    <div class="me-grid">
+        {% for event in events %}
+        <article class="me-card">
+            <a class="me-thumb" href="{% url 'events:event_details' event.slug %}">
+                {% if event.image %}
+                <img src="{{ event.image.url }}" alt="{{ event.title }}">
+                {% else %}
+                <img src="{% static 'default_event_image.jpg' %}" alt="{{ event.title }}">
+                {% endif %}
+            </a>
+            <div class="me-body">
+                <h3>{{ event.title|truncatechars:40 }}</h3>
+                <div class="me-actions">
+                    <a href="{% url 'events:update_event' event.slug %}" title="Editar"><i class="fa fa-edit"></i></a>
+                    <a href="?delete={{ event.pk }}" class="me-del" title="Eliminar"
+                       onclick="return confirm('¿Eliminar «{{ event.title|escapejs }}»?');"><i class="fa fa-trash"></i></a>
                 </div>
             </div>
-            {% endfor %}
-        </div>
-        <div> 
-             {% include 'pagination.html' %}
-        </div>
+        </article>
+        {% empty %}
+        <p class="me-empty">Todavía no has publicado nada. <a href="{% url 'events:add_event' %}">Añade el primero</a>.</p>
+        {% endfor %}
+    </div>
 
+    <div class="me-pagination">
+        {% include 'pagination.html' %}
     </div>
 </section>
 {% endblock content %}

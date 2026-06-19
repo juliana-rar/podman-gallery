@@ -1,44 +1,44 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Categorías de {{ site_settings.nav_events|default:"Tips" }}{% endblock title %}
+{% block title %}Colecciones de la galería{% endblock title %}
 {% block extra_css %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'css/events/manage_event_categories.css' %}">
+<link rel="stylesheet" href="{% static 'css/gallery/manage_gallery_categories.css' %}">
 {% endblock extra_css %}
 {% block content %}
 <section class="manage-cats">
     <header class="mc-head">
         <div>
-            <p class="mc-eyebrow">{{ site_settings.nav_events|default:"Tips" }}</p>
-            <h1 class="mc-title">Categorías</h1>
+            <p class="mc-eyebrow">Galería</p>
+            <h1 class="mc-title">Colecciones</h1>
         </div>
-        <a class="mc-back" href="{% url 'events:my_events' %}"><i class="fa-solid fa-arrow-left"></i> Mis {{ site_settings.nav_events|default:"Tips" }}</a>
+        <a class="mc-back" href="{% url 'gallery:my_gallery' %}"><i class="fa-solid fa-arrow-left"></i> Mi galería</a>
     </header>
 
     <form class="mc-add" method="POST">
         {% csrf_token %}
-        <input type="text" name="title" placeholder="Nueva categoría" required>
+        <input type="text" name="title" placeholder="Nueva colección" required>
         <button type="submit"><i class="fa-solid fa-plus"></i> Añadir</button>
     </form>
 
     <ul class="mc-list">
-        {% for category in event_categories %}
+        {% for category in categories %}
         <li class="mc-item">
-            <form class="mc-edit" method="POST" action="{% url 'events:edit_event_category' category.id %}">
+            <form class="mc-edit" method="POST" action="{% url 'gallery:edit_gallery_category' category.id %}">
                 {% csrf_token %}
-                <input type="text" name="title" value="{{ category.title }}" aria-label="Nombre de la categoría">
+                <input type="text" name="title" value="{{ category.title }}" aria-label="Nombre de la colección">
                 <span class="mc-slug">/{{ category.slug }}</span>
                 <div class="mc-tools">
                     <button type="submit" class="mc-save" title="Guardar"><i class="fa-solid fa-floppy-disk"></i></button>
-                    <a class="mc-del" href="{% url 'events:delete_event_category' category.id %}"
-                       onclick="return confirm('¿Eliminar «{{ category.title|escapejs }}»?');"
+                    <a class="mc-del" href="{% url 'gallery:delete_gallery_category' category.id %}"
+                       onclick="return confirm('¿Eliminar «{{ category.title|escapejs }}»? Las obras no se borran.');"
                        title="Eliminar"><i class="fa-solid fa-trash"></i></a>
                 </div>
             </form>
         </li>
         {% empty %}
-        <li class="mc-empty">Aún no hay categorías.</li>
+        <li class="mc-empty">Aún no hay colecciones.</li>
         {% endfor %}
     </ul>
 </section>

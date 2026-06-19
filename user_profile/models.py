@@ -41,6 +41,9 @@ class SiteSettings(models.Model):
     nav_blogs = models.CharField("Menú · Blogs", max_length=50, default="Eportfolios")
     nav_events = models.CharField("Menú · Events", max_length=50, default="Tips")
     nav_gallery = models.CharField("Menú · Galería", max_length=50, default="Galería")
+    accent_color = models.CharField("Color de acento", max_length=7, default="#c2a878")
+    instagram_url = models.URLField("Instagram", blank=True, default="")
+    tiktok_url = models.URLField("TikTok", blank=True, default="")
 
     class Meta:
         verbose_name = "Configuración del sitio"

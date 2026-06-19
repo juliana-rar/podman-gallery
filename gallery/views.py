@@ -156,7 +156,10 @@ def manage_gallery_categories(request):
         if title:
             GalleryCategory.objects.get_or_create(title=title, slug=slugify(title))
             messages.success(request, "Colección creada")
-    return redirect("gallery:gallery_list")
+        return redirect("gallery:manage_gallery_categories")
+
+    categories = GalleryCategory.objects.all().order_by("-created_date")
+    return render(request, "gallery/manage_gallery_categories.html", {"categories": categories})
 
 
 @login_required(login_url='user_profile:login')
@@ -168,7 +171,7 @@ def edit_gallery_category(request, category_id):
             category.title = new_title
             category.save()
             messages.success(request, "Colección actualizada")
-    return redirect("gallery:gallery_list")
+    return redirect("gallery:manage_gallery_categories")
 
 
 @login_required(login_url='user_profile:login')
@@ -176,4 +179,4 @@ def delete_gallery_category(request, category_id):
     category = get_object_or_404(GalleryCategory, id=category_id)
     category.delete()
     messages.success(request, "Colección eliminada")
-    return redirect("gallery:gallery_list")
+    return redirect("gallery:manage_gallery_categories")

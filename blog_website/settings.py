@@ -46,6 +46,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'user_profile.User'
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
+# El editor se ajusta siempre al ancho de su contenedor (el div del formulario),
+# así nunca se desborda por la derecha.
+CKEDITOR_CONFIGS = {
+    'default': {
+        'width': '100%',
+    },
+}
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=['127.0.0.1', 'localhost'])

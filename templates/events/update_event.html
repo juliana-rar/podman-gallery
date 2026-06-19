@@ -1,11 +1,13 @@
 ﻿{% extends 'base.html' %}
 {% load static %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/events/update_event.css' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/events/add_event.css' %}">
 {% endblock extra_css %}
 {% block content %}
 
-<section class="update_event">
+<section class="add_event">
     <div>
         <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}

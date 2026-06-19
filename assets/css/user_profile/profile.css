@@ -3,7 +3,7 @@
    =========================================================== */
 
 :root {
-    --accent: #c2a878;
+    --accent: #c2a878; /* respaldo; el valor real lo inyecta base.html desde la configuración */
     --accent-soft: rgba(194, 168, 120, 0.14);
     --panel: #0e0e10;
     --surface: #141416;
@@ -17,7 +17,7 @@
 /* Fondo general */
 .profile {
     min-height: 100vh;
-    padding: 72px 24px;
+    padding: 120px 24px 72px;
     background:
         radial-gradient(120% 80% at 50% -5%, #18181b 0%, transparent 55%),
         #0a0a0b;

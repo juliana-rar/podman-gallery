@@ -1,42 +1,48 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
-{% block title %} Registrate {% endblock title %}
-    {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'css/user_profile/registration.css' %}">
-    {% endblock extra_css %}
+{% block title %}Crear cuenta{% endblock title %}
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/user_profile/login.css' %}">
+{% endblock extra_css %}
 {% block content %}
-<section class="register-section">
-    <div>
-        <h2>Crea tu cuenta</h2>
+<section class="auth">
+    <div class="auth-card">
+        <p class="auth-eyebrow">{{ site_settings.site_title|default:"Sigfrid" }}</p>
+        <h1 class="auth-title">Crea tu cuenta</h1>
 
-        <form id="register-form" action="" method="POST" novalidate>
+        <form id="register-form" action="" method="POST" novalidate class="auth-form">
             {% csrf_token %}
 
-            <div>
-                <input name="username" {% if form.is_bound %} value="{{ form.username.value }}" {% endif %} type="text" placeholder="Tu nombre de usuario">
-                <p class="error">{{ form.username.errors }}</p>
+            <div class="auth-field">
+                <label>Usuario</label>
+                <input name="username" {% if form.is_bound %}value="{{ form.username.value }}"{% endif %} type="text" placeholder="Tu nombre de usuario">
+                <p class="auth-error">{{ form.username.errors }}</p>
             </div>
 
-            <div>
-                <input name="email" {% if form.is_bound %} value="{{ form.email.value }}" {% endif %} type="email" placeholder="Tu email">
-                <p class="error">{{ form.email.errors }}</p>
+            <div class="auth-field">
+                <label>Email</label>
+                <input name="email" {% if form.is_bound %}value="{{ form.email.value }}"{% endif %} type="email" placeholder="Tu email">
+                <p class="auth-error">{{ form.email.errors }}</p>
             </div>
 
-            <div>
+            <div class="auth-field">
+                <label>Contraseña</label>
                 <input name="password" type="password" placeholder="Tu contraseña">
-                <p class="error">{{ form.password.errors }}</p>
+                <p class="auth-error">{{ form.password.errors }}</p>
             </div>
 
-            <div>
+            <div class="auth-field">
+                <label>Confirmar contraseña</label>
                 <input name="confirm_password" type="password" placeholder="Repite tu contraseña">
-                <p class="error">{{ form.confirm_password.errors }}</p>
+                <p class="auth-error">{{ form.confirm_password.errors }}</p>
             </div>
 
-            <div>
-                <button type="submit" >Registrarse</button>
-                <a href="{% url 'user_profile:login' %}">Iniciar sesión</a>
-            </div>
+            <button type="submit" class="auth-submit">Registrarse</button>
         </form>
+
+        <p class="auth-alt">¿Ya tienes cuenta? <a href="{% url 'user_profile:login' %}">Inicia sesión</a></p>
     </div>
 </section>
 {% endblock content %}

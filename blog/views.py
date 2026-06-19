@@ -6,7 +6,7 @@ from django.utils.text import slugify
 from django.contrib import messages
 from .models import Blog
 from django.http import JsonResponse
-from django.db.models import Q
+from django.db.models import Q, Count
 from user_profile.models import User
 from events.models import Event, EventCategory
 from django.shortcuts import render, get_object_or_404, redirect
@@ -46,9 +46,12 @@ def blogs(request):
         blogs = paginator.page(1)
         return redirect('blogs')
 
+    categories = Category.objects.annotate(num=Count('category_blogs')).order_by('title')
+
     context = {
         "blogs" : blogs,
         "tags" : tags,
+        "categories": categories,
         "page_obj": blogs,
         "paginator" : paginator
     }
@@ -70,11 +73,15 @@ def category_blogs(request, slug):
         blogs = paginator.page(1)
         return redirect('blogs')
     
+    categories = Category.objects.annotate(num=Count('category_blogs')).order_by('title')
+
     context = {
         "blogs": blogs,
         "tags": tags,
         "all_blogs": all_blogs,
-        "category": category
+        "category": category,
+        "categories": categories,
+        "active_slug": category.slug,
 
     }
     return render(request, 'blogs/category_blogs.html', context)

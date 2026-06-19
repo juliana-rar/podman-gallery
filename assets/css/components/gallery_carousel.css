@@ -9,7 +9,7 @@
     --mat: #f4f1e9;
     --ink: #ece8df;
     --muted: #9b968a;
-    --brass: #c2a878;
+    --brass: var(--accent, #c2a878);
     --line: rgba(255, 255, 255, 0.08);
 
     background:

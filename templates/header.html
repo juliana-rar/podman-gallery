@@ -1,4 +1,6 @@
 {% load static %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/header.css' %}">
 
 <section class="hero-introduccion">
@@ -19,3 +21,15 @@
         </nav>
     </div>
 </section>
+
+<script>
+(function () {
+    var nav = document.querySelector('.hero-introduccion');
+    if (!nav) return;
+    function onScroll() {
+        nav.classList.toggle('is-scrolled', window.scrollY > 40);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+})();
+</script>

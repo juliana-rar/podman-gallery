@@ -1,13 +1,16 @@
 /* ===========================================================
-   Tarjeta de obra (Eportfolio) — pieza de galería
+   Tarjeta de obra (Eportfolio) — estilo "póster"
+   Igual que el showcase del home y las tarjetas de Tips:
+   imagen a sangre · degradado · píldora de latón · título serif
    =========================================================== */
 
 .blog_card {
-    --brass: #c2a878;
+    --brass: var(--accent, #c2a878);
     --line: rgba(255, 255, 255, 0.08);
 
     position: relative;
     height: 100%;
+    min-height: 440px;
     background: #111113;
     border: 1px solid var(--line);
     border-radius: 6px;
@@ -23,18 +26,21 @@
     color: inherit;
     text-decoration: none;
     display: block;
+    position: relative;
     height: 100%;
+    min-height: 440px;
 }
 
-/* Imagen */
+/* Imagen a sangre (rellena toda la tarjeta) */
 .blog_card > a > div:first-child {
-    position: relative;
+    position: absolute;
+    inset: 0;
     overflow: hidden;
 }
 
     .blog_card > a > div:first-child img.fixed-size {
         width: 100%;
-        height: 300px;
+        height: 100%;
         object-fit: cover;
         display: block;
         transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
@@ -42,29 +48,39 @@
 
     .blog_card:hover > a > div:first-child img.fixed-size { transform: scale(1.06); }
 
-/* Cartela */
+/* Cartela superpuesta sobre la imagen */
 .blog_card > a > div:last-child {
-    padding: 24px 28px 28px;
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 2;
+    padding: 70px 26px 26px;
+    background: linear-gradient(to top,
+        rgba(8, 8, 9, 0.92) 0%,
+        rgba(8, 8, 9, 0.35) 55%,
+        transparent 100%);
+    transition: transform 0.4s ease;
 }
 
     .blog_card > a > div:last-child span {
         display: inline-block;
-        color: var(--brass);
-        font-size: 0.7rem;
+        color: #11100c;
+        background: var(--brass);
+        font-size: 0.68rem;
         font-weight: 700;
         letter-spacing: 2px;
         text-transform: uppercase;
-        margin-bottom: 10px;
+        padding: 4px 12px;
+        border-radius: 100px;
+        margin-bottom: 12px;
     }
 
     .blog_card > a > div:last-child h4 {
         font-family: 'Cormorant Garamond', serif;
         color: #fff;
-        font-size: 1.65rem;
+        font-size: 1.7rem;
         font-weight: 600;
         margin: 0;
-        line-height: 1.2;
-        transition: color 0.3s ease;
+        line-height: 1.18;
     }
 
 /* Hover de la pieza */
@@ -75,4 +91,4 @@
                 0 0 0 1px rgba(194, 168, 120, 0.15);
 }
 
-    .blog_card:hover > a > div:last-child h4 { color: var(--brass); }
+    .blog_card:hover > a > div:last-child { transform: translateY(-4px); }

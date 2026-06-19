@@ -19,57 +19,26 @@
             {% if category %}{{ total_count }} obra{{ total_count|pluralize }} en esta colección
             {% else %}Una selección de pinturas originales{% endif %}
         </p>
+
+        <!-- Filtros por colección — justo debajo del título -->
+        <nav class="ag-filters">
+            <a href="{% url 'gallery:gallery_list' %}" class="{% if not active_slug and not mine %}active{% endif %}">Todas</a>
+            {% for cat in categories %}
+            <a href="{% url 'gallery:category_gallery' cat.slug %}" class="{% if active_slug == cat.slug %}active{% endif %}">
+                {{ cat.title }} <span>{{ cat.num }}</span>
+            </a>
+            {% endfor %}
+        </nav>
+
         <span class="ag-rule"></span>
         {% if mine %}
-        <a class="ag-upload" href="{% url 'gallery:add_image' %}"><i class="fa-solid fa-plus"></i> Subir obra</a>
+        <div class="ag-head-actions">
+            <a class="ag-btn-ghost" href="{% url 'gallery:manage_gallery_categories' %}"><i class="fa-solid fa-tags"></i> Categorías</a>
+            <a class="ag-upload" href="{% url 'gallery:add_image' %}"><i class="fa-solid fa-plus"></i> Añadir obra</a>
+        </div>
         {% endif %}
     </header>
 
-    <!-- Filtros por colección -->
-    <nav class="ag-filters">
-        <a href="{% url 'gallery:gallery_list' %}" class="{% if not active_slug and not mine %}active{% endif %}">Todas</a>
-        {% for cat in categories %}
-        <a href="{% url 'gallery:category_gallery' cat.slug %}" class="{% if active_slug == cat.slug %}active{% endif %}">
-            {{ cat.title }} <span>{{ cat.num }}</span>
-        </a>
-        {% endfor %}
-    </nav>
-
-    {% if request.user.is_authenticated %}
-    <!-- Gestión de colecciones (solo artista) -->
-    <div class="ag-manage">
-        <button type="button" class="ag-manage-toggle" id="agManageToggle">
-            <i class="fa-solid fa-sliders"></i> Gestionar colecciones
-        </button>
-        <div class="ag-manage-panel" id="agManagePanel" hidden>
-            <form method="POST" action="{% url 'gallery:manage_gallery_categories' %}" class="ag-cat-add">
-                {% csrf_token %}
-                <input type="text" name="title" placeholder="Nueva colección…" required>
-                <button type="submit"><i class="fa-solid fa-plus"></i> Crear</button>
-            </form>
-            <ul class="ag-cat-list">
-                {% for cat in categories %}
-                <li>
-                    <form method="POST" action="{% url 'gallery:edit_gallery_category' cat.id %}" class="ag-cat-edit">
-                        {% csrf_token %}
-                        <input type="text" name="title" value="{{ cat.title }}">
-                        <button type="submit" title="Guardar"><i class="fa-solid fa-check"></i></button>
-                    </form>
-                    <span class="ag-cat-count">{{ cat.num }} obra{{ cat.num|pluralize }}</span>
-                    <a href="{% url 'gallery:delete_gallery_category' cat.id %}" class="ag-cat-del"
-                       title="Eliminar colección"
-                       onclick="return confirm('¿Eliminar la colección «{{ cat.title }}»? Las obras no se borran.');">
-                        <i class="fa-solid fa-trash"></i>
-                    </a>
-                </li>
-                {% empty %}
-                <li class="ag-muted">Aún no hay colecciones.</li>
-                {% endfor %}
-            </ul>
-            <a class="ag-add-work" href="{% url 'gallery:add_image' %}"><i class="fa-solid fa-plus"></i> Añadir nueva obra</a>
-        </div>
-    </div>
-    {% endif %}
 
     {% if mine and images %}
     <p class="ag-reorder-hint"><i class="fa-solid fa-up-down-left-right"></i> Arrastra el icono de cada obra para cambiar su posición.</p>
@@ -84,7 +53,7 @@
                     <img src="{{ img.image.url }}" alt="{{ img.title }}" loading="lazy">
                     <span class="ag-hover">
                         <span class="ag-hover-inner">
-                            {% if img.category %}<span class="ag-hover-cat">{{ img.category.title }}</span>{% endif %}
+                            {% if not category and img.category %}<span class="ag-hover-cat">{{ img.category.title }}</span>{% endif %}
                             <span class="ag-hover-view">Ver obra <i class="fa-solid fa-arrow-right"></i></span>
                         </span>
                     </span>
@@ -127,15 +96,6 @@
 </section>
 
 <script>
-    (function () {
-        const t = document.getElementById('agManageToggle');
-        const p = document.getElementById('agManagePanel');
-        if (t && p) t.addEventListener('click', () => {
-            p.hidden = !p.hidden;
-            t.classList.toggle('open', !p.hidden);
-        });
-    })();
-
     // Reordenar obras por arrastre (solo en Mi galería)
     (function () {
         const wall = document.querySelector('.ag-wall--reorder');

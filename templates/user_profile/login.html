@@ -1,32 +1,35 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
-{% block title %} Logeate {% endblock title %}
-    {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'css/user_profile/login.css' %}">
-    {% endblock extra_css %}
+{% block title %}Iniciar sesión{% endblock title %}
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/user_profile/login.css' %}">
+{% endblock extra_css %}
 {% block content %}
-<section class="login-section">
-    <div>
-        <h2>Inicia sesión en tu cuenta</h2>
+<section class="auth">
+    <div class="auth-card">
+        <p class="auth-eyebrow">{{ site_settings.site_title|default:"Sigfrid" }}</p>
+        <h1 class="auth-title">Inicia sesión</h1>
 
-        <form action="" method="POST" novalidate>
+        <form action="" method="POST" novalidate class="auth-form">
             {% csrf_token %}
-            <div>
-                <input name="username" type="text" id="username_id" placeholder="Tu nombre o Email">
-                <p class="error">{{ form.username.errors }}</p>
+            <div class="auth-field">
+                <label>Usuario o email</label>
+                <input name="username" type="text" id="username_id" placeholder="Tu nombre o email">
+                <p class="auth-error">{{ form.username.errors }}</p>
             </div>
 
-            <div>
+            <div class="auth-field">
+                <label>Contraseña</label>
                 <input name="password" type="password" id="password_id" placeholder="Tu contraseña">
-                <p class="error">{{ form.password.errors }}</p>
+                <p class="auth-error">{{ form.password.errors }}</p>
             </div>
 
-            <div>
-                <button type="submit">Iniciar sesión</button>
-                <a href="{% url 'user_profile:register_user' %}">Registrarse</a>
-            </div>
+            <button type="submit" class="auth-submit">Iniciar sesión</button>
         </form>
+
+        <p class="auth-alt">¿No tienes cuenta? <a href="{% url 'user_profile:register_user' %}">Regístrate</a></p>
     </div>
 </section>
-
 {% endblock content %}

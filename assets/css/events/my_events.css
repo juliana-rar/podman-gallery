@@ -1,96 +1,211 @@
-﻿/* Fondo general */
+/* ===========================================================
+   Mis Tips — acorde al diseño de la página
+   Cabecera editorial + botón Añadir · tarjetas en paleta del sitio
+   =========================================================== */
+
 .my-events {
+    --brass: var(--accent, #c2a878);
+    --ink: #ece8df;
+    --muted: #9b968a;
+    --tile: #111113;
+    --tile-2: #161618;
+    --line: rgba(255, 255, 255, 0.08);
+
+    min-height: 80vh;
+    padding: 90px 24px 110px;
+    color: var(--ink);
+    font-family: 'Jost', sans-serif;
+}
+
+/* ---------- Cabecera con título + botón ---------- */
+.my-events .me-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    max-width: 1300px;
+    margin: 0 auto 44px;
+    padding-bottom: 26px;
+    border-bottom: 1px solid var(--line);
+}
+
+    .my-events .me-eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        font-size: 0.72rem;
+        font-weight: 500;
+        color: var(--brass);
+        margin: 0 0 10px;
+    }
+
+    .my-events .me-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 500;
+        font-size: clamp(2.2rem, 5vw, 3.2rem);
+        line-height: 1;
+        color: #fff;
+        margin: 0;
+        letter-spacing: 0.5px;
+    }
+
+    .my-events .me-add {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 26px;
+        background: var(--brass);
+        color: #11100c;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-decoration: none;
+        border-radius: 4px;
+        white-space: nowrap;
+        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
+        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                    box-shadow 0.35s ease, letter-spacing 0.35s ease, background 0.35s ease;
+    }
+
+        .my-events .me-add:hover {
+            transform: translateY(-3px);
+            letter-spacing: 3px;
+            background: #d4bd8f;
+            box-shadow: 0 22px 45px rgba(0, 0, 0, 0.5);
+        }
+
+    /* Grupo de botones de la cabecera */
+    .my-events .me-actions-head {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    /* Botón secundario (Categorías) */
+    .my-events .me-btn--ghost {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 26px;
+        background: transparent;
+        color: var(--ink);
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-decoration: none;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        white-space: nowrap;
+        transition: all 0.35s ease;
+    }
+
+        .my-events .me-btn--ghost:hover {
+            color: #fff;
+            border-color: var(--brass);
+            transform: translateY(-3px);
+        }
+
+/* ---------- Grid de tarjetas ---------- */
+.my-events .me-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.my-events .me-card {
+    position: relative;
+    background: linear-gradient(180deg, var(--tile-2) 0%, var(--tile) 100%);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.35s ease, box-shadow 0.5s ease;
+}
+
+    .my-events .me-card:hover {
+        transform: translateY(-6px);
+        border-color: var(--brass);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6),
+                    0 0 0 1px rgba(194, 168, 120, 0.15);
+    }
+
+.my-events .me-thumb { display: block; overflow: hidden; }
+
+    .my-events .me-thumb img {
+        width: 100%;
+        height: 240px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .my-events .me-card:hover .me-thumb img { transform: scale(1.06); }
+
+.my-events .me-body {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px;
+}
+
+    .my-events .me-body h3 {
+        margin: 0;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        font-size: 1.25rem;
+        color: #fff;
+        line-height: 1.2;
+    }
+
+    .my-events .me-actions {
+        margin-left: auto;
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+        .my-events .me-actions a {
+            display: grid;
+            place-items: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            border: 1px solid var(--line);
+            color: var(--muted);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .my-events .me-actions a:hover { color: #fff; border-color: var(--brass); }
+            .my-events .me-actions .me-del:hover { color: #e0796c; border-color: #e0796c; }
+
+/* ---------- Vacío ---------- */
+.my-events .me-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--muted);
+    font-style: italic;
+    font-size: 1.1rem;
     padding: 40px 0;
 }
 
-    /* Contenedor centrado */
-    .my-events > div:nth-child(1) {
-        width: 90%;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
+    .my-events .me-empty a { color: var(--brass); }
 
-    /* Grid de tarjetas */
-    .my-events > div > div:nth-child(1) {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
-    }
+/* ---------- Paginación ---------- */
+.my-events .me-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
 
-        /* Tarjeta */
-        .my-events > div > div:nth-child(1) > div > div:nth-child(1) {
-            border: 1px solid #111;
-            border-radius: 8px;
-            overflow: hidden;
-            background: #111;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease;
-        }
-
-            .my-events > div > div:nth-child(1) > div > div:nth-child(1):hover {
-                transform: translateY(-5px);
-            }
-
-    /* Imagen */
-    .my-events img {
-        width: 100%;
-        height: 320px;
-        object-fit: cover;
-        display: block;
-    }
-
-    /* Cuerpo de la tarjeta */
-    .my-events > div > div:nth-child(1) > div > div:nth-child(1) > div:nth-child(2) {
-        padding: 15px;
-    }
-
-    /* Título + acciones */
-    .my-events p {
-        display: flex;
-        align-items: center;
-        font-size: 1rem;
-        font-weight: 600;
-        color: #e0e0e0; /* texto claro para dark mode */
-        margin: 0;
-    }
-
-    /* Acciones */
-    .my-events span {
-        margin-left: auto;
-        display: flex;
-        gap: 10px;
-    }
-
-        /* Editar (primer enlace) */
-        .my-events span > a:nth-child(1) {
-            color: #007bff;
-            text-decoration: none;
-        }
-
-            .my-events span > a:nth-child(1):hover {
-                text-decoration: underline;
-            }
-
-        /* Esborrar (segundo enlace) */
-        .my-events span > a:nth-child(2) {
-            color: #e63946;
-            text-decoration: none;
-        }
-
-            .my-events span > a:nth-child(2):hover {
-                text-decoration: underline;
-            }
-
-    /* Paginación */
-    .my-events > div > div:nth-child(2) {
-        margin-top: 30px;
-        display: flex;
-        justify-content: center;
-    }
-
-/* Responsive */
-@media (max-width: 768px) {
-    .my-events > div > div:nth-child(1) {
-        grid-template-columns: 1fr;
-    }
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+    .my-events { padding: 64px 16px 80px; }
+    .my-events .me-grid { grid-template-columns: 1fr; }
+    .my-events .me-add { width: 100%; justify-content: center; }
 }

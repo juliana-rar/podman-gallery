@@ -3,6 +3,16 @@
         <link rel="stylesheet" href="{% static 'css/footer.css' %}">
     {% endblock extra_css %}
 <footer>
+    {% if site_settings.instagram_url or site_settings.tiktok_url %}
+    <div class="footer-social">
+        {% if site_settings.instagram_url %}
+        <a href="{{ site_settings.instagram_url }}" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        {% endif %}
+        {% if site_settings.tiktok_url %}
+        <a href="{{ site_settings.tiktok_url }}" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        {% endif %}
+    </div>
+    {% endif %}
     <p>© 2026 {{ site_settings.site_title|default:"Sigfrid" }}</p>
 </footer>
 

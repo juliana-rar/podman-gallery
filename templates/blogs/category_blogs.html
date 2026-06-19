@@ -1,26 +1,43 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
+{% block title %}{{ category.title }}{% endblock title %}
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/blogs/category_blog_card.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/blogs/blogs.css' %}">
 {% endblock extra_css %}
 {% block content %}
-<div class="category_blogs">
-    <div>
-        <div class="category_title">
-            {{ category.title }}
-        </div>
+<section class="blogss art-list">
+    <header class="al-head">
+        <p class="al-eyebrow">Colección</p>
+        <h1 class="al-title">{{ category.title }}</h1>
+        <span class="al-rule"></span>
+    </header>
 
-        <section>
+    {% if categories %}
+    <nav class="bl-filters">
+        <a href="{% url 'blog:blogs' %}" class="{% if not active_slug %}active{% endif %}">Todas</a>
+        {% for cat in categories %}
+        <a href="{% url 'blog:category_blogs' cat.slug %}" class="{% if active_slug == cat.slug %}active{% endif %}">{{ cat.title }} <span>{{ cat.num }}</span></a>
+        {% endfor %}
+    </nav>
+    {% endif %}
+
+    <div>
+        <div>
             <div>
                 {% for blog in blogs %}
-                    {% include 'blogs/category_blog_card.html' %}
+                <div>
+                    {% include 'blogs/blog_card.html' with hide_category=True %}
+                </div>
+                {% empty %}
+                <p class="al-empty">Todavía no hay obras en esta colección.</p>
                 {% endfor %}
+                <div>
+                    {% include 'pagination.html' %}
+                </div>
             </div>
-
-            {% include 'pagination.html' %}
-        </section>
-
+        </div>
     </div>
-</div>
-
+</section>
 {% endblock content %}

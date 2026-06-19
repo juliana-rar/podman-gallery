@@ -1,6 +1,5 @@
 /* ===========================================================
-   Categorías de Eportfolios — acorde al diseño de la página
-   (mismo lenguaje que galería: oscuro · serif · latón)
+   Colecciones de la galería — acorde al diseño de la página
    =========================================================== */
 
 .manage-cats {
@@ -109,7 +108,7 @@
 
         .manage-cats .mc-add button:hover { background: #d4bd8f; transform: translateY(-2px); }
 
-/* ---------- Lista de categorías ---------- */
+/* ---------- Lista de colecciones ---------- */
 .manage-cats .mc-list {
     list-style: none;
     margin: 0;

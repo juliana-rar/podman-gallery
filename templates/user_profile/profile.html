@@ -61,6 +61,18 @@
                             <label><i class="fa-solid fa-images"></i> Galería</label>
                             <input type="text" name="nav_gallery" value="{{ site_settings.nav_gallery }}" maxlength="50" required>
                         </div>
+                        <div class="set-field">
+                            <label><i class="fa-solid fa-palette"></i> Color de acento <small>(se aplica a todo el sitio)</small></label>
+                            <input type="color" name="accent_color" value="{{ site_settings.accent_color|default:'#c2a878' }}" class="set-color">
+                        </div>
+                        <div class="set-field">
+                            <label><i class="fa-brands fa-instagram"></i> Instagram <small>(enlace, se ve en el footer)</small></label>
+                            <input type="url" name="instagram_url" value="{{ site_settings.instagram_url }}" placeholder="https://instagram.com/tu_usuario">
+                        </div>
+                        <div class="set-field">
+                            <label><i class="fa-brands fa-tiktok"></i> TikTok <small>(enlace, se ve en el footer)</small></label>
+                            <input type="url" name="tiktok_url" value="{{ site_settings.tiktok_url }}" placeholder="https://tiktok.com/@tu_usuario">
+                        </div>
                         <button type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
                     </form>
                 </div>
@@ -133,12 +145,8 @@
         <div>
             <a href="{% url 'blog:my_blogs' %}"><i class="fa-solid fa-folder-open"></i><span>Mis {{ site_settings.nav_blogs|default:"Eportfolios" }}</span></a>
             <a href="{% url 'events:my_events' %}"><i class="fa-solid fa-lightbulb"></i><span>Mis {{ site_settings.nav_events|default:"Tips" }}</span></a>
-            <a href="{% url 'blog:add_blog' %}"><i class="fa-solid fa-folder-plus"></i><span>Añadir {{ site_settings.nav_blogs|default:"Eportfolio" }}</span></a>
-            <a href="{% url 'events:add_event' %}"><i class="fa-solid fa-plus"></i><span>Añadir {{ site_settings.nav_events|default:"Tip" }}</span></a>
             <a href="{% url 'gallery:my_gallery' %}"><i class="fa-solid fa-images"></i><span>Mi {{ site_settings.nav_gallery|default:"Galería" }}</span></a>
             <a href="{% url 'herophotos:manage' %}"><i class="fa-solid fa-panorama"></i><span>Fotos de portada</span></a>
-            <a href="{% url 'blog:manage_categories' %}"><i class="fa-solid fa-tags"></i><span>Categorías de {{ site_settings.nav_blogs|default:"Eportfolios" }}</span></a>
-            <a href="{% url 'events:manage_event_categories' %}"><i class="fa-solid fa-sliders"></i><span>Categorías de {{ site_settings.nav_events|default:"Tips" }}</span></a>
         </div>
     </div>
 </section>

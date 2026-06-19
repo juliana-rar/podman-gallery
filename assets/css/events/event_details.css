@@ -1,122 +1,126 @@
-/* ===== TÍTULO ===== */
+/* ===========================================================
+   Detalle de Tip — acorde al diseño de la página
+   Placa de museo · serif Cormorant · acento latón
+   =========================================================== */
+
+:root {
+    --brass: var(--accent, #c2a878);
+    --ink: #d7d2c7;
+    --muted: #9b968a;
+    --tile: #111113;
+    --tile-2: #161618;
+    --line: rgba(255, 255, 255, 0.08);
+}
+
+/* ===== TÍTULO (fuera de la tarjeta) ===== */
 .event_details_title {
     width: 100%;
-    height: 7rem;
-    background: linear-gradient(
-        135deg,
-        rgba(30, 30, 45, 0.85),
-        rgba(18, 18, 25, 0.75)
-    );
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    color: #f8fafc;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    max-width: 920px;
+    margin: 90px auto 36px;
+    padding: 0 24px;
     text-align: center;
 
-    font-size: clamp(1.4rem, 3vw, 2rem);
-    font-weight: 900;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-
-    margin-bottom: 3rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-
-    box-shadow:
-        0 10px 40px rgba(0, 0, 0, 0.55),
-        inset 0 -1px 8px rgba(255, 255, 255, 0.05);
-
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: 0.5px;
+    color: #fff;
 }
 
-.event_details_title:hover {
-    transform: translateY(-4px);
-    box-shadow:
-        0 18px 60px rgba(0, 0, 0, 0.65),
-        inset 0 -1px 12px rgba(255, 255, 255, 0.08);
+/* Filete de latón bajo el título */
+.event_details_title::after {
+    content: "";
+    display: block;
+    width: 56px;
+    height: 1px;
+    margin: 26px auto 0;
+    background: var(--brass);
 }
 
-/* ===== CARD PRINCIPAL ===== */
+/* ===== TARJETA PRINCIPAL (placa de museo) ===== */
 .event_details {
-    max-width: 900px;
-    margin: 0 auto 3rem;
-    padding: 2.2rem;
+    max-width: 920px;
+    margin: 0 auto 110px;
+    padding: 36px;
 
-       background: linear-gradient(
-        135deg,
-        rgba(30, 30, 45, 0.85),
-        rgba(18, 18, 25, 0.75)
-    );
-    backdrop-filter: blur(10px);
-
-    border-radius: 20px;
+    background: linear-gradient(180deg, var(--tile-2) 0%, var(--tile) 100%);
+    border: 1px solid var(--line);
+    border-radius: 8px;
     box-shadow:
-        0 25px 50px rgba(0, 0, 0, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        0 30px 80px rgba(0, 0, 0, 0.6),
+        0 12px 30px rgba(0, 0, 0, 0.4);
 
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
-
-.event_details:hover {
-    transform: translateY(-6px);
-    box-shadow:
-        0 35px 70px rgba(0, 0, 0, 0.2);
+    font-family: 'Jost', sans-serif;
 }
 
 /* ===== ARTICLE ===== */
 .event_details article {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.6rem;
 }
 
 /* ===== IMAGEN ===== */
 .event_details img {
     width: 100%;
-    border-radius: 16px;
+    max-height: 560px;
     object-fit: cover;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    display: block;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
 }
 
-/* ===== CATEGORÍA ===== */
+/* ===== CATEGORÍA (píldora de latón) ===== */
 .event_details span {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-
     width: fit-content;
-    padding: 0.4rem 1rem;
+    padding: 5px 16px;
 
-    background: linear-gradient(135deg, #0ea5e9, #2563eb);
-    color: #fff;
+    background: var(--brass);
+    color: #11100c;
 
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    letter-spacing: 2px;
     text-transform: uppercase;
 
-    border-radius: 999px;
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+    border-radius: 100px;
 }
 
 /* ===== DESCRIPCIÓN ===== */
 .event_details p {
-    font-size: 1rem;
-    line-height: 1.7;
-    color: white;
-    margin-top: 0.5rem;
+    font-size: 1.12rem;
+    line-height: 1.95;
+    color: var(--ink);
+    margin: 0;
 }
 
-/* ===== LINKS (por si luego añades compartir) ===== */
+.event_details p img {
+    margin: 28px 0;
+}
+
+/* ===== LINKS ===== */
 .event_details a {
-    color: #2563eb;
+    color: var(--brass);
     text-decoration: none;
-    font-weight: 600;
-    transition: color 0.25s ease;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(194, 168, 120, 0.35);
+    transition: color 0.25s ease, border-color 0.25s ease;
 }
 
 .event_details a:hover {
-    color: #1e40af;
+    color: #fff;
+    border-color: #fff;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 576px) {
+    .event_details_title { margin: 64px auto 26px; }
+    .event_details {
+        padding: 22px;
+        margin-bottom: 80px;
+    }
 }

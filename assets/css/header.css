@@ -9,32 +9,57 @@
     background: transparent;
 }
 
-/* El navbar flota SOBRE el hero (el hero queda por debajo) — solo en páginas con hero */
-body:has(.herophotos) .hero-introduccion {
-    position: absolute;
+/* El navbar flota SOBRE el fondo y se queda fijo al hacer scroll — hero y perfil */
+body:has(.herophotos) .hero-introduccion,
+body:has(.post-hero) .hero-introduccion,
+body:has(.profile) .hero-introduccion {
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 60;
     padding-top: 14px;
+    transition: padding-top 0.35s ease;
 }
+
+    /* Al hacer scroll: navbar más compacto y con fondo más sólido para leerse sobre el contenido */
+    body:has(.herophotos) .hero-introduccion.is-scrolled,
+    body:has(.post-hero) .hero-introduccion.is-scrolled,
+    body:has(.profile) .hero-introduccion.is-scrolled {
+        padding-top: 6px;
+    }
+
+        .hero-introduccion.is-scrolled > div { padding-top: 6px; padding-bottom: 6px; }
+
+        .hero-introduccion.is-scrolled > div > nav::before {
+            background: rgba(12, 12, 14, 0.72);
+        }
+
+        .hero-introduccion.is-scrolled > div > nav::after {
+            backdrop-filter: blur(26px) saturate(140%);
+            -webkit-backdrop-filter: blur(26px) saturate(140%);
+        }
 
     .hero-introduccion > div {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 20px 20px; /* Solo un poco de padding lateral, y ahora también vertical para dar aire A LA CAJA */
+        padding: 10px 20px; /* navbar más bajo */
         width: 100%;
         box-sizing: border-box;
     }
 
-        /* La caja del nav - ahora con su propio "aire" interno */
+        /* La caja del nav - compacta */
         .hero-introduccion > div > nav {
             position: relative;
-            padding: 24px 30px; /* Más padding interno para que los enlaces respiren */
+            padding: 6px 24px; /* navbar mucho más bajo */
             width: 100%;
             max-width: 1200px;
-            border-radius: 24px; /* Un poco más redondeada para que quede premium */
-            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.4); /* Ombra moderna */
+            border-radius: 16px;
+            /* Sombra moderna en capas: profundidad + halo ambiental + brillo interior superior */
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.55),
+                0 12px 30px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.18);
             overflow: hidden;
             isolation: isolate;
         }
@@ -45,7 +70,7 @@ body:has(.herophotos) .hero-introduccion {
                 position: absolute;
                 inset: 0;
                 background: rgba(14, 14, 16, 0.18);
-                border-radius: 24px;
+                border-radius: 16px;
                 border: 1px solid rgba(255, 255, 255, 0.14);
             }
 
@@ -55,9 +80,9 @@ body:has(.herophotos) .hero-introduccion {
                 position: absolute;
                 inset: 0;
                 background: rgba(255, 255, 255, 0.04);
-                backdrop-filter: blur(16px) saturate(130%);
-                -webkit-backdrop-filter: blur(16px) saturate(130%);
-                border-radius: 24px;
+                backdrop-filter: blur(22px) saturate(140%);
+                -webkit-backdrop-filter: blur(22px) saturate(140%);
+                border-radius: 16px;
             }
 
     /* Enlaces encima de todo */
@@ -75,16 +100,17 @@ body:has(.herophotos) .hero-introduccion {
 
         .hero-introduccion nav ul li a {
             position: relative;
-            padding: 14px 28px;
+            padding: 7px 18px;
+            font-family: 'Cormorant Garamond', Georgia, serif;
             font-weight: 600;
-            font-size: 17px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 22px;
+            text-transform: none;
+            letter-spacing: 0.6px;
             color: rgba(255, 255, 255, 0.95);
             text-decoration: none;
             display: block;
-            border-radius: 14px;
-            transition: all 0.4s ease;
+            border-radius: 10px;
+            transition: color 0.3s ease;
             white-space: nowrap;
             z-index: 2;
             text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
@@ -93,24 +119,24 @@ body:has(.herophotos) .hero-introduccion {
             .hero-introduccion nav ul li a::after {
                 content: '';
                 position: absolute;
-                bottom: 8px;
+                bottom: 4px;
                 left: 50%;
                 width: 0;
-                height: 3px;
-                background: #3cffb055;
+                height: 2px;
+                background: var(--accent, #c2a878);
                 border-radius: 2px;
-                transition: all 0.4s ease;
+                transition: width 0.3s ease;
                 transform: translateX(-50%);
             }
 
+            /* Hover: texto en marrón claro (latón) como el resto del sitio, sin caja */
             .hero-introduccion nav ul li a:hover {
-                color: white;
-                background: rgba(255, 255, 255, 0.25);
-                transform: translateY(-3px);
+                color: var(--accent, #c2a878);
+                background: transparent;
             }
 
                 .hero-introduccion nav ul li a:hover::after {
-                    width: 70%;
+                    width: 60%;
                 }
 
 /* MÓVIL - Compacto y bonito */
@@ -131,26 +157,32 @@ body:has(.herophotos) .hero-introduccion {
 
     .hero-introduccion nav ul {
         flex-direction: column;
-        align-items: center;
-        gap: 12px;
+        align-items: stretch;
+        gap: 0;
     }
 
         .hero-introduccion nav ul li {
             width: 100%;
-            max-width: 320px;
+            max-width: none;
         }
+
+            /* Separador fino entre enlaces (en vez de una caja por enlace) */
+            .hero-introduccion nav ul li + li {
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
+            }
 
             .hero-introduccion nav ul li a {
                 width: 100%;
-                padding: 18px 20px;
+                padding: 16px 20px;
                 text-align: center;
-                background: rgba(255, 255, 255, 0.1);
+                background: transparent;
+                border-radius: 0;
             }
 
                 .hero-introduccion nav ul li a:hover {
-                    background: rgba(255, 215, 0, 0.35);
-                    color: #3cffb055;
-                    transform: translateY(-2px);
+                    background: transparent;
+                    color: var(--accent, #c2a878);
+                    transform: none;
                 }
 
                 .hero-introduccion nav ul li a::after {

@@ -10,13 +10,11 @@
     --mat: #f4f1e9;          /* paspartú */
     --ink: #ece8df;          /* texto claro */
     --muted: #9b968a;
-    --brass: #c2a878;        /* acento latón sobrio */
+    --brass: var(--accent, #c2a878);        /* acento latón sobrio */
     --line: rgba(255, 255, 255, 0.08);
 
     min-height: 100vh;
-    background:
-        radial-gradient(140% 60% at 50% -10%, #18181b 0%, transparent 60%),
-        var(--wall);
+    background: var(--wall);
     color: var(--ink);
     font-family: 'Jost', sans-serif;
     padding: 90px 32px 110px;
@@ -84,6 +82,40 @@
             background: #d4bd92;
             transform: translateY(-2px);
             box-shadow: 0 12px 28px rgba(194, 168, 120, 0.25);
+        }
+
+    /* Grupo de botones de la cabecera */
+    .art-gallery .ag-head-actions {
+        display: inline-flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 28px;
+    }
+
+        .art-gallery .ag-head-actions .ag-upload { margin-top: 0; }
+
+    /* Botón secundario (Categorías) */
+    .art-gallery .ag-btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: var(--ink);
+        background: transparent;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 14px 30px;
+        border: 1px solid var(--line);
+        border-radius: 2px;
+        transition: color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+    }
+
+        .art-gallery .ag-btn-ghost:hover {
+            color: #fff;
+            border-color: var(--brass);
+            transform: translateY(-2px);
         }
 
 /* ---------- Filtros / colecciones ---------- */

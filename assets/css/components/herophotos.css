@@ -4,7 +4,7 @@
    =========================================================== */
 
 .herophotos {
-    --brass: #c2a878;
+    --brass: var(--accent, #c2a878);
     --ink: #f4f1e9;
 
     position: relative;
