@@ -21,9 +21,9 @@
 
 /* ---------- Contenedor unificado dentro de su sección ---------- */
 .cat-block {
-    max-width: 1600px;
+    max-width: 1920px;
     margin: 60px auto 0;
-    padding: 50px 40px 0;
+    padding: 50px 60px 0;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -96,7 +96,7 @@
         /* Grid de las placas */
         .blogcategories-grid > div:nth-child(1) > div {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 22px;
             justify-items: stretch;
             counter-reset: catnum;
@@ -123,10 +123,10 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                aspect-ratio: 1 / 1;
+                aspect-ratio: 3 / 2;        /* apaisada: más ancho para textos largos */
                 width: 100%;
-                max-width: 250px;
-                padding: 24px;
+                max-width: none;            /* se estiran para llenar todo el ancho en conjunto */
+                padding: 24px 30px;
                 box-sizing: border-box;
                 word-break: break-word;
                 white-space: normal;
@@ -195,17 +195,21 @@
 
 @media (max-width: 900px) {
     .blogcategories-grid > div:nth-child(1) > div {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 520px) {
     .blogcategories-grid > div:nth-child(1) > div {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
         gap: 14px;
     }
 
-    .blogcategories-grid > div:nth-child(1) > div > a { font-size: 1.15rem; }
+    .blogcategories-grid > div:nth-child(1) > div > a {
+        font-size: 1.15rem;
+        aspect-ratio: 5 / 2;    /* aún más ancha en móvil, para 1 columna */
+        max-width: none;
+    }
 }
 
 .blogcategories-grid > div:nth-child(1) > div > a,
