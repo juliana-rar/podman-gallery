@@ -31,6 +31,11 @@ def home(request):
     }
     return render(request, 'home.html', context)
 
+def biografia(request):
+    from user_profile.models import BioPhoto
+    featured_photos = BioPhoto.objects.filter(is_active=True)
+    return render(request, 'biografia.html', {"featured_photos": featured_photos})
+
 def blogs(request):
     queryset = Blog.objects.order_by('-created_date')
     tags = Tag.objects.order_by('-created_date')

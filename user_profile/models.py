@@ -38,6 +38,11 @@ class SiteSettings(models.Model):
     """Configuración global del sitio (singleton). Nombres del menú."""
     site_title = models.CharField("Título del sitio", max_length=80, default="Sigfrid")
     favicon = models.ImageField("Logo / favicon", upload_to="site/", null=True, blank=True)
+    hero_video = models.FileField("Video del hero", upload_to="site/", null=True, blank=True)
+    home_logo = models.ImageField("Logo del inicio", upload_to="site/", null=True, blank=True)
+    bio_text = models.TextField("Biografía", blank=True, default="")
+    bio_video = models.FileField("Video de la biografía", upload_to="site/", null=True, blank=True)
+    bio_photo = models.ImageField("Foto de la biografía", upload_to="site/", null=True, blank=True)
     nav_blogs = models.CharField("Menú · Blogs", max_length=50, default="Eportfolios")
     nav_events = models.CharField("Menú · Events", max_length=50, default="Tips")
     nav_gallery = models.CharField("Menú · Galería", max_length=50, default="Galería")
@@ -78,4 +83,21 @@ class Follow(models.Model):
 
     def __str__(self) -> str:
         return f"{self.followed_by.username} started following {self.followed.username}"
+
+
+class BioPhoto(models.Model):
+    """Foto del 'Contenido destacado' de la página de biografía."""
+    image = models.ImageField(upload_to='bio/')
+    caption = models.CharField("Texto", max_length=200, blank=True)
+    order = models.PositiveIntegerField("Orden", default=0)
+    is_active = models.BooleanField("Visible", default=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', '-created_date']
+        verbose_name = "Foto de la biografía"
+        verbose_name_plural = "Fotos de la biografía"
+
+    def __str__(self):
+        return self.caption or f"BioPhoto #{self.pk}"
 

@@ -1,0 +1,142 @@
+/* ===========================================================
+   Biografía — página del artista (serif + latón + negro)
+   =========================================================== */
+
+.biografia {
+    --brass: var(--accent, #c2a878);
+    min-height: 100vh;
+    padding: 130px 24px 90px;
+    max-width: 900px;
+    margin: 0 auto;
+    color: #ece8df;
+    font-family: 'Jost', sans-serif;
+}
+
+    /* ---------- Encabezado ---------- */
+    .biografia .bio-head {
+        text-align: center;
+        margin-bottom: 44px;
+    }
+
+        .biografia .bio-eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--brass);
+            margin: 0 0 14px;
+        }
+
+        .biografia .bio-head h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: clamp(2.6rem, 6vw, 4.2rem);
+            line-height: 1.05;
+            color: #fff;
+            margin: 0;
+        }
+
+    /* ---------- Video ---------- */
+    .biografia .bio-video {
+        position: relative;
+        width: 100%;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+        background: #000;
+        margin-bottom: 48px;
+    }
+
+        .biografia .bio-video video {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
+            background: #000;
+        }
+
+    /* ---------- Foto + texto ---------- */
+    .biografia .bio-main {
+        display: flex;
+        gap: 36px;
+        align-items: flex-start;
+        margin-bottom: 48px;
+    }
+
+        .biografia .bio-photo {
+            flex: 0 0 38%;
+            max-width: 340px;
+        }
+
+            .biografia .bio-photo img {
+                width: 100%;
+                height: auto;
+                border-radius: 16px;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+            }
+
+    /* ---------- Texto ---------- */
+    .biografia .bio-text {
+        font-size: 1.12rem;
+        line-height: 1.85;
+        color: #cbd5e1;
+        flex: 1 1 auto;
+    }
+
+        .biografia .bio-text p {
+            margin: 0 0 1.3rem;
+        }
+
+    /* ---------- Contenido destacado ---------- */
+    .biografia .bio-featured {
+        margin-top: 64px;
+    }
+
+        .biografia .bio-featured h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            color: #fff;
+            text-align: center;
+            margin: 0 0 32px;
+        }
+
+        .biografia .bio-featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .biografia .bio-featured-item {
+            margin: 0;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #111;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+            .biografia .bio-featured-item img {
+                display: block;
+                width: 100%;
+                height: 260px;
+                object-fit: cover;
+            }
+
+            .biografia .bio-featured-item figcaption {
+                padding: 12px 14px;
+                font-size: 0.9rem;
+                color: #cbd5e1;
+            }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .biografia { padding: 100px 18px 70px; }
+    .biografia .bio-head { margin-bottom: 32px; }
+    .biografia .bio-main { flex-direction: column; gap: 22px; }
+    .biografia .bio-photo { flex-basis: auto; max-width: none; }
+    .biografia .bio-video { margin-bottom: 34px; border-radius: 14px; }
+    .biografia .bio-text { font-size: 1.05rem; }
+}

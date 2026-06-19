@@ -23,7 +23,9 @@
         #0a0a0b;
     color: var(--text);
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
     font-family: 'Jost', sans-serif;
 }
 
@@ -168,6 +170,7 @@
             background: var(--surface-2);
             color: #fff;
             font-size: 0.95rem;
+            box-sizing: border-box;
             outline: none;
             transition: all 0.25s ease;
         }
@@ -345,92 +348,190 @@
             transform: translateY(-2px);
         }
 
-    /* ---------- Icono de configuración (arriba-izquierda) ---------- */
-    .profile > div > div:nth-child(1) { position: relative; }
-
-    .profile-settings-btn {
-        position: absolute;
-        top: 18px;
-        left: 18px;
-        width: 38px;
-        height: 38px;
-        display: grid;
-        place-items: center;
-        background: var(--surface-2);
+    /* ---------- Configuración del sitio (sección inline, ampliable) ---------- */
+    .profile-config {
+        width: 100%;
+        max-width: 1080px;
+        background: var(--panel);
         border: 1px solid var(--line);
-        border-radius: 50%;
-        color: var(--muted);
-        font-size: 0.95rem;
-        cursor: pointer;
-        z-index: 3;
-        transition: color 0.3s ease, border-color 0.3s ease, transform 0.4s ease;
+        border-radius: 24px;
+        padding: 40px;
+        box-sizing: border-box;
+        box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 30px 70px rgba(0,0,0,0.5);
     }
 
-        .profile-settings-btn:hover {
-            color: var(--accent);
-            border-color: var(--accent);
-            transform: rotate(45deg);
+        .profile-config .cfg-head { margin-bottom: 28px; }
+
+        .profile-config .cfg-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 0.3px;
+            transition: color 0.25s ease, gap 0.25s ease;
         }
 
-    /* ---------- Modal: nombres del menú ---------- */
-    #settingsModal {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(6, 7, 8, 0.72);
-        backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
+            .profile-config .cfg-back:hover { color: var(--accent); gap: 12px; }
 
-        #settingsModal > div {
-            background: var(--panel);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid var(--line);
-            width: 90%;
-            max-width: 460px;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
-            position: relative;
-            text-align: left;
-        }
-
-        #settingsModal h3 {
+        .profile-config h3 {
             font-family: 'Cormorant Garamond', serif;
             font-weight: 600;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: #fff;
             margin: 0 0 6px;
-            text-align: center;
         }
 
-        #settingsModal h3 > i { margin-right: 10px; color: var(--accent); }
+        .profile-config h3 > i { margin-right: 10px; color: var(--accent); }
 
-        #settingsModal .set-help {
+        .profile-config .cfg-help {
             color: var(--muted);
-            font-size: 0.84rem;
-            text-align: center;
-            margin: 0 0 26px;
+            font-size: 0.86rem;
+            margin: 0;
         }
 
-    #closeSettings {
-        position: absolute;
-        top: 18px;
-        right: 22px;
-        background: none;
-        border: none;
-        font-size: 1.6rem;
-        line-height: 1;
-        color: var(--muted);
-        cursor: pointer;
-        transition: color 0.2s ease;
-    }
+        /* La config no hereda el margen del formulario de identidad */
+        .profile-config form { margin-top: 0; }
 
-        #closeSettings:hover { color: var(--accent); }
+        /* Campos en grid responsivo: deja sitio para futuras opciones */
+        .profile-config .cfg-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px 24px;
+        }
 
-    .set-field { margin-bottom: 16px; }
+        .profile-config input {
+            width: 100%;
+            padding: 13px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            background: var(--surface-2);
+            color: #fff;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+            .profile-config input:focus {
+                border-color: var(--accent);
+                box-shadow: 0 0 0 3px var(--accent-soft);
+            }
+
+        /* Camp a tota l'amplada (p. ex. el text de la biografia) */
+        .profile-config .set-field--full { grid-column: 1 / -1; }
+
+        .profile-config textarea {
+            width: 100%;
+            padding: 13px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            background: var(--surface-2);
+            color: #fff;
+            font-size: 0.95rem;
+            font-family: inherit;
+            line-height: 1.6;
+            resize: vertical;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+            .profile-config textarea:focus {
+                border-color: var(--accent);
+                box-shadow: 0 0 0 3px var(--accent-soft);
+            }
+
+        .profile-config .set-current {
+            display: block;
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 0.78rem;
+        }
+
+            .profile-config .set-current a { color: var(--accent); }
+
+        .profile-config .cfg-save {
+            margin-top: 26px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #11100c;
+            background: var(--accent);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+            .profile-config .cfg-save:hover {
+                background: #d4bd92;
+                transform: translateY(-2px);
+                box-shadow: 0 10px 24px rgba(194, 168, 120, 0.22);
+            }
+
+            .profile-config .cfg-save > i { margin-right: 9px; }
+
+        /* Separador entre la edición de la bio y el contenido destacado */
+        .profile-config .cfg-head--section {
+            margin-top: 44px;
+            padding-top: 28px;
+            border-top: 1px solid var(--line);
+        }
+
+        /* Galería de contenido destacado (gestión) */
+        .profile-config .bio-photos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+            margin-top: 22px;
+        }
+
+        .profile-config .bio-photo-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--surface-2);
+            border: 1px solid var(--line);
+        }
+
+            .profile-config .bio-photo-card img {
+                display: block;
+                width: 100%;
+                height: 150px;
+                object-fit: cover;
+            }
+
+            .profile-config .bio-photo-card p {
+                margin: 0;
+                padding: 8px 10px;
+                font-size: 0.8rem;
+                color: var(--muted);
+            }
+
+            .profile-config .bio-photo-del {
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                width: 32px;
+                height: 32px;
+                display: grid;
+                place-items: center;
+                border-radius: 8px;
+                background: rgba(8, 7, 6, 0.7);
+                color: #fff;
+                text-decoration: none;
+                transition: background 0.25s ease, color 0.25s ease;
+            }
+
+                .profile-config .bio-photo-del:hover {
+                    background: #c0392b;
+                    color: #fff;
+                }
+
+    .set-field { margin-bottom: 0; }
 
     .set-field label small {
         text-transform: none;
@@ -490,45 +591,6 @@
 
         .set-field label > i { color: var(--accent); width: 16px; text-align: center; }
 
-    #settingsModal input {
-        width: 100%;
-        padding: 13px 16px;
-        border-radius: 12px;
-        border: 1px solid var(--line);
-        background: var(--surface-2);
-        color: #fff;
-        font-size: 0.95rem;
-        box-sizing: border-box;
-        outline: none;
-        transition: all 0.25s ease;
-    }
-
-        #settingsModal input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-soft);
-        }
-
-    #settingsModal button[type="submit"] {
-        width: 100%;
-        margin-top: 14px;
-        padding: 15px;
-        font-size: 1rem;
-        font-weight: 600;
-        color: #11100c;
-        background: var(--accent);
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: all 0.25s ease;
-    }
-
-        #settingsModal button[type="submit"]:hover {
-            background: #d4bd92;
-            transform: translateY(-2px);
-        }
-
-        #settingsModal button[type="submit"] > i { margin-right: 9px; }
-
     /* ---------- Responsive ---------- */
     @media (max-width: 880px) {
         .profile { padding: 40px 16px; }
@@ -543,6 +605,8 @@
             border-bottom: 1px solid var(--line);
             padding: 40px 28px;
         }
+
+        .profile-config { max-width: 460px; padding: 28px 22px; }
     }
 
     @media (max-width: 420px) {

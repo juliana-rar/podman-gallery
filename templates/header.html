@@ -3,33 +3,54 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/header.css' %}">
 
-<section class="hero-introduccion">
-    <div>
-        <nav>
-            <ul>
-                <li><a href="{% url 'blog:home' %}">Home</a></li>
-                <li><a href="{% url 'gallery:gallery_list' %}">{{ site_settings.nav_gallery|default:"Galería" }}</a></li>
-                <li><a href="{% url 'blog:blogs' %}">{{ site_settings.nav_blogs|default:"Eportfolios" }}</a></li>
-                <li><a href="/events/">{{ site_settings.nav_events|default:"Tips" }}</a></li>
-                {% if request.user.is_authenticated %}
-                <li><a href="{% url 'user_profile:profile' %}">Perfil</a></li>
-                <li><a href="{% url 'user_profile:logout' %}">Logout</a></li>
-                {% else %}
-                <li><a href="{% url 'user_profile:login' %}">Login</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </div>
-</section>
+<header class="site-nav">
+    <button type="button" class="menu-toggle" id="menuToggle" aria-label="Menú" aria-expanded="false" aria-controls="siteMenu">
+        <span></span><span></span><span></span>
+    </button>
+
+    <nav class="site-menu" id="siteMenu" aria-hidden="true">
+        <ul>
+            <li><a href="{% url 'blog:home' %}">Home</a></li>
+            <li><a href="{% url 'blog:biografia' %}">Biografía</a></li>
+            <li><a href="{% url 'gallery:gallery_list' %}">{{ site_settings.nav_gallery|default:"Galería" }}</a></li>
+            <li><a href="{% url 'blog:blogs' %}">{{ site_settings.nav_blogs|default:"Eportfolios" }}</a></li>
+            <li><a href="/events/">{{ site_settings.nav_events|default:"Tips" }}</a></li>
+            {% if request.user.is_authenticated %}
+            <li><a href="{% url 'user_profile:profile' %}">Perfil</a></li>
+            <li><a href="{% url 'user_profile:logout' %}">Logout</a></li>
+            {% else %}
+            <li><a href="{% url 'user_profile:login' %}">Login</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
 
 <script>
 (function () {
-    var nav = document.querySelector('.hero-introduccion');
-    if (!nav) return;
-    function onScroll() {
-        nav.classList.toggle('is-scrolled', window.scrollY > 40);
+    var toggle = document.getElementById('menuToggle');
+    var menu = document.getElementById('siteMenu');
+    if (!toggle || !menu) return;
+
+    function setOpen(open) {
+        menu.classList.toggle('open', open);
+        toggle.classList.toggle('is-active', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        menu.setAttribute('aria-hidden', open ? 'false' : 'true');
+        document.body.classList.toggle('menu-open', open);
     }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+
+    toggle.addEventListener('click', function () {
+        setOpen(!menu.classList.contains('open'));
+    });
+    // Clic al fons (fora dels enllaços) tanca
+    menu.addEventListener('click', function (e) {
+        if (e.target === menu || e.target.tagName === 'UL') setOpen(false);
+    });
+    menu.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () { setOpen(false); });
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') setOpen(false);
+    });
 })();
 </script>

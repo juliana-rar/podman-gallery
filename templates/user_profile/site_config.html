@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Configuración del sitio{% endblock title %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/user_profile/profile.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="profile">
+    <section class="profile-config" id="siteConfig">
+        <header class="cfg-head">
+            <a class="cfg-back" href="{% url 'user_profile:profile' %}"><i class="fa-solid fa-arrow-left"></i> Volver al perfil</a>
+            <h3><i class="fa-solid fa-gear"></i> Configuración del sitio</h3>
+            <p class="cfg-help">Personaliza el título, el logo, el video del inicio, la biografía y cómo aparecen las secciones en el menú.</p>
+        </header>
+
+        <form method="POST" action="{% url 'user_profile:update_site_settings' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="cfg-grid">
+                <div class="set-field">
+                    <label><i class="fa-solid fa-heading"></i> Título del sitio <small>(pestaña del navegador y footer)</small></label>
+                    <input type="text" name="site_title" value="{{ site_settings.site_title }}" maxlength="80" required>
+                </div>
+                <div class="set-field">
+                    <label><i class="fa-solid fa-icons"></i> Logo / favicon <small>(pestaña del navegador)</small></label>
+                    <label class="set-favicon" id="setFaviconDrop" title="Cambiar logo">
+                        <input type="file" name="favicon" accept="image/*" hidden id="setFaviconInput">
+                        <img id="setFaviconPreview" src="{% if site_settings.favicon %}{{ site_settings.favicon.url }}{% else %}https://i.ibb.co/XWXdqFc/LOGO.png{% endif %}" alt="logo actual">
+                        <span><i class="fa-solid fa-arrow-up-from-bracket"></i> Cambiar logo</span>
+                    </label>
+                </div>
+                <div class="set-field">
+                    <label><i class="fa-solid fa-image"></i> Logo del inicio <small>(esquina superior izquierda del home)</small></label>
+                    <label class="set-favicon" id="setLogoDrop" title="Cambiar logo del inicio">
+                        <input type="file" name="home_logo" accept="image/*" hidden id="setLogoInput">
+                        <img id="setLogoPreview" src="{% if site_settings.home_logo %}{{ site_settings.home_logo.url }}{% else %}{% static 'dessign/logo.jpeg' %}{% endif %}" alt="logo del inicio actual">
+                        <span><i class="fa-solid fa-arrow-up-from-bracket"></i> Cambiar logo</span>
+                    </label>
+                </div>
+                <div class="set-field">
+                    <label><i class="fa-solid fa-film"></i> Video del hero <small>(fondo del inicio, en bucle)</small></label>
+                    <input type="file" name="hero_video" accept="video/*">
+                    {% if site_settings.hero_video %}
+                    <small class="set-current">Actual: <a href="{{ site_settings.hero_video.url }}" target="_blank">{{ site_settings.hero_video.name }}</a></small>
+                    {% endif %}
+                </div>
+                <div class="set-field">
+                    <label><i class="fa-solid fa-folder-open"></i> Blogs</label>
+                    <input type="text" name="nav_blogs" value="{{ site_settings.nav_blogs }}" maxlength="50" required>
+                </div>
+                <div class="set-field">
+                    <label><i class="fa-solid fa-lightbulb"></i> Events</label>
+                    <input type="text" name="nav_events" value="{{ site_settings.nav_events }}" maxlength="50" required>
+                </div>
+                <div class="set-field">
+                    <label><i class="fa-solid fa-images"></i> Galería</label>
+                    <input type="text" name="nav_gallery" value="{{ site_settings.nav_gallery }}" maxlength="50" required>
+                </div>
+                <div class="set-field">
+                    <label><i class="fa-solid fa-palette"></i> Color de acento <small>(se aplica a todo el sitio)</small></label>
+                    <input type="color" name="accent_color" value="{{ site_settings.accent_color|default:'#c2a878' }}" class="set-color">
+                </div>
+                <div class="set-field">
+                    <label><i class="fa-brands fa-instagram"></i> Instagram <small>(enlace, se ve en el footer)</small></label>
+                    <input type="url" name="instagram_url" value="{{ site_settings.instagram_url }}" placeholder="https://instagram.com/tu_usuario">
+                </div>
+                <div class="set-field">
+                    <label><i class="fa-brands fa-tiktok"></i> TikTok <small>(enlace, se ve en el footer)</small></label>
+                    <input type="url" name="tiktok_url" value="{{ site_settings.tiktok_url }}" placeholder="https://tiktok.com/@tu_usuario">
+                </div>
+            </div>
+            <button type="submit" class="cfg-save"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+        </form>
+    </section>
+</section>
+
+<script>
+    // Preview del logo/favicon al elegir archivo
+    document.getElementById("setFaviconInput").addEventListener("change", function () {
+        if (this.files[0]) {
+            document.getElementById("setFaviconPreview").src = URL.createObjectURL(this.files[0]);
+        }
+    });
+    // Preview del logo del inicio al elegir archivo
+    document.getElementById("setLogoInput").addEventListener("change", function () {
+        if (this.files[0]) {
+            document.getElementById("setLogoPreview").src = URL.createObjectURL(this.files[0]);
+        }
+    });
+</script>
+{% endblock content %}

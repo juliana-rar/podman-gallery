@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Galería{% endblock title %}
+{% block title %}{{ site_settings.nav_gallery|default:"Galería" }}{% endblock title %}
 
 {% block extra_css %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +14,7 @@
 
     <header class="ag-header">
         <p class="ag-eyebrow">Colección de obra</p>
-        <h1>{% if category %}{{ category.title }}{% elif mine %}Mis obras{% else %}Galería{% endif %}</h1>
+        <h1>{% if category %}{{ category.title }}{% elif mine %}Mi {{ site_settings.nav_gallery|default:"Galería" }}{% else %}{{ site_settings.nav_gallery|default:"Galería" }}{% endif %}</h1>
         <p class="ag-sub">
             {% if category %}{{ total_count }} obra{{ total_count|pluralize }} en esta colección
             {% else %}Una selección de pinturas originales{% endif %}

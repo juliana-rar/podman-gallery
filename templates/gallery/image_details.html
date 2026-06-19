@@ -11,7 +11,7 @@
 
 {% block content %}
 <section class="artwork">
-    <a class="aw-back" href="{% url 'gallery:gallery_list' %}"><i class="fa-solid fa-arrow-left"></i> Galería</a>
+    <a class="aw-back" href="{% url 'gallery:gallery_list' %}"><i class="fa-solid fa-arrow-left"></i> {{ site_settings.nav_gallery|default:"Galería" }}</a>
 
     <div class="aw-stage">
         <div class="aw-frame">

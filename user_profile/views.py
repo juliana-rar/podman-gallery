@@ -15,7 +15,52 @@ from .forms import (
 from .decorators import  (
     not_logged_in_required
 )
-from .models import Follow, User, SiteSettings
+from .models import Follow, User, SiteSettings, BioPhoto
+
+
+@login_required(login_url='login')
+def site_config(request):
+    return render(request, 'user_profile/site_config.html')
+
+
+@login_required(login_url='login')
+def bio_manage(request):
+    return render(request, 'user_profile/bio_manage.html', {
+        "bio_photos": BioPhoto.objects.all(),
+    })
+
+
+@login_required(login_url='login')
+def update_bio(request):
+    settings_obj = SiteSettings.load()
+    if request.method == "POST":
+        settings_obj.bio_text = request.POST.get("bio_text", "")
+        if request.FILES.get("bio_photo"):
+            settings_obj.bio_photo = request.FILES["bio_photo"]
+        if request.FILES.get("bio_video"):
+            settings_obj.bio_video = request.FILES["bio_video"]
+        settings_obj.save()
+        messages.success(request, "Biografía actualizada")
+    return redirect("user_profile:bio_manage")
+
+
+@login_required(login_url='login')
+def add_bio_photo(request):
+    if request.method == "POST" and request.FILES.get("image"):
+        BioPhoto.objects.create(
+            image=request.FILES["image"],
+            caption=(request.POST.get("caption") or "").strip(),
+        )
+        messages.success(request, "Foto añadida al contenido destacado")
+    return redirect("user_profile:bio_manage")
+
+
+@login_required(login_url='login')
+def delete_bio_photo(request, pk):
+    photo = get_object_or_404(BioPhoto, pk=pk)
+    photo.delete()
+    messages.success(request, "Foto eliminada")
+    return redirect("user_profile:bio_manage")
 
 
 @login_required(login_url='login')
@@ -27,6 +72,10 @@ def update_site_settings(request):
             settings_obj.site_title = site_title
         if request.FILES.get("favicon"):
             settings_obj.favicon = request.FILES["favicon"]
+        if request.FILES.get("hero_video"):
+            settings_obj.hero_video = request.FILES["hero_video"]
+        if request.FILES.get("home_logo"):
+            settings_obj.home_logo = request.FILES["home_logo"]
         nav_blogs = (request.POST.get("nav_blogs") or "").strip()
         nav_events = (request.POST.get("nav_events") or "").strip()
         nav_gallery = (request.POST.get("nav_gallery") or "").strip()
@@ -43,7 +92,7 @@ def update_site_settings(request):
         settings_obj.tiktok_url = (request.POST.get("tiktok_url") or "").strip()
         settings_obj.save()
         messages.success(request, "Configuración actualizada")
-    return redirect("user_profile:profile")
+    return redirect("user_profile:site_config")
 
 
 @never_cache

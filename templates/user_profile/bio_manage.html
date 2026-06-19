@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Editar biografía{% endblock title %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/user_profile/profile.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="profile">
+    <section class="profile-config" id="bioManage">
+        <header class="cfg-head">
+            <a class="cfg-back" href="{% url 'user_profile:profile' %}"><i class="fa-solid fa-arrow-left"></i> Volver al perfil</a>
+            <h3><i class="fa-solid fa-feather"></i> Biografía</h3>
+            <p class="cfg-help">Edita la foto, el texto y la galería de contenido destacado de la página de biografía.</p>
+        </header>
+
+        <!-- Foto + video + texto -->
+        <form method="POST" action="{% url 'user_profile:update_bio' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="cfg-grid">
+                <div class="set-field">
+                    <label><i class="fa-solid fa-image"></i> Foto de la biografía</label>
+                    <label class="set-favicon" id="setBioPhotoDrop" title="Cambiar foto">
+                        <input type="file" name="bio_photo" accept="image/*" hidden id="setBioPhotoInput">
+                        <img id="setBioPhotoPreview" src="{% if site_settings.bio_photo %}{{ site_settings.bio_photo.url }}{% else %}{% static 'dessign/logo.jpeg' %}{% endif %}" alt="foto de la biografía">
+                        <span><i class="fa-solid fa-arrow-up-from-bracket"></i> Cambiar foto</span>
+                    </label>
+                </div>
+                <div class="set-field">
+                    <label><i class="fa-solid fa-video"></i> Video de la biografía <small>(opcional)</small></label>
+                    <input type="file" name="bio_video" accept="video/*">
+                    {% if site_settings.bio_video %}
+                    <small class="set-current">Actual: <a href="{{ site_settings.bio_video.url }}" target="_blank">{{ site_settings.bio_video.name }}</a></small>
+                    {% endif %}
+                </div>
+                <div class="set-field set-field--full">
+                    <label><i class="fa-solid fa-feather"></i> Texto de la biografía</label>
+                    <textarea name="bio_text" rows="8" placeholder="Escribe aquí la biografía…">{{ site_settings.bio_text }}</textarea>
+                </div>
+            </div>
+            <button type="submit" class="cfg-save"><i class="fa-solid fa-floppy-disk"></i> Guardar biografía</button>
+        </form>
+
+        <!-- Contenido destacado: galería de fotos -->
+        <header class="cfg-head cfg-head--section">
+            <h3><i class="fa-solid fa-star"></i> Contenido destacado</h3>
+            <p class="cfg-help">Galería de fotos que se muestra en la página de biografía.</p>
+        </header>
+
+        <form class="bio-add" method="POST" action="{% url 'user_profile:add_bio_photo' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="cfg-grid">
+                <div class="set-field">
+                    <label><i class="fa-solid fa-plus"></i> Nueva foto</label>
+                    <input type="file" name="image" accept="image/*" required>
+                </div>
+                <div class="set-field">
+                    <label><i class="fa-solid fa-pen"></i> Texto <small>(opcional)</small></label>
+                    <input type="text" name="caption" maxlength="200" placeholder="Descripción de la foto">
+                </div>
+            </div>
+            <button type="submit" class="cfg-save"><i class="fa-solid fa-plus"></i> Añadir foto</button>
+        </form>
+
+        {% if bio_photos %}
+        <div class="bio-photos">
+            {% for p in bio_photos %}
+            <div class="bio-photo-card">
+                <img src="{{ p.image.url }}" alt="{{ p.caption }}">
+                {% if p.caption %}<p>{{ p.caption }}</p>{% endif %}
+                <a class="bio-photo-del" href="{% url 'user_profile:delete_bio_photo' p.pk %}" title="Eliminar"
+                   onclick="return confirm('¿Eliminar esta foto?');"><i class="fa-solid fa-trash"></i></a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="cfg-help">Aún no hay fotos en el contenido destacado.</p>
+        {% endif %}
+    </section>
+</section>
+
+<script>
+    document.getElementById("setBioPhotoInput").addEventListener("change", function () {
+        if (this.files[0]) {
+            document.getElementById("setBioPhotoPreview").src = URL.createObjectURL(this.files[0]);
+        }
+    });
+</script>
+{% endblock content %}

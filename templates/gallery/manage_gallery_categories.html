@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Colecciones de la galería{% endblock title %}
+{% block title %}Colecciones de {{ site_settings.nav_gallery|default:"Galería" }}{% endblock title %}
 {% block extra_css %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -10,10 +10,10 @@
 <section class="manage-cats">
     <header class="mc-head">
         <div>
-            <p class="mc-eyebrow">Galería</p>
+            <p class="mc-eyebrow">{{ site_settings.nav_gallery|default:"Galería" }}</p>
             <h1 class="mc-title">Colecciones</h1>
         </div>
-        <a class="mc-back" href="{% url 'gallery:my_gallery' %}"><i class="fa-solid fa-arrow-left"></i> Mi galería</a>
+        <a class="mc-back" href="{% url 'gallery:my_gallery' %}"><i class="fa-solid fa-arrow-left"></i> Mi {{ site_settings.nav_gallery|default:"Galería" }}</a>
     </header>
 
     <form class="mc-add" method="POST">

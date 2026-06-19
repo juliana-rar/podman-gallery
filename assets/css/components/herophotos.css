@@ -3,6 +3,30 @@
    Efecto Ken Burns · overlay editorial · acento latón
    =========================================================== */
 
+/* Logo del inicio — esquina superior izquierda, fijo sobre el hero.
+   z-index 60: por debajo del overlay del menú (80) para que quede
+   tapado cuando el menú lateral está abierto. */
+.home-logo {
+    position: absolute;
+    top: 0;
+    left: 4px;
+    z-index: 60;
+    display: block;
+    line-height: 0;
+}
+
+    .home-logo img {
+        height: 300px;
+        width: auto;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+@media (max-width: 768px) {
+    .home-logo { top: 0; left: 2px; }
+    .home-logo img { height: 180px; }
+}
+
 .herophotos {
     --brass: var(--accent, #c2a878);
     --ink: #f4f1e9;
@@ -17,45 +41,20 @@
     font-family: 'Jost', sans-serif;
 }
 
-.herophotos .hp-slides {
+/* Video de fondo a pantalla completa */
+.herophotos .hp-video {
     position: absolute;
     inset: 0;
-}
-
-.herophotos .hp-slide {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 1.4s ease, visibility 1.4s;
-}
-
-    .herophotos .hp-slide.is-active {
-        opacity: 1;
-        visibility: visible;
-        z-index: 1;
-    }
-
-    .herophotos .hp-slide img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transform: scale(1.05);
-    }
-
-    /* Ken Burns lento en la diapositiva activa */
-    .herophotos .hp-slide.is-active img {
-        animation: hpZoom 8s ease-out forwards;
-    }
-
-@keyframes hpZoom {
-    from { transform: scale(1.05); }
-    to   { transform: scale(1.16); }
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
 }
 
     .herophotos .hp-overlay {
         position: absolute;
         inset: 0;
+        z-index: 1;
         background:
             linear-gradient(to top, rgba(8, 7, 6, 0.78) 0%, rgba(8, 7, 6, 0.15) 45%, rgba(8, 7, 6, 0.35) 100%);
     }
@@ -113,66 +112,14 @@
 
         .herophotos .hp-cta:hover { background: #d4bd92; gap: 18px; }
 
-    /* Animación de entrada del texto en la activa */
-    .herophotos .hp-slide.is-active .hp-eyebrow { animation: hpRise 0.8s ease 0.3s forwards; }
-    .herophotos .hp-slide.is-active .hp-caption h1 { animation: hpRise 0.9s ease 0.45s forwards; }
-    .herophotos .hp-slide.is-active .hp-cta { animation: hpRise 0.9s ease 0.65s forwards; }
+    /* Animación de entrada del texto */
+    .herophotos .hp-caption .hp-eyebrow { animation: hpRise 0.8s ease 0.3s forwards; }
+    .herophotos .hp-caption h1 { animation: hpRise 0.9s ease 0.45s forwards; }
+    .herophotos .hp-caption .hp-cta { animation: hpRise 0.9s ease 0.65s forwards; }
 
 @keyframes hpRise {
     to { opacity: 1; transform: translateY(0); }
 }
-
-/* ---------- Flechas ---------- */
-.herophotos .hp-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 4;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    background: rgba(15, 13, 10, 0.25);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    color: #fff;
-    font-size: 1rem;
-    cursor: pointer;
-    display: grid;
-    place-items: center;
-    transition: all 0.25s ease;
-}
-
-    .herophotos .hp-arrow:hover {
-        background: var(--brass);
-        color: #1a1813;
-        border-color: var(--brass);
-    }
-
-    .herophotos .hp-prev { left: 28px; }
-    .herophotos .hp-next { right: 28px; }
-
-/* ---------- Dots ---------- */
-.herophotos .hp-dots {
-    position: absolute;
-    right: 8vw;
-    bottom: 8%;
-    z-index: 4;
-    display: flex;
-    gap: 12px;
-}
-
-    .herophotos .hp-dot {
-        width: 36px;
-        height: 3px;
-        padding: 0;
-        border: none;
-        background: rgba(255, 255, 255, 0.3);
-        cursor: pointer;
-        transition: background 0.3s ease;
-    }
-
-        .herophotos .hp-dot.active { background: var(--brass); }
 
 /* ---------- Indicador de scroll ---------- */
 .herophotos .hp-scroll {
@@ -208,7 +155,5 @@
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
     .herophotos { height: 100vh; height: 100svh; }
-    .herophotos .hp-arrow { display: none; }
     .herophotos .hp-caption { bottom: 16%; padding: 0 24px; }
-    .herophotos .hp-dots { right: 24px; bottom: 7%; }
 }

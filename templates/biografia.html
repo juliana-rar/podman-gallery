@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Biografía · {{ site_settings.site_title|default:"Sigfrid" }}{% endblock title %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/biografia.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="biografia">
+    <header class="bio-head">
+        <p class="bio-eyebrow">Sobre el artista</p>
+        <h1>{{ site_settings.site_title|default:"Sigfrid" }}</h1>
+    </header>
+
+    <div class="bio-main">
+        {% if site_settings.bio_photo %}
+        <div class="bio-photo">
+            <img src="{{ site_settings.bio_photo.url }}" alt="{{ site_settings.site_title|default:'Biografía' }}">
+        </div>
+        {% endif %}
+
+        <div class="bio-text">
+            {% if site_settings.bio_text %}
+                {{ site_settings.bio_text|linebreaks }}
+            {% else %}
+                <p>Aún no se ha escrito la biografía. Puedes añadirla desde tu perfil → Biografía.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="bio-video">
+        <video controls playsinline preload="metadata">
+            <source src="{% if site_settings.bio_video %}{{ site_settings.bio_video.url }}{% else %}{% static 'dessign/sigfrid-biografia.mp4' %}{% endif %}" type="video/mp4">
+        </video>
+    </div>
+
+    {% if featured_photos %}
+    <section class="bio-featured">
+        <h2>Contenido destacado</h2>
+        <div class="bio-featured-grid">
+            {% for p in featured_photos %}
+            <figure class="bio-featured-item">
+                <img src="{{ p.image.url }}" alt="{{ p.caption }}" loading="lazy">
+                {% if p.caption %}<figcaption>{{ p.caption }}</figcaption>{% endif %}
+            </figure>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</section>
+{% endblock content %}
