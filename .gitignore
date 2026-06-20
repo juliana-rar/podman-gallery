@@ -33,8 +33,10 @@ media
 
 config.env
 
-# Backup files # 
-*.bak 
+# Backup files #
+*.bak
+# Database dumps (no deben ir al repo)
+*.sql
 
 # If you are using PyCharm # 
 # User-specific stuff

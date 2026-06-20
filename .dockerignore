@@ -6,9 +6,22 @@ env/
 .vs/
 .idea/
 .vscode/
+.claude/
 __pycache__/
 *.pyc
 *.pyo
 *.log
 media/
 db.sqlite3
+
+# Secretos: NO hornear ningún .env en la imagen. En producción las variables
+# llegan vía env_file de compose, no desde un archivo copiado.
+.env
+.env.*
+
+# Dumps de base de datos y backups: no deben ir en la imagen
+*.sql
+*.bak
+
+# Estáticos recolectados: se regeneran con collectstatic al arrancar
+staticfiles/
