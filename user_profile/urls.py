@@ -19,6 +19,7 @@ urlpatterns= [
    path('biografia/foto/delete/<int:pk>/', delete_bio_photo, name='delete_bio_photo'),
    path('exhibitions/', exhibitions_calendar, name='exhibitions'),
    path('exhibitions/my-exhibitions/', exhibitions_manage, name='exhibitions_manage'),
+   path('exhibitions/hero/', update_exhibitions_hero, name='update_exhibitions_hero'),
    path('exhibiciones/editar/<int:pk>/', edit_exhibition, name='edit_exhibition'),
    path('exhibiciones/eliminar/<int:pk>/', delete_exhibition, name='delete_exhibition'),
    path('view_user_information/<str:username>/', view_user_information, name="view_user_information"),

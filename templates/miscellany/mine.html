@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Mis {{ site_settings.nav_miscellany|default:"Tips" }}{% endblock title %}
+{% block title %}{{ site_settings.nav_miscellany|default:"Tips" }}{% endblock title %}
 
 {% block extra_css %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +14,7 @@
     <header class="me-head">
         <div>
             <p class="me-eyebrow" data-es="Tu colección" data-en="Your collection">Your collection</p>
-            <h1 class="me-title"><span data-es="Mis" data-en="My">My</span> {{ site_settings.nav_miscellany|default:"Tips" }}</h1>
+            <h1 class="me-title">{{ site_settings.nav_miscellany|default:"Tips" }}</h1>
         </div>
         <div class="me-actions-head">
             <a class="me-btn--ghost" href="{% url 'miscellany:manage_miscellany_categories' %}">

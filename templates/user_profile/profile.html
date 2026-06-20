@@ -90,9 +90,9 @@
 
         <!-- Columna derecha: Grid de enlaces -->
         <div>
-            <a href="{% url 'miscellany:my_miscellany' %}"><i class="fa-solid fa-lightbulb"></i><span><span data-es="Mis" data-en="My">My</span> {{ site_settings.nav_miscellany|default:"Tips" }}</span></a>
-            <a href="{% url 'products:my_products' %}"><i class="fa-solid fa-box-open"></i><span><span data-es="Mis" data-en="My">My</span> <span data-es="Productos" data-en="Products">Products</span></span></a>
-            <a href="{% url 'gallery:my_gallery' %}"><i class="fa-solid fa-images"></i><span><span data-es="Mi" data-en="My">My</span> {{ site_settings.nav_gallery|default:"Galería" }}</span></a>
+            <a href="{% url 'miscellany:my_miscellany' %}"><i class="fa-solid fa-lightbulb"></i><span>{{ site_settings.nav_miscellany|default:"Tips" }}</span></a>
+            <a href="{% url 'products:my_products' %}"><i class="fa-solid fa-box-open"></i><span><span data-es="Productos" data-en="Products">Products</span></span></a>
+            <a href="{% url 'gallery:my_gallery' %}"><i class="fa-solid fa-images"></i><span>{{ site_settings.nav_gallery|default:"Galería" }}</span></a>
             <a href="{% url 'herophotos:manage' %}"><i class="fa-solid fa-panorama"></i><span data-es="Fotos de portada" data-en="Cover photos">Cover photos</span></a>
             <a href="{% url 'user_profile:bio_manage' %}"><i class="fa-solid fa-feather"></i><span data-es="Biografía" data-en="Biography">Biography</span></a>
             <a href="{% url 'user_profile:exhibitions_manage' %}"><i class="fa-solid fa-calendar-day"></i><span data-es="Exhibiciones" data-en="Exhibitions">Exhibitions</span></a>

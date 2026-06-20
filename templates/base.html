@@ -31,11 +31,11 @@
             overflow-x: hidden;
             max-width: 100%;
         }
-        /* Fondo global: degradado vertical de #020202 a negro, fijo al viewport
-           para que todas las páginas compartan el mismo fondo sin costuras. */
+        /* Fondo global: color sólido #030303, fijo al viewport para que todas
+           las páginas compartan el mismo fondo sin costuras. */
         html {
             min-height: 100%;
-            background: linear-gradient(to bottom, #020202 0%, #000000 100%) no-repeat;
+            background: #030303 no-repeat;
             background-attachment: fixed;
         }
         body {
@@ -46,6 +46,15 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+        /* Transición de salida: al navegar desde el menú la página se desvanece
+           lentamente antes de cambiar de página. */
+        body {
+            opacity: 1;
+            transition: opacity 0.55s ease;
+        }
+        body.page-leaving {
+            opacity: 0;
         }
         /* Language blocks (Mechanism B): show only the active language. */
         html[lang="en"] .lang-es { display: none !important; }

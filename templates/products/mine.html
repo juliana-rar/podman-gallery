@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}My Products{% endblock title %}
+{% block title %}Products{% endblock title %}
 
 {% block extra_css %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +14,7 @@
     <header class="me-head">
         <div>
             <p class="me-eyebrow" data-es="Tu colección" data-en="Your collection">Your collection</p>
-            <h1 class="me-title"><span data-es="Mis" data-en="My">My</span> <span data-es="Productos" data-en="Products">Products</span></h1>
+            <h1 class="me-title"><span data-es="Productos" data-en="Products">Products</span></h1>
         </div>
         <div class="me-actions-head">
             <a class="me-add" href="{% url 'products:add_product' %}">
@@ -26,16 +26,7 @@
     <!-- Configuración del hero de la página pública de productos -->
     <form class="ph-config" method="POST" action="{% url 'products:update_products_hero' %}" enctype="multipart/form-data">
         {% csrf_token %}
-        <h2 class="ph-config-title"><i class="fa-solid fa-image"></i> <span data-es="Hero de productos" data-en="Products hero">Products hero</span> <small data-es="(imagen grande a todo el ancho, arriba de la página de productos)" data-en="(large full-width image, at the top of the products page)">(large full-width image, at the top of the products page)</small></h2>
-        <div class="ph-config-grid">
-            <label class="ph-config-drop" id="phHeroDrop" title="Cambiar imagen">
-                <input type="file" name="products_hero_image" accept="image/*" hidden id="phHeroInput">
-                <img id="phHeroPreview" src="{% if site_settings.products_hero_image %}{{ site_settings.products_hero_image.url }}{% else %}{% static 'default_event_image.jpg' %}{% endif %}" alt="hero actual">
-                <span><i class="fa-solid fa-arrow-up-from-bracket"></i> <span data-es="Cambiar imagen" data-en="Change image">Change image</span></span>
-            </label>
-        </div>
-
-        <h2 class="ph-config-title ph-config-title--spaced"><i class="fa-solid fa-image"></i> <span data-es="Segundo hero" data-en="Second hero">Second hero</span> <small data-es="(imagen centrada mediana y texto breve debajo)" data-en="(medium centered image and short text below)">(medium centered image and short text below)</small></h2>
+        <h2 class="ph-config-title"><i class="fa-solid fa-image"></i> <span data-es="Hero de productos" data-en="Products hero">Products hero</span> <small data-es="(imagen centrada mediana y texto breve debajo)" data-en="(medium centered image and short text below)">(medium centered image and short text below)</small></h2>
         <div class="ph-config-grid">
             <label class="ph-config-drop" id="phHero2Drop" title="Cambiar imagen">
                 <input type="file" name="products_hero2_image" accept="image/*" hidden id="phHero2Input">
@@ -86,7 +77,7 @@
 <script>
     // Previsualización de las imágenes de los heroes al elegir archivo
     (function () {
-        [['phHeroInput', 'phHeroPreview'], ['phHero2Input', 'phHero2Preview']].forEach(function (pair) {
+        [['phHero2Input', 'phHero2Preview']].forEach(function (pair) {
             var input = document.getElementById(pair[0]);
             var preview = document.getElementById(pair[1]);
             if (!input || !preview) return;

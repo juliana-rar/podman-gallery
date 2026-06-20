@@ -113,6 +113,17 @@ def exhibitions_manage(request):
 
 
 @login_required(login_url='user_profile:login')
+def update_exhibitions_hero(request):
+    """Guarda la imagen del hero de la página pública de exhibiciones."""
+    settings_obj = SiteSettings.load()
+    if request.method == "POST" and request.FILES.get("exhibitions_hero_image"):
+        settings_obj.exhibitions_hero_image = request.FILES["exhibitions_hero_image"]
+        settings_obj.save()
+        messages.success(request, "Hero de exhibiciones actualizado")
+    return redirect("user_profile:exhibitions_manage")
+
+
+@login_required(login_url='user_profile:login')
 def edit_exhibition(request, pk):
     ex = get_object_or_404(Exhibition, pk=pk)
     if request.method == "POST":

@@ -11,6 +11,12 @@
 
 {% block content %}
 <section class="exh">
+    {% if site_settings.exhibitions_hero_image %}
+    <div class="exh-hero">
+        <img class="exh-hero-img" src="{{ site_settings.exhibitions_hero_image.url }}" alt="">
+    </div>
+    {% endif %}
+
     <header class="exh-head">
         <p class="exh-eyebrow" data-es="Agenda" data-en="Schedule">Schedule</p>
         <h1 data-es="Exhibiciones" data-en="Exhibitions">Exhibitions</h1>

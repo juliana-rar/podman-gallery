@@ -51,7 +51,7 @@
     height: 100svh;                  /* altura real del viewport en móvil */
     min-height: 600px;
     overflow: hidden;
-    background: #0a0a0b;
+    background: #030303;
     font-family: 'Jost', sans-serif;
 }
 
@@ -170,4 +170,11 @@
 @media (max-width: 768px) {
     .herophotos { height: 100vh; height: 100svh; }
     .herophotos .hp-caption { bottom: 16%; padding: 0 24px; }
+
+    /* En móvil mostrar el frame completo del video (sin recortar) para que
+       su texto quede visible: más pequeño y centrado, con barras de fondo. */
+    .herophotos .hp-video {
+        object-fit: contain;
+        object-position: center;
+    }
 }

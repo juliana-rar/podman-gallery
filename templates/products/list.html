@@ -7,16 +7,12 @@
 {% endblock extra_css %}
 {% block content %}
 <section class="eventss art-list">
-    {% if site_settings.products_hero_image %}
-    <div class="products-hero">
-        <img class="ph-img" src="{{ site_settings.products_hero_image.url }}" alt="">
-    </div>
-    {% endif %}
-
     {% if site_settings.products_hero2_image or site_settings.products_hero2_text %}
     <div class="products-hero2">
         {% if site_settings.products_hero2_image %}
-        <img class="ph2-img" src="{{ site_settings.products_hero2_image.url }}" alt="">
+        <div class="ph2-frame">
+            <img class="ph2-img" src="{{ site_settings.products_hero2_image.url }}" alt="">
+        </div>
         {% endif %}
         {% if site_settings.products_hero2_text or site_settings.products_hero2_text_en %}
         <p class="ph2-text"><span class="lang-es">{{ site_settings.products_hero2_text }}</span><span class="lang-en">{% if site_settings.products_hero2_text_en %}{{ site_settings.products_hero2_text_en }}{% else %}{{ site_settings.products_hero2_text }}{% endif %}</span></p>
@@ -46,6 +42,45 @@
     </div>
     {% endif %}
 </section>
+
+<!-- Modal: ver la imagen del producto en grande al hacer click -->
+<div class="pm-modal" aria-hidden="true">
+    <button class="pm-modal-close" aria-label="Close">&times;</button>
+    <img class="pm-modal-img" src="" alt="">
+</div>
+
+<script>
+    // Abrir la imagen del producto en un modal en vez de ir a la página de detalle
+    (function () {
+        const modal = document.querySelector('.pm-modal');
+        if (!modal) return;
+        const modalImg = modal.querySelector('.pm-modal-img');
+        const closeBtn = modal.querySelector('.pm-modal-close');
+
+        function openModal(src, alt) {
+            modalImg.src = src; modalImg.alt = alt || '';
+            modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal() {
+            modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true');
+            modalImg.src = ''; document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.art-list .ev-grid .ev-piece a').forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                const img = a.querySelector('img');
+                if (!img) return;
+                e.preventDefault();
+                openModal(img.currentSrc || img.src, img.alt);
+            });
+        });
+
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+    })();
+</script>
 
 <script>
     (function () {

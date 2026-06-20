@@ -59,6 +59,7 @@ class SiteSettings(models.Model):
     products_hero2_image = models.ImageField("Imagen del segundo hero de productos", upload_to="site/", null=True, blank=True)
     products_hero2_text = models.TextField("Texto del segundo hero de productos", blank=True, default="")
     products_hero2_text_en = models.TextField("Products second hero text (EN)", blank=True, default="")
+    exhibitions_hero_image = models.ImageField("Imagen del hero de exhibiciones", upload_to="site/", null=True, blank=True)
     accent_color = models.CharField("Color de acento", max_length=7, default="#c2a878")
     instagram_url = models.URLField("Instagram", blank=True, default="")
     tiktok_url = models.URLField("TikTok", blank=True, default="")

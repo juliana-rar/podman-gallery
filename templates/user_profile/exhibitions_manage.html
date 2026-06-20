@@ -20,6 +20,19 @@
             <a class="exm-public" href="{% url 'user_profile:exhibitions' %}" target="_blank"><i class="fa-solid fa-up-right-from-square"></i> <span data-es="Ver calendario público" data-en="View public calendar">View public calendar</span></a>
         </header>
 
+        <!-- Hero de la página pública de exhibiciones -->
+        <form class="exm-form exm-hero-form" method="POST" action="{% url 'user_profile:update_exhibitions_hero' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="cfg-grid">
+                <div class="set-field set-field--full">
+                    <label><i class="fa-solid fa-image"></i> <span data-es="Imagen del hero" data-en="Hero image">Hero image</span> <small data-es="(imagen grande a todo el ancho, arriba de la página pública de exhibiciones)" data-en="(large full-width image at the top of the public exhibitions page)">(large full-width image at the top of the public exhibitions page)</small></label>
+                    <img class="exm-hero-preview" id="exhHeroPreview" src="{% if site_settings.exhibitions_hero_image %}{{ site_settings.exhibitions_hero_image.url }}{% else %}{% static 'default_event_image.jpg' %}{% endif %}" alt="hero actual">
+                    <input type="file" name="exhibitions_hero_image" accept="image/*" id="exhHeroInput">
+                </div>
+            </div>
+            <button type="submit" class="cfg-save"><i class="fa-solid fa-floppy-disk"></i> <span data-es="Guardar hero" data-en="Save hero">Save hero</span></button>
+        </form>
+
         <!-- Alta de exhibición -->
         <form class="exm-form" method="POST" action="{% url 'user_profile:exhibitions_manage' %}">
             {% csrf_token %}
@@ -116,4 +129,16 @@
         </div>
     </section>
 </section>
+
+<script>
+    // Previsualización de la imagen del hero al elegir archivo
+    (function () {
+        var input = document.getElementById('exhHeroInput');
+        var preview = document.getElementById('exhHeroPreview');
+        if (!input || !preview) return;
+        input.addEventListener('change', function () {
+            if (this.files[0]) preview.src = URL.createObjectURL(this.files[0]);
+        });
+    })();
+</script>
 {% endblock content %}

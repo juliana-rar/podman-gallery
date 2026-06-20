@@ -27,16 +27,26 @@
     }
 
     .site-logo:hover {
-        transform: scale(1.06);
         opacity: 0.9;
     }
 
     .site-logo img {
         display: block;
-        height: 84px;
+        height: 104px;
         width: auto;
-        max-width: 290px;
+        max-width: 340px;
         object-fit: contain;
+    }
+
+    /* Pantalles grans: logo una mica més petit i amb més marge dalt/esquerra */
+    @media (min-width: 1200px) {
+        .site-logo { top: 32px; left: 32px; }
+        .site-logo img { height: 112px; max-width: 380px; }
+    }
+
+    @media (min-width: 1600px) {
+        .site-logo { top: 44px; left: 44px; }
+        .site-logo img { height: 128px; max-width: 440px; }
     }
 
 /* ---------- Botó hamburguesa (fix, dalt-dreta) ---------- */
@@ -223,10 +233,19 @@
     }
 
         /* L'animació d'entrada va al <li> perquè el :hover del <a>
-           pugui escalar sense que el fill-mode de l'animació la trepitgi */
+           pugui escalar sense que el fill-mode de l'animació la trepitgi.
+           Apareixen amb un degradat que es revela des del centre cap amunt i
+           cap avall (màscara que creix). */
         .site-menu li {
             opacity: 0;
-            transform: translateY(16px);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 50%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, #000 50%, transparent 100%);
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+            -webkit-mask-size: 100% 0%;
+            mask-size: 100% 0%;
         }
 
         .site-menu li a {
@@ -242,13 +261,12 @@
         }
 
             .site-menu li a:hover {
-                color: var(--menu-brass);
                 transform: scale(1.12);
             }
 
     /* Entrada esglaonada dels enllaços quan s'obre */
     .site-menu.open li {
-        animation: menuRise 0.5s ease forwards;
+        animation: menuFade 0.7s ease forwards;
     }
 
         .site-menu.open li:nth-child(1) { animation-delay: 0.08s; }
@@ -258,8 +276,12 @@
         .site-menu.open li:nth-child(5) { animation-delay: 0.32s; }
         .site-menu.open li:nth-child(6) { animation-delay: 0.38s; }
 
-@keyframes menuRise {
-    to { opacity: 1; transform: translateY(0); }
+@keyframes menuFade {
+    to {
+        opacity: 1;
+        -webkit-mask-size: 100% 300%;
+        mask-size: 100% 300%;
+    }
 }
 
 /* Evita scroll del fons quan el menú està obert */
@@ -273,6 +295,6 @@ body.menu-open {
     .lang-toggle { top: 14px; right: 72px; width: 48px; height: 48px; } /* 14 + 48 + 10 */
     .profile-toggle { top: 14px; right: 72px; width: 48px; height: 48px; } /* mateixa posició que l'idioma */
     .site-logo { top: 10px; left: 12px; }
-    .site-logo img { height: 64px; max-width: 200px; }
+    .site-logo img { height: 80px; max-width: 240px; }
     .site-menu li a { padding: 8px 18px; }
 }

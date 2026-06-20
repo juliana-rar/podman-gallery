@@ -81,7 +81,19 @@
         if (!e.target.closest('a')) setOpen(false);
     });
     menu.querySelectorAll('a').forEach(function (a) {
-        a.addEventListener('click', function () { setOpen(false); });
+        a.addEventListener('click', function (e) {
+            var href = a.getAttribute('href');
+            // Enllaços especials / obrir en nova pestanya: sense transició
+            if (!href || href.charAt(0) === '#' || a.target === '_blank' ||
+                e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+                setOpen(false);
+                return;
+            }
+            // Desvaneix la pàgina lentament abans de navegar
+            e.preventDefault();
+            document.body.classList.add('page-leaving');
+            setTimeout(function () { window.location.href = href; }, 550);
+        });
     });
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') setOpen(false);

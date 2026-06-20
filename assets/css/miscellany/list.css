@@ -131,36 +131,116 @@
    Segundo hero de productos — imagen centrada mediana + texto
    =========================================================== */
 .products-hero2 {
-    max-width: 900px;
-    margin: 70px auto 10px;
+    max-width: 1240px;
+    margin: 0 auto 96px;
     text-align: center;
 }
+
+    /* Marco del hero: recorta el zoom para que la imagen se acerque dentro
+       del cuadro sin desbordar. */
+    .products-hero2 .ph2-frame {
+        overflow: hidden;
+        border-radius: 16px;
+        border: 1px solid rgba(194, 168, 120, 0.28);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45),
+                    0 26px 60px rgba(0, 0, 0, 0.6);
+    }
 
     .products-hero2 .ph2-img {
         display: block;
         width: 100%;
-        max-height: clamp(200px, 34vh, 360px);
+        max-height: clamp(380px, 66vh, 760px);
         object-fit: cover;
-        border-radius: 6px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45),
-                    0 16px 38px rgba(0, 0, 0, 0.55);
+        /* Acercamiento muy suave y lento: al entrar el cursor crece poco a poco,
+           al salir vuelve igual de lento a su tamaño. */
+        transition: transform 4s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
+        .products-hero2 .ph2-frame:hover .ph2-img {
+            transform: scale(1.12);
+        }
+
     .products-hero2 .ph2-text {
-        margin: 22px auto 0;
-        max-width: 680px;
+        margin: 28px auto 0;
+        max-width: 760px;
         color: var(--ink);
         font-family: 'Cormorant Garamond', serif;
-        font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+        font-size: clamp(1.05rem, 2vw, 1.45rem);
         font-weight: 500;
+        font-style: italic;
         letter-spacing: 0.4px;
-        line-height: 1.4;
+        line-height: 1.5;
     }
 
 @media (max-width: 560px) {
-    .products-hero2 { margin-top: 46px; }
-    .products-hero2 .ph2-text { margin-top: 16px; }
+    /* A sangre completa: ocupa todo el ancho de la pantalla y se pega a los
+       extremos superior, izquierdo y derecho (cancela el padding de .art-list). */
+    .products-hero2 {
+        width: 100vw;
+        max-width: none;
+        margin: -40px 0 56px;
+        margin-left: calc(50% - 50vw);
+    }
+    .products-hero2 .ph2-frame {
+        border-radius: 0;
+        border: none;
+    }
+    .products-hero2 .ph2-img {
+        max-height: clamp(300px, 70vh, 620px);
+    }
+    .products-hero2 .ph2-text { margin-top: 18px; padding: 0 18px; }
 }
+
+/* ===========================================================
+   Modal de imagen de producto — ver la obra en grande al click
+   =========================================================== */
+.pm-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4vmin;
+    background: rgba(8, 8, 9, 0.92);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+    .pm-modal.open { opacity: 1; visibility: visible; }
+
+    .pm-modal .pm-modal-img {
+        max-width: 92vw;
+        max-height: 92vh;
+        object-fit: contain;
+        border-radius: 6px;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+        transform: scale(0.96);
+        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .pm-modal.open .pm-modal-img { transform: scale(1); }
+
+    .pm-modal .pm-modal-close {
+        position: absolute;
+        top: 24px;
+        right: 28px;
+        width: 52px;
+        height: 52px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-size: 2rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+        .pm-modal .pm-modal-close:hover { background: var(--accent, #c2a878); color: #11100c; }
 
 /* ===========================================================
    Muro misceláneo — rejilla uniforme (imágenes y vídeos)
