@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/miscellany/list.css' %}">
+{% endblock extra_css %}
+{% block content %}
+<section class="eventss art-list">
+    <header class="al-head">
+        <h1 class="al-title"><span data-es="Productos" data-en="Products">Products</span></h1>
+        <span class="al-rule"></span>
+    </header>
+
+    <!-- Muro de productos en rejilla uniforme -->
+    <div class="ev-grid">
+        {% for product in products %}
+        {% include 'products/card.html' %}
+        {% empty %}
+        <p class="al-empty" data-es="Todavía no hay productos publicados." data-en="No products published yet.">No products published yet.</p>
+        {% endfor %}
+    </div>
+
+    {% if products.has_other_pages %}
+    <div class="ev-pagination">
+        {% if products.has_previous %}<a href="?page={{ products.previous_page_number }}"><i class="fa-solid fa-arrow-left"></i></a>{% endif %}
+        <span>{{ products.number }} / {{ products.paginator.num_pages }}</span>
+        {% if products.has_next %}<a href="?page={{ products.next_page_number }}"><i class="fa-solid fa-arrow-right"></i></a>{% endif %}
+    </div>
+    {% endif %}
+</section>
+
+<script>
+    (function () {
+        const grid = document.querySelector('.ev-grid');
+        if (!grid) return;
+        const pieces = Array.from(grid.querySelectorAll('.ev-piece'));
+
+        // --- Masonry que respeta el orden: cada pieza ocupa N filas según su altura ---
+        function rowUnit() {
+            const cs = getComputedStyle(grid);
+            const row = parseFloat(cs.getPropertyValue('grid-auto-rows')) || 8;
+            const gap = parseFloat(cs.getPropertyValue('row-gap')) || 0;
+            return { row, gap };
+        }
+        function resize(piece, unit) {
+            const media = piece.querySelector('.ev-media');
+            if (!media) return;
+            const h = media.getBoundingClientRect().height;
+            if (!h) return;
+            const span = Math.ceil((h + unit.gap) / (unit.row + unit.gap));
+            piece.style.gridRowEnd = 'span ' + span;
+        }
+        function layout() {
+            const unit = rowUnit();
+            pieces.forEach(p => resize(p, unit));
+        }
+
+        pieces.forEach(function (p) {
+            const img = p.querySelector('img');
+            if (img) {
+                if (img.complete) { /* ya cargada */ }
+                else img.addEventListener('load', layout);
+                img.addEventListener('error', layout);
+            }
+        });
+
+        let raf;
+        window.addEventListener('resize', function () {
+            cancelAnimationFrame(raf);
+            raf = requestAnimationFrame(layout);
+        });
+        window.addEventListener('load', layout);
+        layout();
+    })();
+</script>
+{% endblock content %}

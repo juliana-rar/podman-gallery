@@ -23,14 +23,14 @@
         </figure>
 
         <div class="bio-intro">
-            <p class="bio-eyebrow">Sobre el artista</p>
+            <p class="bio-eyebrow" data-es="Sobre el artista" data-en="About the artist">About the artist</p>
             <h1 class="bio-name">{{ site_settings.site_title|default:"Sigfrid" }}</h1>
             <span class="bio-rule"></span>
             <div class="bio-text">
                 {% if site_settings.bio_text %}
-                    {{ site_settings.bio_text|linebreaks }}
+                    <span class="lang-es">{{ site_settings.bio_text|linebreaks }}</span><span class="lang-en">{% if site_settings.bio_text_en %}{{ site_settings.bio_text_en|linebreaks }}{% else %}{{ site_settings.bio_text|linebreaks }}{% endif %}</span>
                 {% else %}
-                    <p>Aún no se ha escrito la biografía. Puedes añadirla desde tu perfil → Biografía.</p>
+                    <p data-es="Aún no se ha escrito la biografía. Puedes añadirla desde tu perfil → Biografía." data-en="The biography hasn't been written yet. You can add it from your profile → Biography.">The biography hasn't been written yet. You can add it from your profile → Biography.</p>
                 {% endif %}
             </div>
         </div>
@@ -45,11 +45,11 @@
             {% for p in featured_photos %}
             <div class="sc-slide" data-i="{{ forloop.counter0 }}">
                 <div class="sc-frame">
-                    <img src="{{ p.image.url }}" alt="{{ p.caption }}" loading="lazy">
+                    <img src="{{ p.image.url }}" alt="{{ p.title }}" loading="lazy">
                 </div>
-                {% if p.caption %}
+                {% if p.title %}
                 <div class="sc-info">
-                    <h3>{{ p.caption }}</h3>
+                    <h3 data-es="{{ p.title }}" data-en="{{ p.title_en|default:p.title }}">{{ p.title_en|default:p.title }}</h3>
                 </div>
                 {% endif %}
             </div>

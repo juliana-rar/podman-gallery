@@ -12,33 +12,34 @@
 {% block content %}
 <section class="gallery-form">
     <div class="gf-card">
-        <p class="gf-eyebrow">Editar pieza</p>
-        <h1>Editar obra</h1>
+        <p class="gf-eyebrow" data-es="Editar pieza" data-en="Edit piece">Edit piece</p>
+        <h1 data-es="Editar obra" data-en="Edit artwork">Edit artwork</h1>
 
         <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
             <div class="gf-field">
-                <label><i class="fa-solid fa-image"></i> Imagen de la obra</label>
+                <label><i class="fa-solid fa-image"></i> <span data-es="Imagen de la obra" data-en="Artwork image">Artwork image</span></label>
                 <label class="gf-drop has-image" id="gfDrop">
                     <input type="file" name="image" id="gfFile" accept="image/*" hidden>
                     <img id="gfPreview" src="{{ image.image.url }}" alt="{{ image.title }}" style="display:block;">
-                    <span id="gfPlaceholder" style="display:none;"><i class="fa-solid fa-cloud-arrow-up"></i> Haz clic o arrastra una imagen aquí</span>
+                    <span id="gfPlaceholder" style="display:none;"><i class="fa-solid fa-cloud-arrow-up"></i> <span data-es="Haz clic o arrastra una imagen aquí" data-en="Click or drag an image here">Click or drag an image here</span></span>
                 </label>
-                <p class="gf-hint">Deja la imagen como está si no quieres cambiarla.</p>
+                <p class="gf-hint" data-es="Deja la imagen como está si no quieres cambiarla." data-en="Leave the image as is if you don't want to change it.">Leave the image as is if you don't want to change it.</p>
                 <p class="gf-err">{{ form.image.errors }}</p>
             </div>
 
             <div class="gf-field">
-                <label><i class="fa-solid fa-heading"></i> Título de la obra</label>
+                <label><i class="fa-solid fa-heading"></i> <span data-es="Título de la obra" data-en="Artwork title">Artwork title</span></label>
                 <input type="text" name="title" value="{{ image.title }}" required>
+                <input type="text" name="title_en" value="{{ image.title_en }}" placeholder="English (optional)">
                 <p class="gf-err">{{ form.title.errors }}</p>
             </div>
 
             <div class="gf-field">
-                <label><i class="fa-solid fa-layer-group"></i> Colección</label>
+                <label><i class="fa-solid fa-layer-group"></i> <span data-es="Colección" data-en="Collection">Collection</span></label>
                 <select name="category">
-                    <option value="">— Sin colección —</option>
+                    <option value="" data-es="— Sin colección —" data-en="— No collection —">— No collection —</option>
                     {% for category in gallery_categories %}
                     <option value="{{ category.id }}" {% if image.category_id == category.id %}selected{% endif %}>{{ category.title }}</option>
                     {% endfor %}
@@ -48,54 +49,65 @@
 
             <div class="gf-row">
                 <div class="gf-field">
-                    <label><i class="fa-solid fa-brush"></i> Técnica</label>
-                    <input type="text" name="technique" placeholder="Óleo sobre lienzo" value="{{ image.technique }}">
+                    <label><i class="fa-solid fa-brush"></i> <span data-es="Técnica" data-en="Technique">Technique</span></label>
+                    <input type="text" name="technique" placeholder="Oil on canvas" data-es="Óleo sobre lienzo" data-en="Oil on canvas" value="{{ image.technique }}">
+                    <input type="text" name="technique_en" value="{{ image.technique_en }}" placeholder="English (optional)">
                 </div>
                 <div class="gf-field">
-                    <label><i class="fa-solid fa-file"></i> Tamaño de papel</label>
+                    <label><i class="fa-solid fa-file"></i> <span data-es="Tamaño de papel" data-en="Paper size">Paper size</span></label>
                     <input type="text" name="paper_size" placeholder="A3 (29,7 × 42 cm)" value="{{ image.paper_size }}">
+                    <input type="text" name="paper_size_en" value="{{ image.paper_size_en }}" placeholder="English (optional)">
                 </div>
             </div>
 
             <div class="gf-row">
                 <div class="gf-field">
-                    <label><i class="fa-solid fa-ruler-combined"></i> Dimensiones</label>
+                    <label><i class="fa-solid fa-ruler-combined"></i> <span data-es="Dimensiones" data-en="Dimensions">Dimensions</span></label>
                     <input type="text" name="dimensions" placeholder="100 × 80 cm" value="{{ image.dimensions }}">
+                    <input type="text" name="dimensions_en" value="{{ image.dimensions_en }}" placeholder="English (optional)">
                 </div>
                 <div class="gf-field">
-                    <label><i class="fa-solid fa-calendar"></i> Año</label>
+                    <label><i class="fa-solid fa-calendar"></i> <span data-es="Año" data-en="Year">Year</span></label>
                     <input type="text" name="year" placeholder="2026" value="{{ image.year }}">
                 </div>
             </div>
 
             <div class="gf-field">
-                <label><i class="fa-solid fa-euro-sign"></i> Precio (opcional)</label>
+                <label><i class="fa-solid fa-euro-sign"></i> <span data-es="Precio (opcional)" data-en="Price (optional)">Price (optional)</span></label>
                 <input type="number" step="0.01" name="price" placeholder="0.00" value="{{ image.price|default_if_none:'' }}">
             </div>
 
             <div class="gf-field gf-check">
                 <label class="gf-switch">
                     <input type="checkbox" name="available" {% if image.available %}checked{% endif %}>
-                    <span></span> Disponible para venta
+                    <span></span> <span data-es="Disponible para venta" data-en="Available for sale">Available for sale</span>
                 </label>
             </div>
 
             <div class="gf-field gf-check">
                 <label class="gf-switch">
                     <input type="checkbox" name="is_premium" {% if image.is_premium %}checked{% endif %}>
-                    <span></span> <i class="fa-solid fa-crown"></i> Obra premium
+                    <span></span> <i class="fa-solid fa-crown"></i> <span data-es="Obra premium" data-en="Premium artwork">Premium artwork</span>
+                </label>
+            </div>
+
+            <div class="gf-field gf-check">
+                <label class="gf-switch">
+                    <input type="checkbox" name="is_featured" {% if image.is_featured %}checked{% endif %}>
+                    <span></span> <i class="fa-solid fa-star"></i> <span data-es="Contenido destacado" data-en="Featured content">Featured content</span> <small data-es="(carrusel de la biografía)" data-en="(biography carousel)">(biography carousel)</small>
                 </label>
             </div>
 
             <div class="gf-field">
-                <label><i class="fa-solid fa-align-left"></i> Descripción</label>
-                <textarea name="description" rows="3" placeholder="Inspiración, contexto, serie…">{{ image.description }}</textarea>
+                <label><i class="fa-solid fa-align-left"></i> <span data-es="Descripción" data-en="Description">Description</span></label>
+                <textarea name="description" rows="3" placeholder="Inspiration, context, series…" data-es="Inspiración, contexto, serie…" data-en="Inspiration, context, series…">{{ image.description }}</textarea>
+                <textarea name="description_en" rows="3" placeholder="Description (English, optional)">{{ image.description_en }}</textarea>
                 <p class="gf-err">{{ form.description.errors }}</p>
             </div>
 
             <div class="gf-actions">
-                <a class="gf-cancel" href="{% url 'gallery:image_details' image.slug %}">Cancelar</a>
-                <button type="submit" class="gf-submit"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button>
+                <a class="gf-cancel" href="{% url 'gallery:image_details' image.slug %}" data-es="Cancelar" data-en="Cancel">Cancel</a>
+                <button type="submit" class="gf-submit"><i class="fa-solid fa-floppy-disk"></i> <span data-es="Guardar cambios" data-en="Save changes">Save changes</span></button>
             </div>
         </form>
     </div>

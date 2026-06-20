@@ -13,9 +13,9 @@
 <section class="profile">
     <section class="profile-config" id="bioManage">
         <header class="cfg-head">
-            <a class="cfg-back" href="{% url 'user_profile:profile' %}"><i class="fa-solid fa-arrow-left"></i> Volver al perfil</a>
-            <h3><i class="fa-solid fa-feather"></i> Biografía</h3>
-            <p class="cfg-help">Edita la foto, el texto y la galería de contenido destacado de la página de biografía.</p>
+            <a class="cfg-back" href="{% url 'user_profile:profile' %}"><i class="fa-solid fa-arrow-left"></i> <span data-es="Volver al perfil" data-en="Back to profile">Back to profile</span></a>
+            <h3><i class="fa-solid fa-feather"></i> <span data-es="Biografía" data-en="Biography">Biography</span></h3>
+            <p class="cfg-help" data-es="Edita la foto, el texto y la galería de contenido destacado de la página de biografía." data-en="Edit the photo, text and featured-content gallery of the biography page.">Edit the photo, text and featured-content gallery of the biography page.</p>
         </header>
 
         <!-- Foto + video + texto -->
@@ -23,62 +23,53 @@
             {% csrf_token %}
             <div class="cfg-grid">
                 <div class="set-field">
-                    <label><i class="fa-solid fa-image"></i> Foto de la biografía</label>
+                    <label><i class="fa-solid fa-image"></i> <span data-es="Foto de la biografía" data-en="Biography photo">Biography photo</span></label>
                     <label class="set-favicon" id="setBioPhotoDrop" title="Cambiar foto">
                         <input type="file" name="bio_photo" accept="image/*" hidden id="setBioPhotoInput">
                         <img id="setBioPhotoPreview" src="{% if site_settings.bio_photo %}{{ site_settings.bio_photo.url }}{% else %}{% static 'dessign/logo.jpeg' %}{% endif %}" alt="foto de la biografía">
-                        <span><i class="fa-solid fa-arrow-up-from-bracket"></i> Cambiar foto</span>
+                        <span><i class="fa-solid fa-arrow-up-from-bracket"></i> <span data-es="Cambiar foto" data-en="Change photo">Change photo</span></span>
                     </label>
                 </div>
                 <div class="set-field">
-                    <label><i class="fa-solid fa-video"></i> Video de la biografía <small>(opcional)</small></label>
+                    <label><i class="fa-solid fa-video"></i> <span data-es="Video de la biografía" data-en="Biography video">Biography video</span> <small data-es="(opcional)" data-en="(optional)">(optional)</small></label>
                     <input type="file" name="bio_video" accept="video/*">
                     {% if site_settings.bio_video %}
-                    <small class="set-current">Actual: <a href="{{ site_settings.bio_video.url }}" target="_blank">{{ site_settings.bio_video.name }}</a></small>
+                    <small class="set-current"><span data-es="Actual:" data-en="Current:">Current:</span> <a href="{{ site_settings.bio_video.url }}" target="_blank">{{ site_settings.bio_video.name }}</a></small>
                     {% endif %}
                 </div>
                 <div class="set-field set-field--full">
-                    <label><i class="fa-solid fa-feather"></i> Texto de la biografía</label>
-                    <textarea name="bio_text" rows="8" placeholder="Escribe aquí la biografía…">{{ site_settings.bio_text }}</textarea>
+                    <label><i class="fa-solid fa-feather"></i> <span data-es="Texto de la biografía" data-en="Biography text">Biography text</span></label>
+                    <textarea name="bio_text" rows="8" placeholder="Write the biography here…" data-es="Escribe aquí la biografía…" data-en="Write the biography here…">{{ site_settings.bio_text }}</textarea>
+                    <label><i class="fa-solid fa-feather"></i> <span data-es="Texto de la biografía (inglés)" data-en="Biography text (English)">Biography text (English)</span></label>
+                    <textarea name="bio_text_en" rows="8" placeholder="Biography in English (optional)…">{{ site_settings.bio_text_en }}</textarea>
                 </div>
             </div>
-            <button type="submit" class="cfg-save"><i class="fa-solid fa-floppy-disk"></i> Guardar biografía</button>
+            <button type="submit" class="cfg-save"><i class="fa-solid fa-floppy-disk"></i> <span data-es="Guardar biografía" data-en="Save biography">Save biography</span></button>
         </form>
 
-        <!-- Contenido destacado: galería de fotos -->
+        <!-- Contenido destacado: ahora se gestiona desde la galería -->
         <header class="cfg-head cfg-head--section">
-            <h3><i class="fa-solid fa-star"></i> Contenido destacado</h3>
-            <p class="cfg-help">Galería de fotos que se muestra en la página de biografía.</p>
+            <h3><i class="fa-solid fa-star"></i> <span data-es="Contenido destacado" data-en="Featured content">Featured content</span></h3>
+            <p class="cfg-help" data-es="El carrusel de la biografía muestra las obras marcadas como «Contenido destacado». Para añadir o quitar una obra, edítala en la galería y activa o desactiva esa opción." data-en="The biography carousel shows the works marked as «Featured content». To add or remove a work, edit it in the gallery and turn that option on or off.">The biography carousel shows the works marked as «Featured content». To add or remove a work, edit it in the gallery and turn that option on or off.</p>
         </header>
 
-        <form class="bio-add" method="POST" action="{% url 'user_profile:add_bio_photo' %}" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="cfg-grid">
-                <div class="set-field">
-                    <label><i class="fa-solid fa-plus"></i> Nueva foto</label>
-                    <input type="file" name="image" accept="image/*" required>
-                </div>
-                <div class="set-field">
-                    <label><i class="fa-solid fa-pen"></i> Texto <small>(opcional)</small></label>
-                    <input type="text" name="caption" maxlength="200" placeholder="Descripción de la foto">
-                </div>
-            </div>
-            <button type="submit" class="cfg-save"><i class="fa-solid fa-plus"></i> Añadir foto</button>
-        </form>
+        <a class="cfg-save" href="{% url 'gallery:my_gallery' %}">
+            <i class="fa-solid fa-images"></i> <span data-es="Ir a mi galería" data-en="Go to my gallery">Go to my gallery</span>
+        </a>
 
-        {% if bio_photos %}
+        {% if featured_images %}
         <div class="bio-photos">
-            {% for p in bio_photos %}
+            {% for p in featured_images %}
             <div class="bio-photo-card">
-                <img src="{{ p.image.url }}" alt="{{ p.caption }}">
-                {% if p.caption %}<p>{{ p.caption }}</p>{% endif %}
-                <a class="bio-photo-del" href="{% url 'user_profile:delete_bio_photo' p.pk %}" title="Eliminar"
-                   onclick="return confirm('¿Eliminar esta foto?');"><i class="fa-solid fa-trash"></i></a>
+                <img src="{{ p.image.url }}" alt="{{ p.title }}">
+                {% if p.title %}<p>{{ p.title }}</p>{% endif %}
+                <a class="bio-photo-del" href="{% url 'gallery:edit_image' p.pk %}" title="Editar obra">
+                    <i class="fa-solid fa-pen"></i></a>
             </div>
             {% endfor %}
         </div>
         {% else %}
-        <p class="cfg-help">Aún no hay fotos en el contenido destacado.</p>
+        <p class="cfg-help" data-es="Aún no hay obras marcadas como contenido destacado. Edita una obra en tu galería y activa «Contenido destacado»." data-en="No works are marked as featured content yet. Edit a work in your gallery and enable «Featured content».">No works are marked as featured content yet. Edit a work in your gallery and enable «Featured content».</p>
         {% endif %}
     </section>
 </section>

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} {{ product.title }} {% endblock title %}
+{% block extra_css %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/miscellany/details.css' %}">
+{% endblock extra_css %}
+{% block content %}
+<!-- Título fuera de la tarjeta -->
+<div class="event_details_title" data-es="{{ product.title }}" data-en="{{ product.title_en|default:product.title }}">
+    {{ product.title_en|default:product.title }}
+</div>
+
+<section class="event_details">
+    <article>
+        <div>
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.title }}">
+            {% endif %}
+        </div>
+        <div>
+            {% if product.technique %}<span><span data-es="Técnica:" data-en="Technique:">Technique:</span> {{ product.technique }}</span>{% endif %}
+            {% if product.size %}<span><span data-es="Tamaño:" data-en="Size:">Size:</span> {{ product.size }}</span>{% endif %}
+            <p><span class="lang-es">{{ product.description|safe }}</span><span class="lang-en">{% if product.description_en %}{{ product.description_en|safe }}{% else %}{{ product.description|safe }}{% endif %}</span></p>
+        </div>
+    </article>
+</section>
+{% endblock content %}

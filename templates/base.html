@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     {% load static %}
+    {# Set the saved language before first paint so CSS .lang-* rules apply with no flash. #}
+    <script>(function(){try{var l=localStorage.getItem('site-lang')==='es'?'es':'en';document.documentElement.setAttribute('lang',l);}catch(e){}})();</script>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -39,6 +41,9 @@
             display: flex;
             flex-direction: column;
         }
+        /* Language blocks (Mechanism B): show only the active language. */
+        html[lang="en"] .lang-es { display: none !important; }
+        html[lang="es"] .lang-en { display: none !important; }
     </style>
 <body>
     
@@ -55,6 +60,8 @@
     {% block scripts %}
     {% include 'scripts.html' %}
     {% endblock scripts %}
-    
+
+    {% include 'lang.html' %}
+
 </body>
 </html>

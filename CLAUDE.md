@@ -4,23 +4,28 @@ Sitio web Django (blog + galería + eventos + proyectos + perfiles) llamado inte
 **"sigfrid"**, orquestado con **Podman Compose**. El nombre de carpeta es `podman-gallery`,
 pero todos los nombres internos (compose `name:`, contenedores, volúmenes, imagen) son `sigfrid`.
 
-## ⚠️ Esta copia NO es la que corre
+## ⚠️ Qué copia corre — confirmá siempre el montaje
 
 En `C:\Users\julia\Desktop\proyectos` hay **dos copias** del mismo proyecto Django (mismo
-remoto GitHub `juliana-rar/podman-gallery`):
+remoto GitHub `juliana-rar/podman-gallery`): `sigfrid` y `podman-gallery` (esta). Cuál de las
+dos monta el contenedor `sigfrid-web` en `/app` **ha cambiado en el tiempo**, así que no lo
+asumas: confirmalo antes de tocar nada.
 
-- **`sigfrid`** = copia VIVA. El contenedor `sigfrid-web` monta `.../sigfrid` en `/app` (dev,
-  host port 8091). Editar ahí **sí** se refleja en el sitio que corre.
-- **`podman-gallery`** (esta) = clon aparte, **NO montado en ningún contenedor**. Editar acá
-  **no** cambia el sitio en ejecución. Contiene assets de `staticfiles/dessign/` (videos del
-  hero) que `sigfrid` no tiene.
-
-Antes de asumir qué copia corre, confirmá el montaje:
 ```powershell
 podman inspect sigfrid-web --format '{{range .Mounts}}{{.Source}} -> {{.Destination}}{{end}}'
 ```
-El usuario a veces pide cambios **solo en `podman-gallery`** a propósito (p. ej. el hero con
-video de fondo) — preguntá si hay duda.
+
+- **2026-06-20**: el montaje es `.../podman-gallery -> /app` (vía WSL:
+  `/mnt/c/Users/julia/Desktop/proyectos/podman-gallery`). Es decir, **esta copia ES la viva**;
+  editar acá **sí** cambia el sitio en ejecución (dev, host port 8091).
+- Históricamente la copia viva era `sigfrid`; `podman-gallery` era un clon no montado. Si el
+  `inspect` vuelve a apuntar a `sigfrid`, esta copia deja de reflejarse en el sitio.
+
+Tras cambios de modelo, aplicá migraciones en el contenedor (corren solas al levantar, pero
+si editás en caliente hay que correrlas a mano): `podman exec sigfrid-web python manage.py migrate`.
+
+El usuario a veces pide cambios **solo en una copia** a propósito (p. ej. el hero con video de
+fondo, cuyos assets `staticfiles/dessign/` solo están en `podman-gallery`) — preguntá si hay duda.
 
 ## Stack
 
@@ -33,7 +38,7 @@ video de fondo) — preguntá si hay duda.
 ## Estructura
 
 - `blog_website/` — proyecto Django: `settings.py`, `urls.py`, `wsgi.py`/`asgi.py`.
-- Apps: `blog`, `events`, `gallery`, `herophotos`, `projects`, `user_profile`. Casi todas
+- Apps: `blog`, `miscellany`, `gallery`, `herophotos`, `projects`, `user_profile`. Casi todas
   cuelgan de la raíz `''` en `blog_website/urls.py`.
 - `projects/api.py` — `ProyectoViewSet` (DRF), montado en `/api/proyectos/`.
 - `templates/` — HTML del sitio (no en las apps). `assets/` — fuentes estáticas

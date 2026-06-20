@@ -1,0 +1,23 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/miscellany/edit_category.css' %}">
+{% endblock extra_css %}
+{% block content %}
+<div class="edit_event_category">
+    <h2 data-es="Editar Categoría" data-en="Edit category">Edit category</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="title" data-es="Nombre de la categoría" data-en="Category name">Category name</label>
+            <input type="text" name="title" class="form-control" value="{{ category.title }}" required>
+            <label data-es="Nombre (inglés)" data-en="Name (English)">Name (English)</label>
+            <input type="text" name="title_en" class="form-control" value="{{ category.title_en }}" placeholder="English (optional)">
+        </div>
+        <button type="submit" data-es="Guardar cambios" data-en="Save changes">Save changes</button>
+        <a href="{% url 'miscellany:manage_miscellany_categories' %}" class="btn btn-secondary mt-2" data-es="Cancelar" data-en="Cancel">Cancel</a>
+    </form>
+</div>
+{% endblock content %}
+

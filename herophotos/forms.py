@@ -6,4 +6,4 @@ from .models import HeroPhoto
 class HeroPhotoForm(forms.ModelForm):
     class Meta:
         model = HeroPhoto
-        fields = ['title', 'subtitle', 'image', 'order', 'is_active']
+        fields = ['title', 'title_en', 'subtitle', 'subtitle_en', 'image', 'order', 'is_active']

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/miscellany/add.css' %}">
+{% endblock extra_css %}
+{% block content %}
+
+<section class="add_event">
+    <div>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div>
+                <label for="title" data-es="Título" data-en="Title">Title</label>
+                <input type="text" name="title" value="{{ form.instance.title }}">
+                <input type="text" name="title_en" value="{{ form.instance.title_en }}" placeholder="English (optional)">
+                <p>{{ form.instance.title.errors }}</p>
+            </div>
+
+            <div>
+                <label for="size" data-es="Tamaño" data-en="Size">Size</label>
+                <input type="text" name="size" value="{{ form.instance.size }}">
+                <p>{{ form.size.errors }}</p>
+            </div>
+
+            <div>
+                <label for="technique" data-es="Técnica" data-en="Technique">Technique</label>
+                <input type="text" name="technique" value="{{ form.instance.technique }}">
+                <p>{{ form.technique.errors }}</p>
+            </div>
+
+            <div>
+                <label for="description" data-es="Descripción" data-en="Description">Description</label>
+                {{ form.description|safe }}
+                <label data-es="Descripción (inglés)" data-en="Description (English)">Description (English)</label>
+                {{ form.description_en|safe }}
+                <p>{{ form.description.errors }}</p>
+            </div>
+
+            <div>
+                <label for="image" data-es="Imagen" data-en="Image">Image</label>
+                <input type="file" name="image" accept="image/*">
+                {% if form.instance.image %}<small><span data-es="Actual:" data-en="Current:">Current:</span> <a href="{{ form.instance.image.url }}" target="_blank">{{ form.instance.image.name }}</a></small>{% endif %}
+                <p>{{ form.instance.image.errors }}</p>
+            </div>
+
+            <div>
+                <button type="submit" data-es="Actualizar" data-en="Update">Update</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% block extra_head %}
+{{ form.media }}
+{% endblock extra_head %}
+
+{% endblock content %}

@@ -13,31 +13,31 @@
 <section class="art-gallery">
 
     <header class="ag-header">
-        <p class="ag-eyebrow">Colección de obra</p>
-        <h1>{% if category %}{{ category.title }}{% elif mine %}Mi {{ site_settings.nav_gallery|default:"Galería" }}{% else %}{{ site_settings.nav_gallery|default:"Galería" }}{% endif %}</h1>
+        <p class="ag-eyebrow" data-es="Colección de obra" data-en="The collection">The collection</p>
+        <h1>{% if category %}<span data-es="{{ category.title }}" data-en="{{ category.title_en|default:category.title }}">{{ category.title_en|default:category.title }}</span>{% elif mine %}<span data-es="Mi {{ site_settings.nav_gallery|default:'Galería' }}" data-en="My {{ site_settings.nav_gallery_en|default:'Gallery' }}">My {{ site_settings.nav_gallery_en|default:'Gallery' }}</span>{% else %}<span data-es="{{ site_settings.nav_gallery|default:'Galería' }}" data-en="{{ site_settings.nav_gallery_en|default:'Gallery' }}">{{ site_settings.nav_gallery_en|default:'Gallery' }}</span>{% endif %}</h1>
         <p class="ag-sub">
-            {% if category %}{{ total_count }} obra{{ total_count|pluralize }} en esta colección
-            {% else %}Una selección de pinturas originales{% endif %}
+            {% if category %}{{ total_count }} <span data-es="obra{{ total_count|pluralize }} en esta colección" data-en="work{{ total_count|pluralize }} in this collection">work{{ total_count|pluralize }} in this collection</span>
+            {% else %}<span data-es="Una selección de pinturas originales" data-en="A selection of original paintings">A selection of original paintings</span>{% endif %}
         </p>
 
         <!-- Buscador de obras por texto -->
         <form class="ag-search" method="get" action="{% url 'gallery:gallery_list' %}" role="search">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" name="q" value="{{ q }}" placeholder="Buscar obra por título, técnica, tamaño de papel…" aria-label="Buscar obras">
+            <input type="text" name="q" value="{{ q }}" placeholder="Search by title, technique, paper size…" data-es="Buscar obra por título, técnica, tamaño de papel…" data-en="Search by title, technique, paper size…" aria-label="Buscar obras">
             {% if q %}<a class="ag-search-clear" href="{% url 'gallery:gallery_list' %}" title="Limpiar">&times;</a>{% endif %}
-            <button type="submit">Buscar</button>
+            <button type="submit" data-es="Buscar" data-en="Search">Search</button>
         </form>
 
         {% if q %}
-        <p class="ag-sub">{{ total_count }} resultado{{ total_count|pluralize }} para «{{ q }}»</p>
+        <p class="ag-sub">{{ total_count }} <span data-es="resultado{{ total_count|pluralize }} para" data-en="result{{ total_count|pluralize }} for">result{{ total_count|pluralize }} for</span> «{{ q }}»</p>
         {% endif %}
 
         <!-- Filtros por colección — justo debajo del título -->
         <nav class="ag-filters">
-            <a href="{% url 'gallery:gallery_list' %}" class="{% if not active_slug and not mine %}active{% endif %}">Todas</a>
+            <a href="{% url 'gallery:gallery_list' %}" class="{% if not active_slug and not mine %}active{% endif %}" data-es="Todas" data-en="All">All</a>
             {% for cat in categories %}
             <a href="{% url 'gallery:category_gallery' cat.slug %}" class="{% if active_slug == cat.slug %}active{% endif %}">
-                {{ cat.title }} <span>{{ cat.num }}</span>
+                <span data-es="{{ cat.title }}" data-en="{{ cat.title_en|default:cat.title }}">{{ cat.title_en|default:cat.title }}</span> <span>{{ cat.num }}</span>
             </a>
             {% endfor %}
         </nav>
@@ -45,35 +45,42 @@
         <span class="ag-rule"></span>
         {% if mine %}
         <div class="ag-head-actions">
-            <a class="ag-btn-ghost" href="{% url 'gallery:manage_gallery_categories' %}"><i class="fa-solid fa-tags"></i> Categorías</a>
-            <a class="ag-upload" href="{% url 'gallery:add_image' %}"><i class="fa-solid fa-plus"></i> Añadir obra</a>
+            <a class="ag-btn-ghost" href="{% url 'gallery:manage_gallery_categories' %}"><i class="fa-solid fa-tags"></i> <span data-es="Categorías" data-en="Categories">Categories</span></a>
+            <a class="ag-upload" href="{% url 'gallery:add_image' %}"><i class="fa-solid fa-plus"></i> <span data-es="Añadir obra" data-en="Add work">Add work</span></a>
         </div>
         {% endif %}
     </header>
 
 
     {% if mine and images %}
-    <p class="ag-reorder-hint"><i class="fa-solid fa-up-down-left-right"></i> Arrastra el icono de cada obra para cambiar su posición.</p>
+    <p class="ag-reorder-hint"><i class="fa-solid fa-up-down-left-right"></i> <span data-es="Arrastra el icono de cada obra para cambiar su posición." data-en="Drag each work's handle to change its position.">Drag each work's handle to change its position.</span></p>
     {% endif %}
 
     <!-- Pared de obras -->
     <div class="ag-wall{% if mine %} ag-wall--reorder{% endif %}"{% if mine %} data-reorder-url="{% url 'gallery:reorder_gallery' %}" data-csrf="{{ csrf_token }}"{% endif %}>
         {% for img in images %}
-        <figure class="ag-piece" data-id="{{ img.id }}">
+        <figure class="ag-piece{% if mine and not img.is_public %} ag-piece--hidden{% endif %}" data-id="{{ img.id }}">
             <a href="{% url 'gallery:image_details' img.slug %}" class="ag-frame">
                 <span class="ag-canvas">
                     <img src="{{ img.image.url }}" alt="{{ img.title }}" loading="lazy">
                     {% if img.is_premium %}<span class="ag-premium"><i class="fa-solid fa-crown"></i> Premium</span>{% endif %}
                     <span class="ag-hover">
                         <span class="ag-hover-inner">
-                            {% if not category and img.category %}<span class="ag-hover-cat">{{ img.category.title }}</span>{% endif %}
-                            <span class="ag-hover-view">Ver obra <i class="fa-solid fa-arrow-right"></i></span>
+                            {% if not category and img.category %}<span class="ag-hover-cat" data-es="{{ img.category.title }}" data-en="{{ img.category.title_en|default:img.category.title }}">{{ img.category.title_en|default:img.category.title }}</span>{% endif %}
+                            <span class="ag-hover-view"><span data-es="Ver obra" data-en="View work">View work</span> <i class="fa-solid fa-arrow-right"></i></span>
                         </span>
                     </span>
                 </span>
                 {% if request.user.is_authenticated and img.user_id == request.user.id %}
                 <span class="ag-piece-tools">
                     {% if mine %}<span class="ag-tool ag-tool-move" draggable="true" title="Arrastra para reordenar"><i class="fa-solid fa-up-down-left-right"></i></span>{% endif %}
+                    {% if mine %}
+                    <span class="ag-tool{% if not img.is_public %} ag-tool-hidden{% endif %}"
+                          title="{% if img.is_public %}Ocultar de la galería{% else %}Mostrar en la galería{% endif %}"
+                          onclick="event.preventDefault(); event.stopPropagation(); window.location='{% url 'gallery:toggle_visibility' img.id %}';">
+                        <i class="fa-solid {% if img.is_public %}fa-eye{% else %}fa-eye-slash{% endif %}"></i>
+                    </span>
+                    {% endif %}
                     <span class="ag-tool" title="Editar obra"
                           onclick="event.preventDefault(); event.stopPropagation(); window.location='{% url 'gallery:edit_image' img.id %}';">
                         <i class="fa-solid fa-pen"></i>
@@ -86,18 +93,18 @@
                 {% endif %}
             </a>
             <figcaption>
-                <h3>{{ img.title }}</h3>
+                <h3 data-es="{{ img.title }}" data-en="{{ img.title_en|default:img.title }}">{{ img.title_en|default:img.title }}</h3>
                 <p>
-                    {% if img.technique %}{{ img.technique }}{% endif %}
+                    {% if img.technique %}<span data-es="{{ img.technique }}" data-en="{{ img.technique_en|default:img.technique }}">{{ img.technique_en|default:img.technique }}</span>{% endif %}
                     {% if img.year %} · {{ img.year }}{% endif %}
                 </p>
             </figcaption>
         </figure>
         {% empty %}
         {% if q %}
-        <p class="ag-empty">No se encontraron obras para «{{ q }}».</p>
+        <p class="ag-empty" data-es="No se encontraron obras para «{{ q }}»." data-en="No works found for «{{ q }}».">No works found for «{{ q }}».</p>
         {% else %}
-        <p class="ag-empty">Todavía no hay obras expuestas.</p>
+        <p class="ag-empty" data-es="Todavía no hay obras expuestas." data-en="No works on display yet.">No works on display yet.</p>
         {% endif %}
         {% endfor %}
     </div>

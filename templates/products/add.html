@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/miscellany/add.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="add_event">
+    <div>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div>
+                <label data-es="Título del producto" data-en="Product title">Product title</label>
+                {{ form.title }}
+                <p>{{ form.title.errors }}</p>
+            </div>
+
+            <div>
+                <label data-es="Imagen" data-en="Image">Image</label>
+                <input type="file" name="image" id="image" accept="image/*">
+                <p>{{ form.image.errors }}</p>
+            </div>
+
+            <div>
+                <label data-es="Tamaño" data-en="Size">Size</label>
+                {{ form.size }}
+                <p>{{ form.size.errors }}</p>
+            </div>
+
+            <div>
+                <label data-es="Técnica" data-en="Technique">Technique</label>
+                {{ form.technique }}
+                <p>{{ form.technique.errors }}</p>
+            </div>
+
+            <div>
+                <label data-es="Descripción" data-en="Description">Description</label>
+                {{ form.description }}
+                <p>{{ form.description.errors }}</p>
+            </div>
+
+            <div>
+                <button type="submit" data-es="Añadir producto" data-en="Add product">Add product</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% block extra_head %}
+{{ form.media }}
+{% endblock extra_head %}
+
+{% endblock content %}

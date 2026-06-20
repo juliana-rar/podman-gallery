@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/miscellany/list.css' %}">
+{% endblock extra_css %}
+{% block content %}
+<section class="eventss art-list">
+    <header class="al-head">
+        {% if category %}<p class="al-eyebrow" data-es="Colección" data-en="Collection">Collection</p>{% endif %}
+        <h1 class="al-title">{% if category %}<span data-es="{{ category.title }}" data-en="{{ category.title_en|default:category.title }}">{{ category.title_en|default:category.title }}</span>{% else %}<span data-es="{{ site_settings.nav_miscellany|default:'Tips' }}" data-en="{{ site_settings.nav_miscellany_en|default:'Tips' }}">{{ site_settings.nav_miscellany_en|default:'Tips' }}</span>{% endif %}</h1>
+        <span class="al-rule"></span>
+    </header>
+
+    {% if categories %}
+    <nav class="bl-filters">
+        <a href="{% url 'miscellany:miscellany_list' %}" class="{% if not active_slug %}active{% endif %}" data-es="Todas" data-en="All">All</a>
+        {% for cat in categories %}
+        <a href="{% url 'miscellany:category_miscellany' cat.slug %}" class="{% if active_slug == cat.slug %}active{% endif %}"><span data-es="{{ cat.title }}" data-en="{{ cat.title_en|default:cat.title }}">{{ cat.title_en|default:cat.title }}</span> <span>{{ cat.num }}</span></a>
+        {% endfor %}
+    </nav>
+    {% endif %}
+
+    <!-- Muro misceláneo: imágenes y vídeos en rejilla uniforme -->
+    <div class="ev-grid">
+        {% for event in events %}
+        {% include 'miscellany/card.html' with hide_category=category %}
+        {% empty %}
+        <p class="al-empty" data-es="Todavía no hay piezas publicadas." data-en="No pieces published yet.">No pieces published yet.</p>
+        {% endfor %}
+    </div>
+
+    {% if events.has_other_pages %}
+    <div class="ev-pagination">
+        {% if events.has_previous %}<a href="?page={{ events.previous_page_number }}"><i class="fa-solid fa-arrow-left"></i></a>{% endif %}
+        <span>{{ events.number }} / {{ events.paginator.num_pages }}</span>
+        {% if events.has_next %}<a href="?page={{ events.next_page_number }}"><i class="fa-solid fa-arrow-right"></i></a>{% endif %}
+    </div>
+    {% endif %}
+</section>
+
+<script>
+    (function () {
+        const grid = document.querySelector('.ev-grid');
+        if (!grid) return;
+        const pieces = Array.from(grid.querySelectorAll('.ev-piece'));
+
+        // --- Masonry que respeta el orden: cada pieza ocupa N filas según su altura ---
+        function rowUnit() {
+            const cs = getComputedStyle(grid);
+            const row = parseFloat(cs.getPropertyValue('grid-auto-rows')) || 8;
+            const gap = parseFloat(cs.getPropertyValue('row-gap')) || 0;
+            return { row, gap };
+        }
+        function resize(piece, unit) {
+            const media = piece.querySelector('.ev-media');
+            if (!media) return;
+            const h = media.getBoundingClientRect().height;
+            if (!h) return;
+            const span = Math.ceil((h + unit.gap) / (unit.row + unit.gap));
+            piece.style.gridRowEnd = 'span ' + span;
+        }
+        function layout() {
+            const unit = rowUnit();
+            pieces.forEach(p => resize(p, unit));
+        }
+
+        // Recalcular cuando cada medio carga (la altura natural no se sabe antes)
+        pieces.forEach(function (p) {
+            const img = p.querySelector('img');
+            const video = p.querySelector('video');
+            if (img) {
+                if (img.complete) { /* ya cargada */ }
+                else img.addEventListener('load', layout);
+                img.addEventListener('error', layout);
+            }
+            if (video) {
+                video.addEventListener('loadedmetadata', layout);
+            }
+        });
+
+        let raf;
+        window.addEventListener('resize', function () {
+            cancelAnimationFrame(raf);
+            raf = requestAnimationFrame(layout);
+        });
+        window.addEventListener('load', layout);
+        layout();
+
+        // --- Reproducir el vídeo al pasar el cursor (ligero, sin autoplay masivo) ---
+        grid.querySelectorAll('.ev-media video').forEach(function (v) {
+            const tile = v.closest('.ev-piece');
+            if (!tile) return;
+            tile.addEventListener('mouseenter', function () { v.play().catch(function () {}); });
+            tile.addEventListener('mouseleave', function () {
+                v.pause();
+                try { v.currentTime = 0; } catch (e) {}
+            });
+        });
+    })();
+</script>
+{% endblock content %}

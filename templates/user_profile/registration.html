@@ -10,39 +10,39 @@
 <section class="auth">
     <div class="auth-card">
         <p class="auth-eyebrow">{{ site_settings.site_title|default:"Sigfrid" }}</p>
-        <h1 class="auth-title">Crea tu cuenta</h1>
+        <h1 class="auth-title" data-es="Crea tu cuenta" data-en="Create your account">Create your account</h1>
 
         <form id="register-form" action="" method="POST" novalidate class="auth-form">
             {% csrf_token %}
 
             <div class="auth-field">
-                <label>Usuario</label>
-                <input name="username" {% if form.is_bound %}value="{{ form.username.value }}"{% endif %} type="text" placeholder="Tu nombre de usuario">
+                <label data-es="Usuario" data-en="Username">Username</label>
+                <input name="username" {% if form.is_bound %}value="{{ form.username.value }}"{% endif %} type="text" placeholder="Your username" data-es="Tu nombre de usuario" data-en="Your username">
                 <p class="auth-error">{{ form.username.errors }}</p>
             </div>
 
             <div class="auth-field">
-                <label>Email</label>
-                <input name="email" {% if form.is_bound %}value="{{ form.email.value }}"{% endif %} type="email" placeholder="Tu email">
+                <label data-es="Email" data-en="Email">Email</label>
+                <input name="email" {% if form.is_bound %}value="{{ form.email.value }}"{% endif %} type="email" placeholder="Your email" data-es="Tu email" data-en="Your email">
                 <p class="auth-error">{{ form.email.errors }}</p>
             </div>
 
             <div class="auth-field">
-                <label>Contraseña</label>
-                <input name="password" type="password" placeholder="Tu contraseña">
+                <label data-es="Contraseña" data-en="Password">Password</label>
+                <input name="password" type="password" placeholder="Your password" data-es="Tu contraseña" data-en="Your password">
                 <p class="auth-error">{{ form.password.errors }}</p>
             </div>
 
             <div class="auth-field">
-                <label>Confirmar contraseña</label>
-                <input name="confirm_password" type="password" placeholder="Repite tu contraseña">
+                <label data-es="Confirmar contraseña" data-en="Confirm password">Confirm password</label>
+                <input name="confirm_password" type="password" placeholder="Repeat your password" data-es="Repite tu contraseña" data-en="Repeat your password">
                 <p class="auth-error">{{ form.confirm_password.errors }}</p>
             </div>
 
-            <button type="submit" class="auth-submit">Registrarse</button>
+            <button type="submit" class="auth-submit" data-es="Registrarse" data-en="Sign up">Sign up</button>
         </form>
 
-        <p class="auth-alt">¿Ya tienes cuenta? <a href="{% url 'user_profile:login' %}">Inicia sesión</a></p>
+        <p class="auth-alt"><span data-es="¿Ya tienes cuenta?" data-en="Already have an account?">Already have an account?</span> <a href="{% url 'user_profile:login' %}" data-es="Inicia sesión" data-en="Sign in">Sign in</a></p>
     </div>
 </section>
 {% endblock content %}

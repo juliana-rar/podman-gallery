@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Categorías de {{ site_settings.nav_miscellany|default:"Tips" }}{% endblock title %}
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/miscellany/manage_categories.css' %}">
+{% endblock extra_css %}
+{% block content %}
+<section class="manage-cats">
+    <header class="mc-head">
+        <div>
+            <p class="mc-eyebrow">{{ site_settings.nav_miscellany|default:"Tips" }}</p>
+            <h1 class="mc-title" data-es="Categorías" data-en="Categories">Categories</h1>
+        </div>
+        <a class="mc-back" href="{% url 'miscellany:my_miscellany' %}"><i class="fa-solid fa-arrow-left"></i> <span data-es="Mis" data-en="My">My</span> {{ site_settings.nav_miscellany|default:"Tips" }}</a>
+    </header>
+
+    <form class="mc-add" method="POST">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="New category" data-es="Nueva categoría" data-en="New category" required>
+        <input type="text" name="title_en" placeholder="English (optional)">
+        <button type="submit"><i class="fa-solid fa-plus"></i> <span data-es="Añadir" data-en="Add">Add</span></button>
+    </form>
+
+    <ul class="mc-list">
+        {% for category in event_categories %}
+        <li class="mc-item">
+            <form class="mc-edit" method="POST" action="{% url 'miscellany:edit_miscellany_category' category.id %}">
+                {% csrf_token %}
+                <input type="text" name="title" value="{{ category.title }}" aria-label="Nombre de la categoría">
+                <input type="text" name="title_en" value="{{ category.title_en }}" placeholder="English (optional)" aria-label="Category name (EN)">
+                <span class="mc-slug">/{{ category.slug }}</span>
+                <div class="mc-tools">
+                    <button type="submit" class="mc-save" title="Guardar"><i class="fa-solid fa-floppy-disk"></i></button>
+                    <a class="mc-del" href="{% url 'miscellany:delete_miscellany_category' category.id %}"
+                       onclick="return confirm('¿Eliminar «{{ category.title|escapejs }}»?');"
+                       title="Eliminar"><i class="fa-solid fa-trash"></i></a>
+                </div>
+            </form>
+        </li>
+        {% empty %}
+        <li class="mc-empty" data-es="Aún no hay categorías." data-en="No categories yet.">No categories yet.</li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock content %}

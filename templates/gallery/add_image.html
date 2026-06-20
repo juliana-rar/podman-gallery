@@ -12,32 +12,33 @@
 {% block content %}
 <section class="gallery-form">
     <div class="gf-card">
-        <p class="gf-eyebrow">Nueva pieza</p>
-        <h1>Añadir obra a {{ site_settings.nav_gallery|default:"Galería" }}</h1>
+        <p class="gf-eyebrow" data-es="Nueva pieza" data-en="New piece">New piece</p>
+        <h1><span data-es="Añadir obra a" data-en="Add work to">Add work to</span> {{ site_settings.nav_gallery|default:"Galería" }}</h1>
 
         <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
             <div class="gf-field">
-                <label><i class="fa-solid fa-image"></i> Imagen de la obra</label>
+                <label><i class="fa-solid fa-image"></i> <span data-es="Imagen de la obra" data-en="Artwork image">Artwork image</span></label>
                 <label class="gf-drop" id="gfDrop">
                     <input type="file" name="image" id="gfFile" accept="image/*" required hidden>
                     <img id="gfPreview" alt="">
-                    <span id="gfPlaceholder"><i class="fa-solid fa-cloud-arrow-up"></i> Haz clic o arrastra una imagen aquí</span>
+                    <span id="gfPlaceholder"><i class="fa-solid fa-cloud-arrow-up"></i> <span data-es="Haz clic o arrastra una imagen aquí" data-en="Click or drag an image here">Click or drag an image here</span></span>
                 </label>
                 <p class="gf-err">{{ form.image.errors }}</p>
             </div>
 
             <div class="gf-field">
-                <label><i class="fa-solid fa-heading"></i> Título de la obra</label>
+                <label><i class="fa-solid fa-heading"></i> <span data-es="Título de la obra" data-en="Artwork title">Artwork title</span></label>
                 <input type="text" name="title" value="{{ form.data.title|default:'' }}" required>
+                <input type="text" name="title_en" value="{{ form.data.title_en|default:'' }}" placeholder="English (optional)">
                 <p class="gf-err">{{ form.title.errors }}</p>
             </div>
 
             <div class="gf-field">
-                <label><i class="fa-solid fa-layer-group"></i> Colección</label>
+                <label><i class="fa-solid fa-layer-group"></i> <span data-es="Colección" data-en="Collection">Collection</span></label>
                 <select name="category">
-                    <option value="">— Sin colección —</option>
+                    <option value="" data-es="— Sin colección —" data-en="— No collection —">— No collection —</option>
                     {% for category in gallery_categories %}
                     <option value="{{ category.id }}">{{ category.title }}</option>
                     {% endfor %}
@@ -47,52 +48,56 @@
 
             <div class="gf-row">
                 <div class="gf-field">
-                    <label><i class="fa-solid fa-brush"></i> Técnica</label>
-                    <input type="text" name="technique" placeholder="Óleo sobre lienzo" value="{{ form.data.technique|default:'' }}">
+                    <label><i class="fa-solid fa-brush"></i> <span data-es="Técnica" data-en="Technique">Technique</span></label>
+                    <input type="text" name="technique" placeholder="Oil on canvas" data-es="Óleo sobre lienzo" data-en="Oil on canvas" value="{{ form.data.technique|default:'' }}">
+                    <input type="text" name="technique_en" value="{{ form.data.technique_en|default:'' }}" placeholder="English (optional)">
                 </div>
                 <div class="gf-field">
-                    <label><i class="fa-solid fa-file"></i> Tamaño de papel</label>
+                    <label><i class="fa-solid fa-file"></i> <span data-es="Tamaño de papel" data-en="Paper size">Paper size</span></label>
                     <input type="text" name="paper_size" placeholder="A3 (29,7 × 42 cm)" value="{{ form.data.paper_size|default:'' }}">
+                    <input type="text" name="paper_size_en" value="{{ form.data.paper_size_en|default:'' }}" placeholder="English (optional)">
                 </div>
             </div>
 
             <div class="gf-row">
                 <div class="gf-field">
-                    <label><i class="fa-solid fa-ruler-combined"></i> Dimensiones</label>
+                    <label><i class="fa-solid fa-ruler-combined"></i> <span data-es="Dimensiones" data-en="Dimensions">Dimensions</span></label>
                     <input type="text" name="dimensions" placeholder="100 × 80 cm" value="{{ form.data.dimensions|default:'' }}">
+                    <input type="text" name="dimensions_en" value="{{ form.data.dimensions_en|default:'' }}" placeholder="English (optional)">
                 </div>
                 <div class="gf-field">
-                    <label><i class="fa-solid fa-calendar"></i> Año</label>
+                    <label><i class="fa-solid fa-calendar"></i> <span data-es="Año" data-en="Year">Year</span></label>
                     <input type="text" name="year" placeholder="2026" value="{{ form.data.year|default:'' }}">
                 </div>
             </div>
 
             <div class="gf-field">
-                <label><i class="fa-solid fa-euro-sign"></i> Precio (opcional)</label>
+                <label><i class="fa-solid fa-euro-sign"></i> <span data-es="Precio (opcional)" data-en="Price (optional)">Price (optional)</span></label>
                 <input type="number" step="0.01" name="price" placeholder="0.00" value="{{ form.data.price|default:'' }}">
             </div>
 
             <div class="gf-field gf-check">
                 <label class="gf-switch">
                     <input type="checkbox" name="available" checked>
-                    <span></span> Disponible para venta
+                    <span></span> <span data-es="Disponible para venta" data-en="Available for sale">Available for sale</span>
                 </label>
             </div>
 
             <div class="gf-field gf-check">
                 <label class="gf-switch">
                     <input type="checkbox" name="is_premium">
-                    <span></span> <i class="fa-solid fa-crown"></i> Obra premium
+                    <span></span> <i class="fa-solid fa-crown"></i> <span data-es="Obra premium" data-en="Premium artwork">Premium artwork</span>
                 </label>
             </div>
 
             <div class="gf-field">
-                <label><i class="fa-solid fa-align-left"></i> Descripción</label>
-                <textarea name="description" rows="3" placeholder="Inspiración, contexto, serie…">{{ form.data.description|default:'' }}</textarea>
+                <label><i class="fa-solid fa-align-left"></i> <span data-es="Descripción" data-en="Description">Description</span></label>
+                <textarea name="description" rows="3" placeholder="Inspiration, context, series…" data-es="Inspiración, contexto, serie…" data-en="Inspiration, context, series…">{{ form.data.description|default:'' }}</textarea>
+                <textarea name="description_en" rows="3" placeholder="Description (English, optional)">{{ form.data.description_en|default:'' }}</textarea>
                 <p class="gf-err">{{ form.description.errors }}</p>
             </div>
 
-            <button type="submit" class="gf-submit"><i class="fa-solid fa-paint-roller"></i> Publicar obra</button>
+            <button type="submit" class="gf-submit"><i class="fa-solid fa-paint-roller"></i> <span data-es="Publicar obra" data-en="Publish artwork">Publish artwork</span></button>
         </form>
     </div>
 </section>

@@ -10,26 +10,26 @@
 <section class="auth">
     <div class="auth-card">
         <p class="auth-eyebrow">{{ site_settings.site_title|default:"Sigfrid" }}</p>
-        <h1 class="auth-title">Inicia sesión</h1>
+        <h1 class="auth-title" data-es="Inicia sesión" data-en="Sign in">Sign in</h1>
 
         <form action="" method="POST" novalidate class="auth-form">
             {% csrf_token %}
             <div class="auth-field">
-                <label>Usuario o email</label>
-                <input name="username" type="text" id="username_id" placeholder="Tu nombre o email">
+                <label data-es="Usuario o email" data-en="Username or email">Username or email</label>
+                <input name="username" type="text" id="username_id" placeholder="Your name or email" data-es="Tu nombre o email" data-en="Your name or email">
                 <p class="auth-error">{{ form.username.errors }}</p>
             </div>
 
             <div class="auth-field">
-                <label>Contraseña</label>
-                <input name="password" type="password" id="password_id" placeholder="Tu contraseña">
+                <label data-es="Contraseña" data-en="Password">Password</label>
+                <input name="password" type="password" id="password_id" placeholder="Your password" data-es="Tu contraseña" data-en="Your password">
                 <p class="auth-error">{{ form.password.errors }}</p>
             </div>
 
-            <button type="submit" class="auth-submit">Iniciar sesión</button>
+            <button type="submit" class="auth-submit" data-es="Iniciar sesión" data-en="Sign in">Sign in</button>
         </form>
 
-        <p class="auth-alt">¿No tienes cuenta? <a href="{% url 'user_profile:register_user' %}">Regístrate</a></p>
+        <p class="auth-alt"><span data-es="¿No tienes cuenta?" data-en="Don't have an account?">Don't have an account?</span> <a href="{% url 'user_profile:register_user' %}" data-es="Regístrate" data-en="Sign up">Sign up</a></p>
     </div>
 </section>
 {% endblock content %}

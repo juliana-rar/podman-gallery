@@ -8,7 +8,7 @@
 
 {% block content %}
 
-<a class="home-logo" href="{% url 'blog:home' %}" aria-label="Inicio">
+<a class="home-logo" href="{% url 'core:home' %}" aria-label="Inicio">
     <img src="{% if site_settings.home_logo %}{{ site_settings.home_logo.url }}{% else %}{% static 'dessign/logo.jpeg' %}{% endif %}" alt="{{ site_settings.site_title|default:'Logo' }}">
 </a>
 
@@ -16,7 +16,7 @@
 
 {% if site_settings.hero_text %}
 <section class="hero-desc">
-    <div class="hero-desc-text">{{ site_settings.hero_text|linebreaks }}</div>
+    <div class="hero-desc-text"><span class="lang-es">{{ site_settings.hero_text|linebreaks }}</span><span class="lang-en">{% if site_settings.hero_text_en %}{{ site_settings.hero_text_en|linebreaks }}{% else %}{{ site_settings.hero_text|linebreaks }}{% endif %}</span></div>
 </section>
 {% endif %}
 

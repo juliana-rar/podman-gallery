@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestionar exhibiciones{% endblock title %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/user_profile/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/exhibitions.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="profile">
+    <section class="profile-config exm">
+        <header class="cfg-head">
+            <a class="cfg-back" href="{% url 'user_profile:profile' %}"><i class="fa-solid fa-arrow-left"></i> <span data-es="Volver al perfil" data-en="Back to profile">Back to profile</span></a>
+            <h3><i class="fa-solid fa-calendar-day"></i> <span data-es="Exhibiciones" data-en="Exhibitions">Exhibitions</span></h3>
+            <p class="cfg-help" data-es="Anuncia las muestras que harás y sus fechas. Aparecerán en el calendario público." data-en="Announce the shows you'll hold and their dates. They'll appear on the public calendar.">Announce the shows you'll hold and their dates. They'll appear on the public calendar.</p>
+            <a class="exm-public" href="{% url 'user_profile:exhibitions' %}" target="_blank"><i class="fa-solid fa-up-right-from-square"></i> <span data-es="Ver calendario público" data-en="View public calendar">View public calendar</span></a>
+        </header>
+
+        <!-- Alta de exhibición -->
+        <form class="exm-form" method="POST" action="{% url 'user_profile:exhibitions_manage' %}">
+            {% csrf_token %}
+            <div class="cfg-grid">
+                <div class="set-field set-field--full">
+                    <label><i class="fa-solid fa-heading"></i> <span data-es="Título" data-en="Title">Title</span></label>
+                    <input type="text" name="title" placeholder="Exhibition name" data-es="Nombre de la exhibición" data-en="Exhibition name" required>
+                    <input type="text" name="title_en" placeholder="English (optional)">
+                </div>
+                <div class="set-field">
+                    <label><i class="fa-solid fa-location-dot"></i> <span data-es="Lugar" data-en="Location">Location</span></label>
+                    <input type="text" name="location" placeholder="Gallery, venue or city" data-es="Galería, sala o ciudad" data-en="Gallery, venue or city">
+                    <input type="text" name="location_en" placeholder="English (optional)">
+                </div>
+                <div class="set-field">
+                    <label><i class="fa-solid fa-calendar-day"></i> <span data-es="Fecha de inicio" data-en="Start date">Start date</span></label>
+                    <input type="date" name="start_date" required>
+                </div>
+                <div class="set-field">
+                    <label><i class="fa-solid fa-calendar-check"></i> <span data-es="Fecha de fin" data-en="End date">End date</span> <small data-es="(opcional)" data-en="(optional)">(optional)</small></label>
+                    <input type="date" name="end_date">
+                </div>
+                <div class="set-field">
+                    <label><i class="fa-solid fa-link"></i> <span data-es="Enlace" data-en="Link">Link</span> <small data-es="(opcional)" data-en="(optional)">(optional)</small></label>
+                    <input type="url" name="url" placeholder="https://…">
+                </div>
+                <div class="set-field set-field--full">
+                    <label><i class="fa-solid fa-align-left"></i> <span data-es="Descripción" data-en="Description">Description</span> <small data-es="(opcional)" data-en="(optional)">(optional)</small></label>
+                    <textarea name="description" rows="3" placeholder="Show details…" data-es="Detalles de la muestra…" data-en="Show details…"></textarea>
+                    <textarea name="description_en" rows="3" placeholder="Description (English, optional)"></textarea>
+                </div>
+            </div>
+            <button type="submit" class="cfg-save"><i class="fa-solid fa-plus"></i> <span data-es="Añadir exhibición" data-en="Add exhibition">Add exhibition</span></button>
+        </form>
+
+        <!-- Listado -->
+        <div class="exm-list">
+            {% for ex in exhibitions %}
+            <div class="exm-item{% if ex.last_day < today %} is-past{% endif %}">
+                <div class="exm-item-head">
+                    <div>
+                        <h4>{{ ex.title }}</h4>
+                        <p>
+                            <i class="fa-solid fa-calendar"></i>
+                            {{ ex.start_date|date:"d/m/Y" }}{% if ex.end_date %} — {{ ex.end_date|date:"d/m/Y" }}{% endif %}
+                            {% if ex.location %} · <i class="fa-solid fa-location-dot"></i> {{ ex.location }}{% endif %}
+                            {% if ex.last_day < today %}<span class="exm-tag-past" data-es="Finalizada" data-en="Ended">Ended</span>{% endif %}
+                        </p>
+                    </div>
+                    <a class="exm-del" href="{% url 'user_profile:delete_exhibition' ex.id %}"
+                       onclick="return confirm('¿Eliminar «{{ ex.title|escapejs }}»?');" title="Eliminar"><i class="fa-solid fa-trash"></i></a>
+                </div>
+
+                <details class="exm-edit">
+                    <summary><i class="fa-solid fa-pen"></i> <span data-es="Editar" data-en="Edit">Edit</span></summary>
+                    <form class="exm-form" method="POST" action="{% url 'user_profile:edit_exhibition' ex.id %}">
+                        {% csrf_token %}
+                        <div class="cfg-grid">
+                            <div class="set-field set-field--full">
+                                <label data-es="Título" data-en="Title">Title</label>
+                                <input type="text" name="title" value="{{ ex.title }}" required>
+                                <input type="text" name="title_en" value="{{ ex.title_en }}" placeholder="English (optional)">
+                            </div>
+                            <div class="set-field">
+                                <label data-es="Lugar" data-en="Location">Location</label>
+                                <input type="text" name="location" value="{{ ex.location }}">
+                                <input type="text" name="location_en" value="{{ ex.location_en }}" placeholder="English (optional)">
+                            </div>
+                            <div class="set-field">
+                                <label data-es="Inicio" data-en="Start">Start</label>
+                                <input type="date" name="start_date" value="{{ ex.start_date|date:'Y-m-d' }}" required>
+                            </div>
+                            <div class="set-field">
+                                <label data-es="Fin" data-en="End">End</label>
+                                <input type="date" name="end_date" value="{{ ex.end_date|date:'Y-m-d' }}">
+                            </div>
+                            <div class="set-field">
+                                <label data-es="Enlace" data-en="Link">Link</label>
+                                <input type="url" name="url" value="{{ ex.url }}">
+                            </div>
+                            <div class="set-field set-field--full">
+                                <label data-es="Descripción" data-en="Description">Description</label>
+                                <textarea name="description" rows="3">{{ ex.description }}</textarea>
+                                <textarea name="description_en" rows="3" placeholder="Description (English, optional)">{{ ex.description_en }}</textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="cfg-save"><i class="fa-solid fa-floppy-disk"></i> <span data-es="Guardar" data-en="Save">Save</span></button>
+                    </form>
+                </details>
+            </div>
+            {% empty %}
+            <p class="exm-empty" data-es="Todavía no has añadido ninguna exhibición." data-en="You haven't added any exhibitions yet.">You haven't added any exhibitions yet.</p>
+            {% endfor %}
+        </div>
+    </section>
+</section>
+{% endblock content %}

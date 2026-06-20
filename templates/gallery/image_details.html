@@ -21,41 +21,41 @@
         <aside class="aw-info">
             {% if request.user.is_authenticated and image.user_id == request.user.id %}
             <div class="aw-owner">
-                <a href="{% url 'gallery:edit_image' image.id %}"><i class="fa-solid fa-pen"></i> Editar</a>
+                <a href="{% url 'gallery:edit_image' image.id %}"><i class="fa-solid fa-pen"></i> <span data-es="Editar" data-en="Edit">Edit</span></a>
                 <a class="aw-owner-del" href="{% url 'gallery:delete_image' image.id %}"
-                   onclick="return confirm('¿Eliminar «{{ image.title|escapejs }}»?');"><i class="fa-solid fa-trash"></i> Eliminar</a>
+                   onclick="return confirm('¿Eliminar «{{ image.title|escapejs }}»?');"><i class="fa-solid fa-trash"></i> <span data-es="Eliminar" data-en="Delete">Delete</span></a>
             </div>
             {% endif %}
             {% if image.is_premium %}<span class="aw-premium"><i class="fa-solid fa-crown"></i> Premium</span>{% endif %}
             {% if image.category %}
-            <a class="aw-collection" href="{% url 'gallery:category_gallery' image.category.slug %}">{{ image.category.title }}</a>
+            <a class="aw-collection" href="{% url 'gallery:category_gallery' image.category.slug %}" data-es="{{ image.category.title }}" data-en="{{ image.category.title_en|default:image.category.title }}">{{ image.category.title_en|default:image.category.title }}</a>
             {% endif %}
-            <h1>{{ image.title }}</h1>
+            <h1 data-es="{{ image.title }}" data-en="{{ image.title_en|default:image.title }}">{{ image.title_en|default:image.title }}</h1>
             <p class="aw-artist">{{ image.user.get_full_name|default:image.user.username }}{% if image.year %}, {{ image.year }}{% endif %}</p>
 
             {% if image.description %}
-            <p class="aw-desc">{{ image.description }}</p>
+            <p class="aw-desc"><span class="lang-es">{{ image.description }}</span><span class="lang-en">{% if image.description_en %}{{ image.description_en }}{% else %}{{ image.description }}{% endif %}</span></p>
             {% endif %}
 
             <dl class="aw-specs">
-                {% if image.technique %}<dt>Técnica</dt><dd>{{ image.technique }}</dd>{% endif %}
-                {% if image.paper_size %}<dt>Tamaño de papel</dt><dd>{{ image.paper_size }}</dd>{% endif %}
-                {% if image.dimensions %}<dt>Dimensiones</dt><dd>{{ image.dimensions }}</dd>{% endif %}
-                {% if image.year %}<dt>Año</dt><dd>{{ image.year }}</dd>{% endif %}
+                {% if image.technique %}<dt data-es="Técnica" data-en="Technique">Technique</dt><dd data-es="{{ image.technique }}" data-en="{{ image.technique_en|default:image.technique }}">{{ image.technique_en|default:image.technique }}</dd>{% endif %}
+                {% if image.paper_size %}<dt data-es="Tamaño de papel" data-en="Paper size">Paper size</dt><dd data-es="{{ image.paper_size }}" data-en="{{ image.paper_size_en|default:image.paper_size }}">{{ image.paper_size_en|default:image.paper_size }}</dd>{% endif %}
+                {% if image.dimensions %}<dt data-es="Dimensiones" data-en="Dimensions">Dimensions</dt><dd data-es="{{ image.dimensions }}" data-en="{{ image.dimensions_en|default:image.dimensions }}">{{ image.dimensions_en|default:image.dimensions }}</dd>{% endif %}
+                {% if image.year %}<dt data-es="Año" data-en="Year">Year</dt><dd>{{ image.year }}</dd>{% endif %}
             </dl>
 
             <div class="aw-status">
                 {% if image.available %}
-                <span class="aw-avail"><i class="fa-solid fa-circle"></i> Disponible</span>
+                <span class="aw-avail"><i class="fa-solid fa-circle"></i> <span data-es="Disponible" data-en="Available">Available</span></span>
                 {% else %}
-                <span class="aw-sold"><i class="fa-solid fa-circle"></i> Vendido</span>
+                <span class="aw-sold"><i class="fa-solid fa-circle"></i> <span data-es="Vendido" data-en="Sold">Sold</span></span>
                 {% endif %}
                 {% if image.price %}<span class="aw-price">{{ image.price }} €</span>{% endif %}
             </div>
 
             {% if image.available %}
             <a class="aw-enquire" href="mailto:?subject=Consulta sobre la obra «{{ image.title }}»">
-                <i class="fa-solid fa-envelope"></i> Consultar disponibilidad
+                <i class="fa-solid fa-envelope"></i> <span data-es="Consultar disponibilidad" data-en="Enquire about availability">Enquire about availability</span>
             </a>
             {% endif %}
         </aside>
@@ -63,12 +63,12 @@
 
     {% if related %}
     <div class="aw-related">
-        <h2>Más de esta colección</h2>
+        <h2 data-es="Más de esta colección" data-en="More from this collection">More from this collection</h2>
         <div class="aw-related-grid">
             {% for r in related %}
             <a href="{% url 'gallery:image_details' r.slug %}">
                 <img src="{{ r.image.url }}" alt="{{ r.title }}" loading="lazy">
-                <span>{{ r.title }}</span>
+                <span data-es="{{ r.title }}" data-en="{{ r.title_en|default:r.title }}">{{ r.title_en|default:r.title }}</span>
             </a>
             {% endfor %}
         </div>

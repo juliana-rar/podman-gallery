@@ -1,0 +1,35 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block title %} {{ event.title }} {% endblock title %}
+{% block extra_css %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/miscellany/details.css' %}">
+{% endblock extra_css %}
+{% block content %}
+<!-- Títol fora de la targeta -->
+<div class="event_details_title" data-es="{{ event.title }}" data-en="{{ event.title_en|default:event.title }}">
+    {{ event.title_en|default:event.title }}
+</div>
+
+<section class="event_details"> 
+    <article>
+        <div>
+            {% if event.video %}
+            <video src="{{ event.video.url }}" controls loop playsinline preload="metadata" style="width:100%;height:auto;display:block;">
+            </video>
+            {% elif event.image %}
+            <img src="{{ event.image.url }}" alt="{{ event.title }}">
+            {% endif %}
+        </div>
+        <div>
+            <span data-es="{{ event.category.title }}" data-en="{{ event.category.title_en|default:event.category.title }}">{{ event.category.title_en|default:event.category.title }}</span>
+            <p><span class="lang-es">{{ event.description|safe }}</span><span class="lang-en">{% if event.description_en %}{{ event.description_en|safe }}{% else %}{{ event.description|safe }}{% endif %}</span></p>
+
+   
+
+
+        </div>
+    </article>
+</section>
+{% endblock content %}

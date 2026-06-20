@@ -1,0 +1,66 @@
+<script>
+/*
+ * Global language controller (client-side, no reload).
+ * Two complementary mechanisms, both keyed off <html lang="es|en">:
+ *   A) Attribute swap  — short plain-text labels carry data-es / data-en;
+ *                        their textContent is swapped on language change.
+ *   B) Block show/hide — rich/long content (RichText, bio) is rendered twice,
+ *                        wrapped in .lang-es / .lang-en, toggled via CSS.
+ * Default language is English; the choice is remembered in localStorage.
+ */
+(function () {
+    // Guard: if the controller is already running, don't bind a second time.
+    // (A second click handler would toggle twice per click and cancel itself out.)
+    if (window.SiteLang) return;
+
+    function getLang() {
+        try {
+            return localStorage.getItem('site-lang') === 'es' ? 'es' : 'en';
+        } catch (e) {
+            return 'en';
+        }
+    }
+
+    function applyLang(lang) {
+        // Mechanism B (CSS) reacts instantly to this attribute.
+        document.documentElement.setAttribute('lang', lang);
+
+        // Mechanism A: swap textContent / placeholder / value for tagged nodes.
+        document.querySelectorAll('[data-es], [data-en]').forEach(function (el) {
+            var text = el.getAttribute('data-' + lang);
+            if (text === null) return;
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                if (el.hasAttribute('placeholder')) el.placeholder = text;
+                else el.value = text;
+            } else {
+                el.textContent = text;
+            }
+        });
+
+        var btn = document.getElementById('langToggle');
+        if (btn) btn.textContent = lang.toUpperCase();
+    }
+
+    // Expose for other scripts that inject content dynamically.
+    window.SiteLang = { get: getLang, apply: applyLang };
+
+    function init() {
+        applyLang(getLang());
+        var btn = document.getElementById('langToggle');
+        if (btn && !btn.dataset.langBound) {
+            btn.dataset.langBound = '1';
+            btn.addEventListener('click', function () {
+                var next = getLang() === 'es' ? 'en' : 'es';
+                try { localStorage.setItem('site-lang', next); } catch (e) {}
+                applyLang(next);
+            });
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+</script>

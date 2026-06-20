@@ -1,0 +1,68 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/miscellany/add.css' %}">
+{% endblock extra_css %}
+{% block content %}
+
+<section class="add_event">
+    <div>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div>
+                <label for="title" data-es="Título" data-en="Title">Title</label>
+                <input type="text" name="title" value="{{ form.instance.title }}">
+                <input type="text" name="title_en" value="{{ form.instance.title_en }}" placeholder="English (optional)">
+                <p>{{ form.instance.title.errors }}</p>
+            </div>
+
+            <div>
+                <label for="category" data-es="Categoría" data-en="Category">Category</label>
+                <select name="category" id="category_id">
+                    {% for category in event_categories %}
+                    <option value="{{ category.id }}" {% if form.instance.category.pk == category.pk %}selected{% endif %}>
+                        {{ category.title }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <p>{{ form.instance.category.errors }}</p>
+            </div>
+
+            <div>
+                <label for="description" data-es="Descripción" data-en="Description">Description</label>
+                {{ form.description|safe }}
+                <label data-es="Descripción (inglés)" data-en="Description (English)">Description (English)</label>
+                {{ form.description_en|safe }}
+                <p>{{ form.description.errors }}</p>
+            </div>
+
+            <!-- CAMPO DE IMAGEN SIN PREVISUALIZACIÓN -->
+            <div>
+                <label for="image" data-es="Imagen" data-en="Image">Image</label>
+                <input type="file" name="image" accept="image/*">
+                {% if form.instance.image %}<small><span data-es="Actual:" data-en="Current:">Current:</span> <a href="{{ form.instance.image.url }}" target="_blank">{{ form.instance.image.name }}</a></small>{% endif %}
+                <p>{{ form.instance.image.errors }}</p>
+            </div>
+
+            <div>
+                <label for="video"><span data-es="Vídeo" data-en="Video">Video</span> <small data-es="(opcional, .mp4)" data-en="(optional, .mp4)">(optional, .mp4)</small></label>
+                <input type="file" name="video" accept="video/*">
+                {% if form.instance.video %}<small><span data-es="Actual:" data-en="Current:">Current:</span> <a href="{{ form.instance.video.url }}" target="_blank">{{ form.instance.video.name }}</a></small>{% endif %}
+                <p>{{ form.video.errors }}</p>
+            </div>
+
+            <div>
+                <button type="submit" data-es="Actualizar" data-en="Update">Update</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% block extra_head %}
+{{ form.media }}
+{% endblock extra_head %}
+
+{% endblock content %}

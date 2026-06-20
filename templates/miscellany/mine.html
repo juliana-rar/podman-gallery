@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mis {{ site_settings.nav_miscellany|default:"Tips" }}{% endblock title %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/miscellany/mine.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="my-events">
+    <header class="me-head">
+        <div>
+            <p class="me-eyebrow" data-es="Tu colección" data-en="Your collection">Your collection</p>
+            <h1 class="me-title"><span data-es="Mis" data-en="My">My</span> {{ site_settings.nav_miscellany|default:"Tips" }}</h1>
+        </div>
+        <div class="me-actions-head">
+            <a class="me-btn--ghost" href="{% url 'miscellany:manage_miscellany_categories' %}">
+                <i class="fa-solid fa-tags"></i> <span data-es="Categorías" data-en="Categories">Categories</span>
+            </a>
+            <a class="me-add" href="{% url 'miscellany:add_miscellany' %}">
+                <i class="fa-solid fa-plus"></i> <span data-es="Añadir" data-en="Add">Add</span> {{ site_settings.nav_miscellany|default:"Tip" }}
+            </a>
+        </div>
+    </header>
+
+    {% if events %}
+    <p class="me-reorder-hint"><i class="fa-solid fa-up-down-left-right"></i> <span data-es="Arrastra el icono de cada pieza para cambiar el orden en que se ve en" data-en="Drag each piece's handle to change the order it appears in">Drag each piece's handle to change the order it appears in</span> {{ site_settings.nav_miscellany|default:"la miscelánea" }}.</p>
+    {% endif %}
+
+    <div class="me-grid me-grid--reorder" data-reorder-url="{% url 'miscellany:reorder_miscellany' %}" data-csrf="{{ csrf_token }}">
+        {% for event in events %}
+        <article class="me-card" data-id="{{ event.pk }}">
+            <span class="me-move" draggable="true" title="Arrastra para reordenar"><i class="fa-solid fa-up-down-left-right"></i></span>
+            <a class="me-thumb" href="{% url 'miscellany:miscellany_details' event.slug %}">
+                {% if event.video %}
+                <video src="{{ event.video.url }}" muted loop playsinline preload="metadata"></video>
+                <span class="me-play"><i class="fa-solid fa-play"></i></span>
+                {% elif event.image %}
+                <img src="{{ event.image.url }}" alt="{{ event.title }}">
+                {% else %}
+                <img src="{% static 'default_event_image.jpg' %}" alt="{{ event.title }}">
+                {% endif %}
+            </a>
+            <div class="me-body">
+                <h3>{{ event.title|truncatechars:40 }}</h3>
+                <div class="me-actions">
+                    <a href="{% url 'miscellany:update_miscellany' event.slug %}" title="Editar"><i class="fa fa-edit"></i></a>
+                    <a href="?delete={{ event.pk }}" class="me-del" title="Eliminar"
+                       onclick="return confirm('¿Eliminar «{{ event.title|escapejs }}»?');"><i class="fa fa-trash"></i></a>
+                </div>
+            </div>
+        </article>
+        {% empty %}
+        <p class="me-empty"><span data-es="Todavía no has publicado nada." data-en="You haven't published anything yet.">You haven't published anything yet.</span> <a href="{% url 'miscellany:add_miscellany' %}" data-es="Añade el primero" data-en="Add the first one">Add the first one</a>.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<script>
+    // Reordenar piezas por arrastre (Mi miscelánea) — guarda el orden de /miscellany
+    (function () {
+        const grid = document.querySelector('.me-grid--reorder');
+        if (!grid) return;
+        const url = grid.dataset.reorderUrl;
+        const csrf = grid.dataset.csrf;
+        let dragEl = null;
+
+        grid.querySelectorAll('img, video, a').forEach(el => el.setAttribute('draggable', 'false'));
+
+        grid.querySelectorAll('.me-move').forEach(function (handle) {
+            const card = handle.closest('.me-card');
+            handle.addEventListener('dragstart', function (e) {
+                dragEl = card;
+                card.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                try { e.dataTransfer.setData('text/plain', card.dataset.id); } catch (err) {}
+                try { e.dataTransfer.setDragImage(card, 30, 30); } catch (err) {}
+            });
+            handle.addEventListener('dragend', function () {
+                if (!dragEl) return;
+                dragEl.classList.remove('dragging');
+                dragEl = null;
+                saveOrder();
+            });
+        });
+
+        grid.querySelectorAll('.me-card').forEach(function (card) {
+            card.addEventListener('dragover', function (e) {
+                if (!dragEl || card === dragEl) return;
+                e.preventDefault();
+                const box = card.getBoundingClientRect();
+                const after = (e.clientY - box.top) / box.height > 0.5
+                           || (e.clientX - box.left) / box.width > 0.5;
+                if (after) card.after(dragEl); else card.before(dragEl);
+            });
+        });
+
+        function saveOrder() {
+            const ids = Array.from(grid.querySelectorAll('.me-card')).map(c => c.dataset.id);
+            fetch(url, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': csrf, 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'order=' + ids.join(',')
+            }).catch(() => {});
+        }
+    })();
+</script>
+{% endblock content %}

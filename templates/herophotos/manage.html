@@ -13,52 +13,54 @@
 {% block content %}
 <section class="gallery-form hp-manage">
     <div class="gf-card">
-        <p class="gf-eyebrow">Portada</p>
-        <h1>Fotos del hero</h1>
+        <p class="gf-eyebrow" data-es="Portada" data-en="Cover">Cover</p>
+        <h1 data-es="Fotos del hero" data-en="Hero photos">Hero photos</h1>
 
         <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
             <div class="gf-field">
-                <label><i class="fa-solid fa-image"></i> Imagen (apaisada, alta resolución)</label>
+                <label><i class="fa-solid fa-image"></i> <span data-es="Imagen (apaisada, alta resolución)" data-en="Image (landscape, high resolution)">Image (landscape, high resolution)</span></label>
                 <label class="gf-drop" id="gfDrop">
                     <input type="file" name="image" id="gfFile" accept="image/*" required hidden>
                     <img id="gfPreview" alt="">
-                    <span id="gfPlaceholder"><i class="fa-solid fa-cloud-arrow-up"></i> Haz clic o arrastra una imagen aquí</span>
+                    <span id="gfPlaceholder"><i class="fa-solid fa-cloud-arrow-up"></i> <span data-es="Haz clic o arrastra una imagen aquí" data-en="Click or drag an image here">Click or drag an image here</span></span>
                 </label>
                 <p class="gf-err">{{ form.image.errors }}</p>
             </div>
 
             <div class="gf-field">
-                <label><i class="fa-solid fa-heading"></i> Título (opcional)</label>
+                <label><i class="fa-solid fa-heading"></i> <span data-es="Título (opcional)" data-en="Title (optional)">Title (optional)</span></label>
                 <input type="text" name="title" value="{{ form.data.title|default:'' }}">
+                <input type="text" name="title_en" value="{{ form.data.title_en|default:'' }}" placeholder="English (optional)">
             </div>
 
             <div class="gf-field">
-                <label><i class="fa-solid fa-quote-left"></i> Subtítulo (opcional)</label>
+                <label><i class="fa-solid fa-quote-left"></i> <span data-es="Subtítulo (opcional)" data-en="Subtitle (optional)">Subtitle (optional)</span></label>
                 <input type="text" name="subtitle" value="{{ form.data.subtitle|default:'' }}">
+                <input type="text" name="subtitle_en" value="{{ form.data.subtitle_en|default:'' }}" placeholder="English (optional)">
             </div>
 
             <div class="gf-row">
                 <div class="gf-field">
-                    <label><i class="fa-solid fa-arrow-down-1-9"></i> Orden</label>
+                    <label><i class="fa-solid fa-arrow-down-1-9"></i> <span data-es="Orden" data-en="Order">Order</span></label>
                     <input type="number" name="order" value="{{ form.data.order|default:'0' }}">
                 </div>
                 <div class="gf-field gf-check">
                     <label class="gf-switch">
                         <input type="checkbox" name="is_active" checked>
-                        <span></span> Visible en la portada
+                        <span></span> <span data-es="Visible en la portada" data-en="Visible on the cover">Visible on the cover</span>
                     </label>
                 </div>
             </div>
 
-            <button type="submit" class="gf-submit"><i class="fa-solid fa-plus"></i> Añadir al hero</button>
+            <button type="submit" class="gf-submit"><i class="fa-solid fa-plus"></i> <span data-es="Añadir al hero" data-en="Add to hero">Add to hero</span></button>
         </form>
     </div>
 
     <!-- Fotos existentes -->
     <div class="hp-list-wrap">
-        <h2>En la portada</h2>
+        <h2 data-es="En la portada" data-en="On the cover">On the cover</h2>
         <div class="hp-list">
             {% for photo in photos %}
             <figure class="hp-card{% if not photo.is_active %} is-hidden{% endif %}">
@@ -66,7 +68,7 @@
                 <figcaption>
                     <div class="hp-card-info">
                         <strong>{{ photo.title|default:"(sin título)" }}</strong>
-                        <span>Orden {{ photo.order }}</span>
+                        <span><span data-es="Orden" data-en="Order">Order</span> {{ photo.order }}</span>
                     </div>
                     <div class="hp-card-actions">
                         <a href="{% url 'herophotos:toggle_photo' photo.pk %}" title="{% if photo.is_active %}Ocultar{% else %}Mostrar{% endif %}">
@@ -80,7 +82,7 @@
                 </figcaption>
             </figure>
             {% empty %}
-            <p class="hp-empty">Aún no hay fotos en la portada.</p>
+            <p class="hp-empty" data-es="Aún no hay fotos en la portada." data-en="No cover photos yet.">No cover photos yet.</p>
             {% endfor %}
         </div>
     </div>

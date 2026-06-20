@@ -1,0 +1,318 @@
+/* ===========================================================
+   Exhibiciones — calendario público + gestión (serif + latón)
+   =========================================================== */
+
+.exh {
+    --brass: var(--accent, #c2a878);
+    --ink: #ece8df;
+    --muted: #9b968a;
+    --line: rgba(255, 255, 255, 0.08);
+    --panel: rgba(255, 255, 255, 0.02);
+
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 110px 32px 90px;
+    color: var(--ink);
+    font-family: 'Jost', sans-serif;
+}
+
+/* ---------- Cabecera ---------- */
+.exh-head { text-align: center; margin-bottom: 48px; }
+
+    .exh-eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 6px;
+        font-size: 0.78rem;
+        color: var(--brass);
+        margin: 0 0 14px;
+    }
+
+    .exh-head h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 500;
+        font-size: clamp(2.6rem, 6vw, 4.4rem);
+        line-height: 1;
+        color: #fff;
+        margin: 0;
+    }
+
+    .exh-sub { color: var(--muted); font-weight: 300; margin: 14px 0 0; }
+
+    .exh-rule { display: block; width: 56px; height: 1px; margin: 26px auto 0; background: var(--brass); }
+
+/* ---------- Layout: calendario + columna de próximas ---------- */
+.exh-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 48px;
+    align-items: start;
+}
+
+/* ---------- Calendario ---------- */
+.exh-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+    .exh-toolbar h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 500;
+        font-size: 2rem;
+        color: #fff;
+        margin: 0;
+        letter-spacing: 0.5px;
+    }
+
+        .exh-toolbar h2 span { color: var(--brass); }
+
+    .exh-navbtn {
+        width: 46px;
+        height: 46px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        border: 1px solid var(--line);
+        color: var(--ink);
+        text-decoration: none;
+        transition: all 0.25s ease;
+    }
+
+        .exh-navbtn:hover { background: var(--brass); color: #11100c; border-color: var(--brass); }
+
+.exh-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.exh-weekdays { margin-bottom: 8px; }
+
+    .exh-wd {
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.68rem;
+        font-weight: 500;
+        color: var(--muted);
+        padding: 6px 0;
+    }
+
+.exh-week { margin-bottom: 8px; }
+
+.exh-cell {
+    position: relative;
+    min-height: 104px;
+    padding: 8px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--panel);
+    overflow: hidden;
+}
+
+    .exh-cell.is-out { opacity: 0.32; }
+
+    .exh-cell.is-today {
+        border-color: var(--brass);
+        box-shadow: inset 0 0 0 1px var(--brass);
+    }
+
+    .exh-cell.has-event { background: rgba(194, 168, 120, 0.06); }
+
+    .exh-daynum {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--ink);
+        margin-bottom: 6px;
+    }
+
+    .exh-cell.is-today .exh-daynum { color: var(--brass); font-weight: 600; }
+
+    .exh-chip {
+        display: block;
+        font-size: 0.68rem;
+        line-height: 1.25;
+        color: #11100c;
+        background: var(--brass);
+        text-decoration: none;
+        padding: 4px 7px;
+        border-radius: 3px;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: background 0.2s ease;
+    }
+
+        .exh-chip:hover { background: #d4bd92; }
+
+/* ---------- Columna: próximas exhibiciones ---------- */
+.exh-upcoming h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: 1.5rem;
+    color: #fff;
+    margin: 0 0 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+}
+
+.exh-card {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+    .exh-date {
+        flex: 0 0 auto;
+        text-align: center;
+        min-width: 58px;
+    }
+
+        .exh-d {
+            display: block;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.1rem;
+            line-height: 1;
+            color: var(--brass);
+        }
+
+        .exh-m { display: block; font-size: 0.7rem; color: var(--muted); letter-spacing: 1px; margin-top: 4px; }
+
+    .exh-info h4 {
+        margin: 0 0 6px;
+        font-size: 1.05rem;
+        font-weight: 500;
+        color: #fff;
+    }
+
+    .exh-loc, .exh-range { margin: 0 0 4px; font-size: 0.82rem; color: var(--muted); }
+
+        .exh-loc i, .exh-range { color: var(--muted); }
+
+    .exh-desc { margin: 8px 0 0; font-size: 0.85rem; font-weight: 300; line-height: 1.6; color: #cbd5e1; }
+
+    .exh-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: 10px;
+        font-size: 0.74rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--brass);
+        text-decoration: none;
+    }
+
+        .exh-link:hover { color: #d4bd92; }
+
+.exh-empty { color: var(--muted); font-style: italic; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 980px) {
+    .exh-layout { grid-template-columns: 1fr; gap: 40px; }
+}
+
+@media (max-width: 620px) {
+    .exh { padding: 90px 14px 70px; }
+    .exh-grid { gap: 4px; }
+    .exh-cell { min-height: 74px; padding: 5px; }
+    .exh-wd { font-size: 0.6rem; letter-spacing: 1px; }
+    .exh-chip { font-size: 0.6rem; padding: 3px 5px; }
+}
+
+/* ===========================================================
+   Gestión de exhibiciones (panel del perfil)
+   =========================================================== */
+.exm .exm-public {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: 0.78rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent, #c2a878);
+    text-decoration: none;
+}
+
+.exm .exm-form { margin-bottom: 40px; }
+
+.exm-list { margin-top: 8px; }
+
+.exm-item {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+    .exm-item.is-past { opacity: 0.55; }
+
+    .exm-item-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+        .exm-item-head h4 { margin: 0 0 6px; color: #fff; font-size: 1.05rem; font-weight: 500; }
+        .exm-item-head p { margin: 0; color: #9b968a; font-size: 0.84rem; }
+        .exm-item-head p i { color: var(--accent, #c2a878); margin-right: 4px; }
+
+    .exm-tag-past {
+        margin-left: 8px;
+        padding: 2px 9px;
+        border-radius: 100px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #cbd5e1;
+        font-size: 0.66rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    .exm-del {
+        flex: 0 0 auto;
+        width: 38px;
+        height: 38px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #ece8df;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .exm-del:hover { background: #b4474a; color: #fff; border-color: #b4474a; }
+
+    .exm-edit { margin-top: 12px; }
+
+        .exm-edit summary {
+            list-style: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 7px 16px;
+            border-radius: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ece8df;
+            font-size: 0.76rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+            .exm-edit summary::-webkit-details-marker { display: none; }
+            .exm-edit summary:hover { border-color: var(--accent, #c2a878); color: var(--accent, #c2a878); }
+
+        .exm-edit[open] summary { background: var(--accent, #c2a878); color: #11100c; border-color: var(--accent, #c2a878); }
+
+        .exm-edit form { margin-top: 16px; margin-bottom: 0; }
+
+.exm-empty { color: #9b968a; font-style: italic; }

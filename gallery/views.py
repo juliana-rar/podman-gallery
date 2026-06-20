@@ -56,20 +56,22 @@ def _gallery_context(request, queryset, active_slug=None, category=None, mine=Fa
 
 
 def gallery_list(request):
-    queryset = GalleryImage.objects.order_by('order', '-created_date')
+    queryset = GalleryImage.objects.filter(is_public=True).order_by('order', '-created_date')
     context = _gallery_context(request, queryset)
     return render(request, "gallery/gallery.html", context)
 
 
 def category_gallery(request, slug):
     category = get_object_or_404(GalleryCategory, slug=slug)
-    queryset = category.category_gallery.all().order_by('order', '-created_date')
+    queryset = category.category_gallery.filter(is_public=True).order_by('order', '-created_date')
     context = _gallery_context(request, queryset, active_slug=slug, category=category)
     return render(request, "gallery/gallery.html", context)
 
 
 def image_details(request, slug):
     image = get_object_or_404(GalleryImage, slug=slug)
+    if not image.is_public and request.user.pk != image.user_id:
+        return redirect('gallery:gallery_list')
     related = (GalleryImage.objects
                .filter(category=image.category)
                .exclude(pk=image.pk)[:4]) if image.category else GalleryImage.objects.none()
@@ -157,6 +159,21 @@ def reorder_gallery(request):
 
 
 @login_required(login_url='user_profile:login')
+def toggle_visibility(request, pk):
+    """Muestra u oculta una obra en /gallery. Solo el dueño puede cambiarla."""
+    image = get_object_or_404(GalleryImage, pk=pk)
+    if request.user.pk != image.user_id:
+        return redirect('gallery:gallery_list')
+    image.is_public = not image.is_public
+    image.save(update_fields=['is_public'])
+    if image.is_public:
+        messages.success(request, "«%s» ahora es visible en la galería" % image.title)
+    else:
+        messages.success(request, "«%s» se ocultó de la galería" % image.title)
+    return redirect('gallery:my_gallery')
+
+
+@login_required(login_url='user_profile:login')
 def delete_image(request, pk):
     image = get_object_or_404(GalleryImage, pk=pk)
     if request.user.pk != image.user.pk:
@@ -173,7 +190,9 @@ def manage_gallery_categories(request):
     if request.method == "POST":
         title = (request.POST.get("title") or "").strip()
         if title:
-            GalleryCategory.objects.get_or_create(title=title, slug=slugify(title))
+            category, _ = GalleryCategory.objects.get_or_create(title=title, slug=slugify(title))
+            category.title_en = (request.POST.get("title_en") or "").strip()
+            category.save()
             messages.success(request, "Colección creada")
         return redirect("gallery:manage_gallery_categories")
 
@@ -188,6 +207,7 @@ def edit_gallery_category(request, category_id):
         new_title = (request.POST.get("title") or "").strip()
         if new_title:
             category.title = new_title
+            category.title_en = (request.POST.get("title_en") or "").strip()
             category.save()
             messages.success(request, "Colección actualizada")
     return redirect("gallery:manage_gallery_categories")

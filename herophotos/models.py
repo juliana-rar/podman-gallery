@@ -11,7 +11,9 @@ class HeroPhoto(models.Model):
         on_delete=models.CASCADE
     )
     title = models.CharField("Título", max_length=200, blank=True)
+    title_en = models.CharField("Title (EN)", max_length=200, blank=True)
     subtitle = models.CharField("Subtítulo", max_length=300, blank=True)
+    subtitle_en = models.CharField("Subtitle (EN)", max_length=300, blank=True)
     image = models.ImageField(upload_to='hero_photos/')
     order = models.PositiveIntegerField("Orden", default=0)
     is_active = models.BooleanField("Visible", default=True)

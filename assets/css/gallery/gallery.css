@@ -512,6 +512,11 @@
 
         .ag-tool:hover { background: var(--brass); color: #1a1813; border-color: var(--brass); }
         .ag-tool-del:hover { background: #c0392b; color: #fff; border-color: #c0392b; }
+        .ag-tool-hidden { background: #c0392b; color: #fff; border-color: #c0392b; }
+
+    /* Obra oculta de /gallery (solo visible en "Mi galería") */
+    .ag-piece--hidden .ag-frame { opacity: 0.45; filter: grayscale(0.6); }
+    .ag-piece--hidden figcaption { opacity: 0.6; }
 
     .ag-piece figcaption {
         text-align: center;

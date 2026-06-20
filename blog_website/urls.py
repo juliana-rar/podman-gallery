@@ -10,11 +10,12 @@ router.register(r'api/proyectos', ProyectoViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('blog.urls', namespace='blog')),
+    path('', include('core.urls', namespace='core')),
     path('', include('user_profile.urls', namespace='user_profile')),
     path('', include('gallery.urls', namespace='gallery')),
     path('', include('herophotos.urls', namespace='herophotos')),
-    path('', include('events.urls', namespace='events')),
+    path('miscellany/', include('miscellany.urls', namespace='miscellany')),
+    path('products/', include('products.urls', namespace='products')),
     path('', include('projects.urls', namespace='projects')),
     path('ckeditor/', include('ckeditor_uploader.urls')), 
     path('', include(router.urls)),

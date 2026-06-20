@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Exhibiciones · {{ site_settings.site_title|default:"Sigfrid" }}{% endblock title %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/exhibitions.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="exh">
+    <header class="exh-head">
+        <p class="exh-eyebrow" data-es="Agenda" data-en="Schedule">Schedule</p>
+        <h1 data-es="Exhibiciones" data-en="Exhibitions">Exhibitions</h1>
+        <p class="exh-sub" data-es="Próximas muestras y fechas señaladas" data-en="Upcoming shows and key dates">Upcoming shows and key dates</p>
+        <span class="exh-rule"></span>
+    </header>
+
+    <div class="exh-layout">
+        <!-- Calendario grande -->
+        <div class="exh-cal">
+            <div class="exh-toolbar">
+                <a class="exh-navbtn" href="?year={{ prev_year }}&month={{ prev_month }}" aria-label="Mes anterior"><i class="fa-solid fa-chevron-left"></i></a>
+                <h2><span data-es="{{ month_name }}" data-en="{{ month_name_en }}">{{ month_name_en }}</span> <span>{{ year }}</span></h2>
+                <a class="exh-navbtn" href="?year={{ next_year }}&month={{ next_month }}" aria-label="Mes siguiente"><i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+
+            <div class="exh-grid exh-weekdays">
+                {% for wd in weekdays %}<div class="exh-wd" data-es="{{ wd.es }}" data-en="{{ wd.en }}">{{ wd.en }}</div>{% endfor %}
+            </div>
+
+            {% for week in weeks %}
+            <div class="exh-grid exh-week">
+                {% for cell in week %}
+                <div class="exh-cell{% if not cell.in_month %} is-out{% endif %}{% if cell.is_today %} is-today{% endif %}{% if cell.items %} has-event{% endif %}">
+                    <span class="exh-daynum">{{ cell.day }}</span>
+                    {% for ex in cell.items %}
+                    <a class="exh-chip" href="#exh-{{ ex.id }}" title="{{ ex.title }}{% if ex.location %} · {{ ex.location }}{% endif %}" data-es="{{ ex.title }}" data-en="{{ ex.title_en|default:ex.title }}">
+                        {{ ex.title_en|default:ex.title }}
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Próximas exhibiciones -->
+        <aside class="exh-upcoming">
+            <h3 data-es="Próximas" data-en="Upcoming">Upcoming</h3>
+            {% for ex in upcoming %}
+            <article class="exh-card" id="exh-{{ ex.id }}">
+                <div class="exh-date">
+                    <span class="exh-d">{{ ex.start_date|date:"d" }}</span>
+                    <span class="exh-m">{{ ex.start_date|date:"m/Y" }}</span>
+                </div>
+                <div class="exh-info">
+                    <h4 data-es="{{ ex.title }}" data-en="{{ ex.title_en|default:ex.title }}">{{ ex.title_en|default:ex.title }}</h4>
+                    {% if ex.location %}<p class="exh-loc"><i class="fa-solid fa-location-dot"></i> <span data-es="{{ ex.location }}" data-en="{{ ex.location_en|default:ex.location }}">{{ ex.location_en|default:ex.location }}</span></p>{% endif %}
+                    <p class="exh-range">
+                        {{ ex.start_date|date:"d/m/Y" }}{% if ex.end_date %} — {{ ex.end_date|date:"d/m/Y" }}{% endif %}
+                    </p>
+                    {% if ex.description %}<p class="exh-desc"><span class="lang-es">{{ ex.description }}</span><span class="lang-en">{% if ex.description_en %}{{ ex.description_en }}{% else %}{{ ex.description }}{% endif %}</span></p>{% endif %}
+                    {% if ex.url %}<a class="exh-link" href="{{ ex.url }}" target="_blank" rel="noopener"><span data-es="Más información" data-en="More info">More info</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a>{% endif %}
+                </div>
+            </article>
+            {% empty %}
+            <p class="exh-empty" data-es="No hay exhibiciones programadas por ahora." data-en="No exhibitions scheduled for now.">No exhibitions scheduled for now.</p>
+            {% endfor %}
+        </aside>
+    </div>
+</section>
+{% endblock content %}

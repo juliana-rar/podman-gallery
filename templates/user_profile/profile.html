@@ -28,7 +28,7 @@
             <div id="profileModal">
                 <div>
                     <div>
-                        <h3><i class="fa-solid fa-camera-retro"></i> Actualizar foto de perfil</h3>
+                        <h3><i class="fa-solid fa-camera-retro"></i> <span data-es="Actualizar foto de perfil" data-en="Update profile picture">Update profile picture</span></h3>
                         <button type="button" id="closeModal">&times;</button>
                     </div>
                     <div>
@@ -38,7 +38,7 @@
                                 <input type="file" name="profile_image" required>
                             </div>
                             <div>
-                                <button type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button>
+                                <button type="submit"><i class="fa-solid fa-floppy-disk"></i> <span data-es="Guardar cambios" data-en="Save changes">Save changes</span></button>
                             </div>
                         </form>
                     </div>
@@ -55,52 +55,53 @@
                 {% endif %}
 
                 <div>
-                    <label><i class="fa-solid fa-user"></i> Nombre</label>
+                    <label><i class="fa-solid fa-user"></i> <span data-es="Nombre" data-en="First name">First name</span></label>
                     <input name="first_name" value="{{ account.first_name }}" type="text">
                     <p>{{ form.first_name.errors }}</p>
                 </div>
                 <div>
-                    <label><i class="fa-solid fa-id-card"></i> Apellido</label>
+                    <label><i class="fa-solid fa-id-card"></i> <span data-es="Apellido" data-en="Last name">Last name</span></label>
                     <input name="last_name" value="{{ account.last_name }}" type="text">
                     <p>{{ form.last_name.errors }}</p>
                 </div>
                 <div>
-                    <label><i class="fa-solid fa-at"></i> Usuario</label>
+                    <label><i class="fa-solid fa-at"></i> <span data-es="Usuario" data-en="Username">Username</span></label>
                     <input name="username" value="{{ account.username }}" type="text">
                     <p>{{ form.username.errors }}</p>
                 </div>
                 <div>
-                    <label><i class="fa-solid fa-envelope"></i> Email</label>
+                    <label><i class="fa-solid fa-envelope"></i> <span data-es="Email" data-en="Email">Email</span></label>
                     <input name="email" value="{{ account.email }}" type="email">
                     <p>{{ form.email.errors }}</p>
                 </div>
                 <div>
-                    <label><i class="fa-solid fa-lock"></i> Nueva contraseña</label>
+                    <label><i class="fa-solid fa-lock"></i> <span data-es="Nueva contraseña" data-en="New password">New password</span></label>
                     <input name="new_password" type="password">
                 </div>
                 <div>
-                    <label><i class="fa-solid fa-lock"></i> Confirmar contraseña</label>
+                    <label><i class="fa-solid fa-lock"></i> <span data-es="Confirmar contraseña" data-en="Confirm password">Confirm password</span></label>
                     <input name="confirm_password" type="password">
                 </div>
                 <div>
-                    <button type="submit"><i class="fa-solid fa-rotate"></i> Actualizar</button>
+                    <button type="submit"><i class="fa-solid fa-rotate"></i> <span data-es="Actualizar" data-en="Update">Update</span></button>
                 </div>
             </form>
         </div>
 
         <!-- Columna derecha: Grid de enlaces -->
         <div>
-            <a href="{% url 'blog:my_blogs' %}"><i class="fa-solid fa-folder-open"></i><span>Mis {{ site_settings.nav_blogs|default:"Eportfolios" }}</span></a>
-            <a href="{% url 'events:my_events' %}"><i class="fa-solid fa-lightbulb"></i><span>Mis {{ site_settings.nav_events|default:"Tips" }}</span></a>
-            <a href="{% url 'gallery:my_gallery' %}"><i class="fa-solid fa-images"></i><span>Mi {{ site_settings.nav_gallery|default:"Galería" }}</span></a>
-            <a href="{% url 'herophotos:manage' %}"><i class="fa-solid fa-panorama"></i><span>Fotos de portada</span></a>
-            <a href="{% url 'user_profile:bio_manage' %}"><i class="fa-solid fa-feather"></i><span>Biografía</span></a>
-            <a href="{% url 'user_profile:site_config' %}"><i class="fa-solid fa-gear"></i><span>Configuración</span></a>
+            <a href="{% url 'miscellany:my_miscellany' %}"><i class="fa-solid fa-lightbulb"></i><span><span data-es="Mis" data-en="My">My</span> {{ site_settings.nav_miscellany|default:"Tips" }}</span></a>
+            <a href="{% url 'products:my_products' %}"><i class="fa-solid fa-box-open"></i><span><span data-es="Mis" data-en="My">My</span> <span data-es="Productos" data-en="Products">Products</span></span></a>
+            <a href="{% url 'gallery:my_gallery' %}"><i class="fa-solid fa-images"></i><span><span data-es="Mi" data-en="My">My</span> {{ site_settings.nav_gallery|default:"Galería" }}</span></a>
+            <a href="{% url 'herophotos:manage' %}"><i class="fa-solid fa-panorama"></i><span data-es="Fotos de portada" data-en="Cover photos">Cover photos</span></a>
+            <a href="{% url 'user_profile:bio_manage' %}"><i class="fa-solid fa-feather"></i><span data-es="Biografía" data-en="Biography">Biography</span></a>
+            <a href="{% url 'user_profile:exhibitions_manage' %}"><i class="fa-solid fa-calendar-day"></i><span data-es="Exhibiciones" data-en="Exhibitions">Exhibitions</span></a>
+            <a href="{% url 'user_profile:site_config' %}"><i class="fa-solid fa-gear"></i><span data-es="Configuración" data-en="Settings">Settings</span></a>
         </div>
     </div>
 
     <a class="profile-logout" href="{% url 'user_profile:logout' %}">
-        <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+        <i class="fa-solid fa-right-from-bracket"></i> <span data-es="Cerrar sesión" data-en="Log out">Log out</span>
     </a>
 </section>
 

@@ -6,11 +6,11 @@
 {% block content %}
 
 <div class="container-idea">
-  <h1>Mejora de tu idea </h1>
+  <h1 data-es="Mejora de tu idea" data-en="Improve your idea">Improve your idea</h1>
 
   <div class="idea-card mb-5">
     <div class="card-header">
-      <h3>Tu versión original</h3>
+      <h3 data-es="Tu versión original" data-en="Your original version">Your original version</h3>
     </div>
     <div class="card-body">
       <h4>{{ idea.titulo }}</h4>
@@ -21,18 +21,18 @@
   <!-- Versión Mejorada -->
   <div class="idea-card">
     <div class="card-header">
-      <h3>Versión mejorada por IA <small>(en proceso...)</small></h3>
+      <h3><span data-es="Versión mejorada por IA" data-en="AI-improved version">AI-improved version</span> <small data-es="(en proceso...)" data-en="(in progress...)">(in progress...)</small></h3>
     </div>
     <div id="resultado-ia" class="card-body loading">
       <div class="spinner-border text-primary" role="status"></div>
-      <span>Mejorando descripción profesionalmente...</span>
+      <span data-es="Mejorando descripción profesionalmente..." data-en="Improving the description professionally...">Improving the description professionally...</span>
     </div>
   </div>
 
   <!-- Botones -->
   <div class="action-buttons">
-    <button id="btn-regenerar" class="btn-modern btn-regenerar">Regenerar</button>
-    <button id="btn-aceptar" class="btn-modern btn-aceptar">Aceptar y publicar</button>
+    <button id="btn-regenerar" class="btn-modern btn-regenerar" data-es="Regenerar" data-en="Regenerate">Regenerate</button>
+    <button id="btn-aceptar" class="btn-modern btn-aceptar" data-es="Aceptar y publicar" data-en="Accept and publish">Accept and publish</button>
   </div>
 </div>
 

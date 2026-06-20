@@ -1,0 +1,63 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/miscellany/add.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="add_event">
+    <div>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div>
+                <label data-es="Título del evento" data-en="Event title">Event title</label>
+                {{ form.title }}
+                {{ form.title_en }}
+                <p>{{ form.title.errors }}</p>
+            </div>
+
+            <div>
+                <label data-es="Categoría" data-en="Category">Category</label>
+                <select name="category" id="category">
+                    {% for category in event_categories %}
+                    <option value="{{ category.id }}">{{ category.title }}</option>
+                    {% endfor %}
+                </select>
+                <p>{{ form.category.errors }}</p>
+            </div>
+
+            <div>
+                <label data-es="Descripción" data-en="Description">Description</label>
+                {{ form.description }}
+                <label data-es="Descripción (inglés)" data-en="Description (English)">Description (English)</label>
+                {{ form.description_en }}
+                <p>{{ form.description.errors }}</p>
+            </div>
+
+            <div>
+                <label data-es="Imagen" data-en="Image">Image</label>
+                <input type="file" name="image" id="image" accept="image/*">
+                <p>{{ form.image.errors }}</p>
+            </div>
+
+            <div>
+                <label><span data-es="Vídeo" data-en="Video">Video</span> <small data-es="(opcional, .mp4)" data-en="(optional, .mp4)">(optional, .mp4)</small></label>
+                <input type="file" name="video" id="video" accept="video/*">
+                <p>{{ form.video.errors }}</p>
+            </div>
+
+            <div>
+                <button type="submit" data-es="Añadir pieza" data-en="Add piece">Add piece</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% block extra_head %}
+{{ form.media }}
+{% endblock extra_head %}
+
+{% endblock content %}

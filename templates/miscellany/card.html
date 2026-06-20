@@ -1,0 +1,19 @@
+{% load static %}
+<article class="ev-piece">
+    <a href="{% url 'miscellany:miscellany_details' event.slug %}">
+        <div class="ev-media">
+            {% if event.video %}
+                <video src="{{ event.video.url }}" muted loop playsinline preload="metadata"></video>
+                <span class="ev-type" title="Vídeo"><i class="fa-solid fa-play"></i></span>
+            {% elif event.image %}
+                <img src="{{ event.image.url }}" alt="{{ event.title }}" loading="lazy">
+            {% else %}
+                <img src="{% static 'images/placeholder-event.jpg' %}" alt="{{ event.title }}" loading="lazy">
+            {% endif %}
+            <span class="ev-overlay">
+                {% if not hide_category and event.category %}<span class="ev-cat" data-es="{{ event.category.title }}" data-en="{{ event.category.title_en|default:event.category.title }}">{{ event.category.title_en|default:event.category.title }}</span>{% endif %}
+                <h4 data-es="{{ event.title }}" data-en="{{ event.title_en|default:event.title }}">{{ event.title_en|default:event.title }}</h4>
+            </span>
+        </div>
+    </a>
+</article>

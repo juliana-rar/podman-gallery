@@ -1,0 +1,19 @@
+{% load static %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/components/blogcategories.css' %}">
+
+<div class="cat-block">
+    <p class="cat-block-label" data-es="Temas" data-en="Topics">Topics</p>
+    <div class="blogcategories-grid">
+        <div>
+            <div>
+                {% for category in event_categories %}
+                <a href="{% url 'miscellany:category_miscellany' category.slug %}">{{ category.title }}</a>
+                {% empty %}
+                <p class="cat-empty" data-es="Aún no hay temas." data-en="No topics yet.">No topics yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
