@@ -2,11 +2,6 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from rest_framework.routers import DefaultRouter
-from projects.api import ProyectoViewSet
-
-router = DefaultRouter()
-router.register(r'api/proyectos', ProyectoViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -16,10 +11,7 @@ urlpatterns = [
     path('', include('herophotos.urls', namespace='herophotos')),
     path('miscellany/', include('miscellany.urls', namespace='miscellany')),
     path('products/', include('products.urls', namespace='products')),
-    path('', include('projects.urls', namespace='projects')),
-    path('ckeditor/', include('ckeditor_uploader.urls')), 
-    path('', include(router.urls)),
-    
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

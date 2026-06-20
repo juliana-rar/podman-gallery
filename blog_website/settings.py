@@ -88,11 +88,9 @@ INSTALLED_APPS = [
     'products',
     'gallery',
     'herophotos',
-    'projects',
     'user_profile',
     'ckeditor',
     'ckeditor_uploader',
-    'rest_framework',  
 ]
 
 STATICFILES_FINDERS = [
