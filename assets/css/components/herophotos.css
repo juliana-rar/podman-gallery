@@ -3,29 +3,9 @@
    Efecto Ken Burns · overlay editorial · acento latón
    =========================================================== */
 
-/* Logo del inicio — esquina superior izquierda, fijo sobre el hero.
-   z-index 60: por debajo del overlay del menú (80) para que quede
-   tapado cuando el menú lateral está abierto. */
-.home-logo {
-    position: absolute;
-    top: 0;
-    left: 4px;
-    z-index: 60;
-    display: block;
-    line-height: 0;
-}
-
-    .home-logo img {
-        height: 300px;
-        width: auto;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    }
-
-@media (max-width: 768px) {
-    .home-logo { top: 0; left: 2px; }
-    .home-logo img { height: 180px; }
-}
+/* El logo del inicio usa la clase compartida .site-logo (definida en header.css),
+   de modo que tamaño y posición sean idénticos al resto de páginas y al menú.
+   Editar .site-logo cambia todos los logos a la vez. */
 
 /* Texto descriptivo centrado, debajo del hero */
 .hero-desc {

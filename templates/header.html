@@ -16,6 +16,15 @@
 
     <button type="button" class="lang-toggle" id="langToggle" aria-label="Cambiar idioma / Change language">EN</button>
 
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'user_profile:profile' %}" class="profile-toggle" id="profileToggle" aria-label="Perfil / Profile">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 20c0-3.6 3.6-6 8-6s8 2.4 8 6"></path>
+        </svg>
+    </a>
+    {% endif %}
+
     <button type="button" class="menu-toggle" id="menuToggle" aria-label="Menú" aria-expanded="false" aria-controls="siteMenu">
         <span></span><span></span><span></span>
     </button>
@@ -25,15 +34,20 @@
             <source src="{% if site_settings.hero_video %}{{ site_settings.hero_video.url }}{% else %}{% static 'dessign/exilium-video.mp4' %}{% endif %}" type="video/mp4">
         </video>
         <div class="menu-video-overlay"></div>
+        <a href="{% url 'core:home' %}" class="menu-logo site-logo" aria-label="Inicio / Home">
+            {% if site_settings.home_logo %}
+            <img src="{{ site_settings.home_logo.url }}" alt="Logo">
+            {% else %}
+            <img src="{% static 'dessign/logo.jpeg' %}" alt="Logo">
+            {% endif %}
+        </a>
         <ul>
-            <li><a href="{% url 'core:biografia' %}" data-en="Biography" data-es="Biografía">Biography</a></li>
             <li><a href="{% url 'gallery:gallery_list' %}" data-en="Gallery" data-es="Galería">Gallery</a></li>
             <li><a href="{% url 'user_profile:exhibitions' %}" data-en="Exhibitions" data-es="Exhibiciones">Exhibitions</a></li>
-            <li><a href="{% url 'miscellany:miscellany_list' %}" data-en="Miscellany" data-es="Miscelánea">Miscellany</a></li>
             <li><a href="{% url 'products:product_list' %}" data-en="Products" data-es="Productos">Products</a></li>
-            {% if request.user.is_authenticated %}
-            <li><a href="{% url 'user_profile:profile' %}" data-en="Profile" data-es="Perfil">Profile</a></li>
-            {% else %}
+            <li><a href="{% url 'miscellany:miscellany_list' %}" data-en="Miscellany" data-es="Miscelánea">Miscellany</a></li>
+            <li><a href="{% url 'core:biografia' %}" data-en="Biography" data-es="Biografía">Biography</a></li>
+            {% if not request.user.is_authenticated %}
             <li><a href="{% url 'user_profile:login' %}" data-en="Login" data-es="Acceder">Login</a></li>
             {% endif %}
         </ul>

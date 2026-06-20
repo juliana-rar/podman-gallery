@@ -31,9 +31,15 @@
             overflow-x: hidden;
             max-width: 100%;
         }
-        /* Negre sòlid (sense degradat ni background fixed): cap costura ni línia a dalt */
-        html, body {
-            background: #0a0a0b;
+        /* Fondo global: degradado vertical de #020202 a negro, fijo al viewport
+           para que todas las páginas compartan el mismo fondo sin costuras. */
+        html {
+            min-height: 100%;
+            background: linear-gradient(to bottom, #020202 0%, #000000 100%) no-repeat;
+            background-attachment: fixed;
+        }
+        body {
+            background: transparent;
         }
         /* Sticky footer: el body ocupa toda la altura y empuja el footer abajo */
         body {

@@ -23,6 +23,36 @@
         </div>
     </header>
 
+    <!-- Configuración del hero de la página pública de productos -->
+    <form class="ph-config" method="POST" action="{% url 'products:update_products_hero' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2 class="ph-config-title"><i class="fa-solid fa-image"></i> <span data-es="Hero de productos" data-en="Products hero">Products hero</span> <small data-es="(imagen grande a todo el ancho, arriba de la página de productos)" data-en="(large full-width image, at the top of the products page)">(large full-width image, at the top of the products page)</small></h2>
+        <div class="ph-config-grid">
+            <label class="ph-config-drop" id="phHeroDrop" title="Cambiar imagen">
+                <input type="file" name="products_hero_image" accept="image/*" hidden id="phHeroInput">
+                <img id="phHeroPreview" src="{% if site_settings.products_hero_image %}{{ site_settings.products_hero_image.url }}{% else %}{% static 'default_event_image.jpg' %}{% endif %}" alt="hero actual">
+                <span><i class="fa-solid fa-arrow-up-from-bracket"></i> <span data-es="Cambiar imagen" data-en="Change image">Change image</span></span>
+            </label>
+        </div>
+
+        <h2 class="ph-config-title ph-config-title--spaced"><i class="fa-solid fa-image"></i> <span data-es="Segundo hero" data-en="Second hero">Second hero</span> <small data-es="(imagen centrada mediana y texto breve debajo)" data-en="(medium centered image and short text below)">(medium centered image and short text below)</small></h2>
+        <div class="ph-config-grid">
+            <label class="ph-config-drop" id="phHero2Drop" title="Cambiar imagen">
+                <input type="file" name="products_hero2_image" accept="image/*" hidden id="phHero2Input">
+                <img id="phHero2Preview" src="{% if site_settings.products_hero2_image %}{{ site_settings.products_hero2_image.url }}{% else %}{% static 'default_event_image.jpg' %}{% endif %}" alt="segundo hero actual">
+                <span><i class="fa-solid fa-arrow-up-from-bracket"></i> <span data-es="Cambiar imagen" data-en="Change image">Change image</span></span>
+            </label>
+            <div class="ph-config-fields">
+                <label data-es="Texto (español)" data-en="Text (Spanish)">Text (Spanish)</label>
+                <textarea name="products_hero2_text" rows="2" placeholder="Texto breve debajo de la imagen…">{{ site_settings.products_hero2_text }}</textarea>
+                <label data-es="Texto (inglés)" data-en="Text (English)">Text (English)</label>
+                <textarea name="products_hero2_text_en" rows="2" placeholder="Short text (English, optional)…">{{ site_settings.products_hero2_text_en }}</textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="ph-config-save"><i class="fa-solid fa-floppy-disk"></i> <span data-es="Guardar heroes" data-en="Save heroes">Save heroes</span></button>
+    </form>
+
     {% if products %}
     <p class="me-reorder-hint"><i class="fa-solid fa-up-down-left-right"></i> <span data-es="Arrastra el icono de cada producto para cambiar el orden en que se ve." data-en="Drag each product's handle to change the order it appears in.">Drag each product's handle to change the order it appears in.</span></p>
     {% endif %}
@@ -54,6 +84,18 @@
 </section>
 
 <script>
+    // Previsualización de las imágenes de los heroes al elegir archivo
+    (function () {
+        [['phHeroInput', 'phHeroPreview'], ['phHero2Input', 'phHero2Preview']].forEach(function (pair) {
+            var input = document.getElementById(pair[0]);
+            var preview = document.getElementById(pair[1]);
+            if (!input || !preview) return;
+            input.addEventListener('change', function () {
+                if (this.files[0]) preview.src = URL.createObjectURL(this.files[0]);
+            });
+        });
+    })();
+
     // Reordenar productos por arrastre (Mis productos) — guarda el orden de /products
     (function () {
         const grid = document.querySelector('.me-grid--reorder');

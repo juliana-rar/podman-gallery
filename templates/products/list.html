@@ -7,6 +7,23 @@
 {% endblock extra_css %}
 {% block content %}
 <section class="eventss art-list">
+    {% if site_settings.products_hero_image %}
+    <div class="products-hero">
+        <img class="ph-img" src="{{ site_settings.products_hero_image.url }}" alt="">
+    </div>
+    {% endif %}
+
+    {% if site_settings.products_hero2_image or site_settings.products_hero2_text %}
+    <div class="products-hero2">
+        {% if site_settings.products_hero2_image %}
+        <img class="ph2-img" src="{{ site_settings.products_hero2_image.url }}" alt="">
+        {% endif %}
+        {% if site_settings.products_hero2_text or site_settings.products_hero2_text_en %}
+        <p class="ph2-text"><span class="lang-es">{{ site_settings.products_hero2_text }}</span><span class="lang-en">{% if site_settings.products_hero2_text_en %}{{ site_settings.products_hero2_text_en }}{% else %}{{ site_settings.products_hero2_text }}{% endif %}</span></p>
+        {% endif %}
+    </div>
+    {% endif %}
+
     <header class="al-head">
         <h1 class="al-title"><span data-es="Productos" data-en="Products">Products</span></h1>
         <span class="al-rule"></span>

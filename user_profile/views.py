@@ -207,6 +207,8 @@ def update_site_settings(request):
             settings_obj.hero_video = request.FILES["hero_video"]
         if request.FILES.get("home_logo"):
             settings_obj.home_logo = request.FILES["home_logo"]
+        if request.FILES.get("footer_signature"):
+            settings_obj.footer_signature = request.FILES["footer_signature"]
         settings_obj.hero_text = request.POST.get("hero_text", "")
         settings_obj.hero_text_en = request.POST.get("hero_text_en", "")
         nav_blogs = (request.POST.get("nav_blogs") or "").strip()

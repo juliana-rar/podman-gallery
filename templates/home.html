@@ -8,7 +8,7 @@
 
 {% block content %}
 
-<a class="home-logo" href="{% url 'core:home' %}" aria-label="Inicio">
+<a class="site-logo home-logo" href="{% url 'core:home' %}" aria-label="Inicio">
     <img src="{% if site_settings.home_logo %}{{ site_settings.home_logo.url }}{% else %}{% static 'dessign/logo.jpeg' %}{% endif %}" alt="{{ site_settings.site_title|default:'Logo' }}">
 </a>
 

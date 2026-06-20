@@ -13,6 +13,6 @@
         {% endif %}
     </div>
     {% endif %}
-    <p>© 2026 {{ site_settings.site_title|default:"Sigfrid" }}</p>
+    <img class="footer-signature" src="{% if site_settings.footer_signature %}{{ site_settings.footer_signature.url }}{% else %}{% static 'dessign/signature.png' %}{% endif %}" alt="{{ site_settings.site_title|default:'Sigfrid' }}">
 </footer>
 

@@ -6,9 +6,10 @@ footer {
     width: 100%;
     margin-top: auto;       /* empuja el footer al fondo de la pantalla */
     flex-shrink: 0;         /* nunca se comprime */
-    padding: 40px 24px;
+    padding: 18px 20px;
     text-align: center;
-    background: #0c0c0d;
+    /* Tono #020202 con degradado vertical de arriba a abajo */
+    background: linear-gradient(to bottom, #020202 0%, #000000 100%);
     border-top: 1px solid rgba(255, 255, 255, 0.07);
     color: #9b968a;
     font-family: 'Jost', 'Segoe UI', Roboto, sans-serif;
@@ -22,8 +23,8 @@ footer {
     .footer-social {
         display: flex;
         justify-content: center;
-        gap: 22px;
-        margin: 0 0 18px;
+        gap: 18px;
+        margin: 0 0 12px;
     }
 
         .footer-social a {
@@ -55,10 +56,25 @@ footer {
             cursor: default;
         }
 
+    /* Firma del footer (imagen en lugar del texto de copyright) */
+    .footer-signature {
+        display: block;
+        margin: 0 auto;
+        max-height: 42px;
+        max-width: 140px;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
+
 @media (max-width: 600px) {
     footer {
         font-size: 11px;
         letter-spacing: 1.5px;
-        padding: 28px 16px;
+        padding: 14px 16px;
+    }
+    .footer-signature {
+        max-height: 36px;
+        max-width: 120px;
     }
 }

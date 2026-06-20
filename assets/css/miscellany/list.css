@@ -99,6 +99,70 @@
         .bl-filters a:hover::after { width: 100%; }
 
 /* ===========================================================
+   Hero de productos — imagen grande + texto breve (configurable)
+   =========================================================== */
+.products-hero {
+    position: relative;
+    /* A sangre completa: ancho de toda la pantalla, pegado a la esquina
+       superior izquierda (cancela el padding superior de .art-list). */
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-top: -48px;
+    margin-bottom: 46px;
+    overflow: hidden;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.6);
+}
+
+    .products-hero .ph-img {
+        display: block;
+        width: 100%;
+        height: clamp(220px, 42vh, 520px);
+        object-fit: cover;
+    }
+
+@media (max-width: 560px) {
+    .products-hero {
+        margin-top: -40px;
+        margin-bottom: 30px;
+    }
+}
+
+/* ===========================================================
+   Segundo hero de productos — imagen centrada mediana + texto
+   =========================================================== */
+.products-hero2 {
+    max-width: 900px;
+    margin: 70px auto 10px;
+    text-align: center;
+}
+
+    .products-hero2 .ph2-img {
+        display: block;
+        width: 100%;
+        max-height: clamp(200px, 34vh, 360px);
+        object-fit: cover;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45),
+                    0 16px 38px rgba(0, 0, 0, 0.55);
+    }
+
+    .products-hero2 .ph2-text {
+        margin: 22px auto 0;
+        max-width: 680px;
+        color: var(--ink);
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+        font-weight: 500;
+        letter-spacing: 0.4px;
+        line-height: 1.4;
+    }
+
+@media (max-width: 560px) {
+    .products-hero2 { margin-top: 46px; }
+    .products-hero2 .ph2-text { margin-top: 16px; }
+}
+
+/* ===========================================================
    Muro misceláneo — rejilla uniforme (imágenes y vídeos)
    Respeta el orden definido en /my-events (lectura izq→der).
    =========================================================== */
@@ -123,6 +187,9 @@
     overflow: hidden;
     background: #0e0e10;
     border: 1px solid var(--line);
+    /* Sombra permanente en capas: profundidad marcada, estética de galería */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45),
+                0 14px 34px rgba(0, 0, 0, 0.55);
     transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
                 box-shadow 0.4s ease, border-color 0.4s ease;
 }
@@ -218,7 +285,9 @@
 /* Hover de la pieza */
 .ev-piece:hover {
     border-color: rgba(194, 168, 120, 0.4);
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+    transform: translateY(-4px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5),
+                0 26px 60px rgba(0, 0, 0, 0.7);
     z-index: 1;
 }
 

@@ -42,6 +42,14 @@
                     </label>
                 </div>
                 <div class="set-field">
+                    <label><i class="fa-solid fa-signature"></i> <span data-es="Firma del footer" data-en="Footer signature">Footer signature</span> <small data-es="(imagen al pie de página)" data-en="(image at the bottom of the page)">(image at the bottom of the page)</small></label>
+                    <label class="set-favicon" id="setSignatureDrop" title="Cambiar firma">
+                        <input type="file" name="footer_signature" accept="image/*" hidden id="setSignatureInput">
+                        <img id="setSignaturePreview" src="{% if site_settings.footer_signature %}{{ site_settings.footer_signature.url }}{% else %}{% static 'dessign/signature.png' %}{% endif %}" alt="firma actual">
+                        <span><i class="fa-solid fa-arrow-up-from-bracket"></i> <span data-es="Cambiar firma" data-en="Change signature">Change signature</span></span>
+                    </label>
+                </div>
+                <div class="set-field">
                     <label><i class="fa-solid fa-film"></i> <span data-es="Video del hero" data-en="Hero video">Hero video</span> <small data-es="(fondo del inicio, en bucle)" data-en="(home background, looped)">(home background, looped)</small></label>
                     <input type="file" name="hero_video" accept="video/*">
                     {% if site_settings.hero_video %}
@@ -82,6 +90,12 @@
     document.getElementById("setLogoInput").addEventListener("change", function () {
         if (this.files[0]) {
             document.getElementById("setLogoPreview").src = URL.createObjectURL(this.files[0]);
+        }
+    });
+    // Preview de la firma del footer al elegir archivo
+    document.getElementById("setSignatureInput").addEventListener("change", function () {
+        if (this.files[0]) {
+            document.getElementById("setSignaturePreview").src = URL.createObjectURL(this.files[0]);
         }
     });
 </script>

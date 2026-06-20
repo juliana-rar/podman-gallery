@@ -9,7 +9,7 @@
 
 /* ---------- Logo (fix, dalt-esquerra → home) ---------- */
 .site-logo {
-    position: absolute;
+    position: fixed; /* segueix l'scroll, com la creu i el botó d'idioma */
     top: 16px;
     left: 16px;
     z-index: 95;
@@ -20,6 +20,11 @@
     background: none;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
+
+    /* A la home el logo NO segueix l'scroll: es queda dalt i marxa amb la pàgina */
+    .site-logo.home-logo {
+        position: absolute;
+    }
 
     .site-logo:hover {
         transform: scale(1.06);
@@ -125,6 +130,45 @@
         transform: translateY(-6px);
     }
 
+/* ---------- Icona de perfil (apareix a l'esquerra de la creu quan el menú està obert) ---------- */
+.profile-toggle {
+    position: fixed;
+    top: 20px;
+    right: 84px; /* mateixa posició que el botó d'idioma: a l'esquerra de la creu */
+    z-index: 95;
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 14px;
+    background: rgba(12, 12, 14, 0.42);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    /* Amagat per defecte; només es mostra quan el menú està obert */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease,
+                border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+    .profile-toggle:hover {
+        border-color: var(--menu-brass);
+        background: rgba(12, 12, 14, 0.6);
+        color: var(--menu-brass);
+    }
+
+    body.menu-open .profile-toggle {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
 /* ---------- Menú: overlay a tota la pàgina, text centrat ---------- */
 .site-menu {
     position: fixed;
@@ -227,6 +271,7 @@ body.menu-open {
 @media (max-width: 768px) {
     .menu-toggle { top: 14px; right: 14px; width: 48px; height: 48px; }
     .lang-toggle { top: 14px; right: 72px; width: 48px; height: 48px; } /* 14 + 48 + 10 */
+    .profile-toggle { top: 14px; right: 72px; width: 48px; height: 48px; } /* mateixa posició que l'idioma */
     .site-logo { top: 10px; left: 12px; }
     .site-logo img { height: 64px; max-width: 200px; }
     .site-menu li a { padding: 8px 18px; }

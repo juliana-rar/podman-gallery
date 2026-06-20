@@ -110,6 +110,25 @@ def my_products(request):
 
 
 @login_required(login_url='user_profile:login')
+def update_products_hero(request):
+    """Guarda la imagen y el texto del hero de la página pública de productos."""
+    from user_profile.models import SiteSettings
+    settings_obj = SiteSettings.load()
+    if request.method == "POST":
+        if request.FILES.get("products_hero_image"):
+            settings_obj.products_hero_image = request.FILES["products_hero_image"]
+        settings_obj.products_hero_text = request.POST.get("products_hero_text", "")
+        settings_obj.products_hero_text_en = request.POST.get("products_hero_text_en", "")
+        if request.FILES.get("products_hero2_image"):
+            settings_obj.products_hero2_image = request.FILES["products_hero2_image"]
+        settings_obj.products_hero2_text = request.POST.get("products_hero2_text", "")
+        settings_obj.products_hero2_text_en = request.POST.get("products_hero2_text_en", "")
+        settings_obj.save()
+        messages.success(request, "Hero de productos actualizado")
+    return redirect("products:my_products")
+
+
+@login_required(login_url='user_profile:login')
 def reorder_products(request):
     """Guarda el nuevo orden (lista de IDs) de los productos. Solo afecta a los del propio usuario."""
     if request.method != "POST":
