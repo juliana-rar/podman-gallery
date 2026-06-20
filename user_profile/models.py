@@ -39,6 +39,7 @@ class SiteSettings(models.Model):
     site_title = models.CharField("Título del sitio", max_length=80, default="Sigfrid")
     favicon = models.ImageField("Logo / favicon", upload_to="site/", null=True, blank=True)
     hero_video = models.FileField("Video del hero", upload_to="site/", null=True, blank=True)
+    hero_text = models.TextField("Texto bajo el hero", blank=True, default="")
     home_logo = models.ImageField("Logo del inicio", upload_to="site/", null=True, blank=True)
     bio_text = models.TextField("Biografía", blank=True, default="")
     bio_video = models.FileField("Video de la biografía", upload_to="site/", null=True, blank=True)

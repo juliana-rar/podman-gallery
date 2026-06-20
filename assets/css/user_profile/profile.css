@@ -29,6 +29,34 @@
     font-family: 'Jost', sans-serif;
 }
 
+/* ---------- Botón de cerrar sesión (centrado bajo el panel) ---------- */
+.profile-logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    align-self: center;
+    margin-top: 8px;
+    padding: 13px 30px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    color: #e7b3ab;
+    text-decoration: none;
+    background: rgba(192, 57, 43, 0.12);
+    border: 1px solid rgba(192, 57, 43, 0.4);
+    border-radius: 12px;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+    .profile-logout:hover {
+        background: #c0392b;
+        border-color: #c0392b;
+        color: #fff;
+        transform: translateY(-2px);
+    }
+
+    .profile-logout > i { font-size: 0.95rem; }
+
     /* ---------- Panel único que une ambas columnas ---------- */
     .profile > div:nth-child(1) {
         width: 100%;

@@ -76,6 +76,7 @@ def update_site_settings(request):
             settings_obj.hero_video = request.FILES["hero_video"]
         if request.FILES.get("home_logo"):
             settings_obj.home_logo = request.FILES["home_logo"]
+        settings_obj.hero_text = request.POST.get("hero_text", "")
         nav_blogs = (request.POST.get("nav_blogs") or "").strip()
         nav_events = (request.POST.get("nav_events") or "").strip()
         nav_gallery = (request.POST.get("nav_gallery") or "").strip()

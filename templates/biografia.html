@@ -6,6 +6,7 @@
 {% block extra_css %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/components/home_showcase.css' %}">
 <link rel="stylesheet" href="{% static 'css/biografia.css' %}">
 {% endblock extra_css %}
 
@@ -17,11 +18,12 @@
     </header>
 
     <div class="bio-main">
-        {% if site_settings.bio_photo %}
-        <div class="bio-photo">
-            <img src="{{ site_settings.bio_photo.url }}" alt="{{ site_settings.site_title|default:'Biografía' }}">
+        <div class="bio-video">
+            <video autoplay loop muted playsinline preload="auto"
+                   disablepictureinpicture controlslist="nofullscreen nodownload noremoteplayback">
+                <source src="{% if site_settings.bio_video %}{{ site_settings.bio_video.url }}{% else %}{% static 'dessign/sigfrid-biografia.mp4' %}{% endif %}" type="video/mp4">
+            </video>
         </div>
-        {% endif %}
 
         <div class="bio-text">
             {% if site_settings.bio_text %}
@@ -31,25 +33,106 @@
             {% endif %}
         </div>
     </div>
+</section>
 
-    <div class="bio-video">
-        <video controls playsinline preload="metadata">
-            <source src="{% if site_settings.bio_video %}{{ site_settings.bio_video.url }}{% else %}{% static 'dessign/sigfrid-biografia.mp4' %}{% endif %}" type="video/mp4">
-        </video>
-    </div>
-
-    {% if featured_photos %}
-    <section class="bio-featured">
-        <h2>Contenido destacado</h2>
-        <div class="bio-featured-grid">
+{% if featured_photos %}
+<!-- Contenido destacado: carrusel coverflow (estilo home, versión grande para biografía) -->
+<section class="home-showcase sc-bio">
+    <div class="sc-stage">
+        <div class="sc-track">
             {% for p in featured_photos %}
-            <figure class="bio-featured-item">
-                <img src="{{ p.image.url }}" alt="{{ p.caption }}" loading="lazy">
-                {% if p.caption %}<figcaption>{{ p.caption }}</figcaption>{% endif %}
-            </figure>
+            <div class="sc-slide" data-i="{{ forloop.counter0 }}">
+                <div class="sc-frame">
+                    <img src="{{ p.image.url }}" alt="{{ p.caption }}" loading="lazy">
+                </div>
+                {% if p.caption %}
+                <div class="sc-info">
+                    <h3>{{ p.caption }}</h3>
+                </div>
+                {% endif %}
+            </div>
             {% endfor %}
         </div>
-    </section>
-    {% endif %}
+    </div>
+    <div class="sc-dots"></div>
 </section>
+
+<!-- Visor a pantalla: ver la imagen en grande al hacer click -->
+<div class="sc-lightbox" aria-hidden="true">
+    <button class="sc-lb-close" aria-label="Cerrar">&times;</button>
+    <img class="sc-lb-img" src="" alt="">
+</div>
+
+<script>
+(function () {
+    document.querySelectorAll('.home-showcase').forEach(function (sc) {
+        const stage = sc.querySelector('.sc-stage');
+        if (!stage) return;
+        const slides = Array.from(stage.querySelectorAll('.sc-slide'));
+        if (!slides.length) return;
+        const dotsWrap = sc.querySelector('.sc-dots');
+        let index = 0, timer = null;
+        const n = slides.length;
+
+        slides.forEach((_, i) => {
+            const d = document.createElement('button');
+            d.className = 'sc-dot' + (i === 0 ? ' active' : '');
+            d.addEventListener('click', () => go(i, true));
+            dotsWrap.appendChild(d);
+        });
+        const dots = Array.from(dotsWrap.children);
+
+        function render() {
+            slides.forEach((s, i) => {
+                s.classList.remove('is-active', 'is-prev', 'is-next');
+                let diff = i - index;
+                if (diff > n / 2) diff -= n;
+                if (diff < -n / 2) diff += n;
+                if (diff === 0) s.classList.add('is-active');
+                else if (diff === -1) s.classList.add('is-prev');
+                else if (diff === 1) s.classList.add('is-next');
+            });
+            dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        }
+        function go(i, user) { index = (i + n) % n; render(); if (user) restart(); }
+        function restart() { clearInterval(timer); timer = setInterval(() => go(index + 1), 5000); }
+
+        // Lightbox: ver la imagen en grande
+        const lb = document.querySelector('.sc-lightbox');
+        const lbImg = lb ? lb.querySelector('.sc-lb-img') : null;
+        const lbClose = lb ? lb.querySelector('.sc-lb-close') : null;
+        function openLightbox(src, alt) {
+            if (!lb) return;
+            lbImg.src = src; lbImg.alt = alt || '';
+            lb.classList.add('open'); lb.setAttribute('aria-hidden', 'false');
+            clearInterval(timer);
+        }
+        function closeLightbox() {
+            if (!lb) return;
+            lb.classList.remove('open'); lb.setAttribute('aria-hidden', 'true');
+            lbImg.src = ''; restart();
+        }
+        if (lbClose) lbClose.addEventListener('click', closeLightbox);
+        if (lb) lb.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+        // Click en la pieza central -> abrir en grande; en las laterales -> centrarla
+        slides.forEach((s, i) => s.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (s.classList.contains('is-active')) {
+                const img = s.querySelector('img');
+                if (img) openLightbox(img.currentSrc || img.src, img.alt);
+            } else {
+                go(i, true);
+            }
+        }));
+        stage.addEventListener('mouseenter', () => clearInterval(timer));
+        stage.addEventListener('mouseleave', restart);
+
+        render();
+        if (n > 1) restart();
+    });
+})();
+</script>
+{% endif %}
 {% endblock content %}

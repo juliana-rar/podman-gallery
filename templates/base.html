@@ -46,9 +46,11 @@
 
     {% block content %}
     {% endblock content %}
-    {% include 'components/home_component1.html' %}
 
+    {% if request.resolver_match.url_name != 'home' %}
+    {% include 'components/home_component1.html' %}
     {% include 'footer.html' %}
+    {% endif %}
 
     {% block scripts %}
     {% include 'scripts.html' %}

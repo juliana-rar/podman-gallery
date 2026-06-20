@@ -48,6 +48,10 @@
                     <small class="set-current">Actual: <a href="{{ site_settings.hero_video.url }}" target="_blank">{{ site_settings.hero_video.name }}</a></small>
                     {% endif %}
                 </div>
+                <div class="set-field set-field--full">
+                    <label><i class="fa-solid fa-align-center"></i> Texto bajo el hero <small>(descripción centrada, debajo del video del inicio)</small></label>
+                    <textarea name="hero_text" rows="3" placeholder="Una breve descripción que aparece centrada bajo el video del inicio…">{{ site_settings.hero_text }}</textarea>
+                </div>
                 <div class="set-field">
                     <label><i class="fa-solid fa-folder-open"></i> Blogs</label>
                     <input type="text" name="nav_blogs" value="{{ site_settings.nav_blogs }}" maxlength="50" required>

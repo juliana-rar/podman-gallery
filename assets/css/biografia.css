@@ -4,8 +4,7 @@
 
 .biografia {
     --brass: var(--accent, #c2a878);
-    min-height: 100vh;
-    padding: 130px 24px 90px;
+    padding: 96px 24px 24px;
     max-width: 900px;
     margin: 0 auto;
     color: #ece8df;
@@ -36,49 +35,35 @@
             margin: 0;
         }
 
-    /* ---------- Video ---------- */
+    /* ---------- Presentación: video (izquierda) + texto (derecha) ---------- */
+    .biografia .bio-main {
+        display: flex;
+        gap: 44px;
+        align-items: center;
+        margin-bottom: 22px;
+    }
+
     .biografia .bio-video {
         position: relative;
-        width: 100%;
+        flex: 0 0 52%;
+        max-width: 640px;
         border-radius: 18px;
         overflow: hidden;
         border: 1px solid rgba(255, 255, 255, 0.08);
         box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
         background: #000;
-        margin-bottom: 48px;
+        margin: 0;
     }
 
         .biografia .bio-video video {
             display: block;
             width: 100%;
             height: auto;
-            max-height: 70vh;
             object-fit: contain;
             background: #000;
         }
 
-    /* ---------- Foto + texto ---------- */
-    .biografia .bio-main {
-        display: flex;
-        gap: 36px;
-        align-items: flex-start;
-        margin-bottom: 48px;
-    }
-
-        .biografia .bio-photo {
-            flex: 0 0 38%;
-            max-width: 340px;
-        }
-
-            .biografia .bio-photo img {
-                width: 100%;
-                height: auto;
-                border-radius: 16px;
-                border: 1px solid rgba(255, 255, 255, 0.08);
-                box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
-            }
-
-    /* ---------- Texto ---------- */
+    /* ---------- Texto (párrafo de presentación) ---------- */
     .biografia .bio-text {
         font-size: 1.12rem;
         line-height: 1.85;
@@ -90,53 +75,134 @@
             margin: 0 0 1.3rem;
         }
 
-    /* ---------- Contenido destacado ---------- */
-    .biografia .bio-featured {
-        margin-top: 64px;
+/* ===========================================================
+   Carrusel destacado en biografía — piezas CUADRADAS
+   Reusa el coverflow de css/components/home_showcase.css pero,
+   con la clase .sc-bio, cada slide es un cuadrado (1:1) grande.
+   Scopeado a .sc-bio para NO afectar al carrusel del home.
+   --bio-size = lado del cuadrado (se reescala en responsive).
+   =========================================================== */
+.home-showcase.sc-bio {
+    --bio-size: min(720px, 80vmin);
+    max-width: 1800px;
+    margin: 0 auto 120px;
+    padding: 0 32px;
+}
+
+    /* El escenario se ajusta al lado del cuadrado (+ aire arriba/abajo) */
+    .home-showcase.sc-bio .sc-stage {
+        height: calc(var(--bio-size) + 80px);
+        perspective: 2600px;
     }
 
-        .biografia .bio-featured h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-weight: 600;
-            font-size: clamp(1.8rem, 4vw, 2.6rem);
-            color: #fff;
-            text-align: center;
-            margin: 0 0 32px;
+    /* Pieza central: CUADRADA (lado x lado) */
+    .home-showcase.sc-bio .sc-slide {
+        width: var(--bio-size);
+        height: var(--bio-size);
+        max-width: 92vw;
+        border-radius: 10px;
+        box-shadow: 0 40px 90px rgba(0, 0, 0, 0.6);
+    }
+
+        /* La imagen llena el cuadrado recortando lo que sobre */
+        .home-showcase.sc-bio .sc-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .biografia .bio-featured-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 18px;
+        .home-showcase.sc-bio .sc-slide.is-active {
+            box-shadow: 0 50px 110px rgba(0, 0, 0, 0.65),
+                        0 0 60px rgba(194, 168, 120, 0.16);
         }
 
-        .biografia .bio-featured-item {
-            margin: 0;
-            border-radius: 14px;
-            overflow: hidden;
-            background: #111;
-            border: 1px solid rgba(255, 255, 255, 0.07);
+        /* Laterales: más separados y girados para dar profundidad */
+        .home-showcase.sc-bio .sc-slide.is-prev {
+            transform: translate(-50%, -50%) translateX(-70%) scale(0.78) rotateY(22deg);
+            opacity: 0.42;
         }
 
-            .biografia .bio-featured-item img {
-                display: block;
-                width: 100%;
-                height: 260px;
-                object-fit: cover;
-            }
+        .home-showcase.sc-bio .sc-slide.is-next {
+            transform: translate(-50%, -50%) translateX(70%) scale(0.78) rotateY(-22deg);
+            opacity: 0.42;
+        }
 
-            .biografia .bio-featured-item figcaption {
-                padding: 12px 14px;
-                font-size: 0.9rem;
-                color: #cbd5e1;
-            }
+        /* Cartela y título acordes a la escala */
+        .home-showcase.sc-bio .sc-info {
+            padding: 70px 34px 30px;
+        }
+
+        .home-showcase.sc-bio .sc-info h3 {
+            font-size: 2rem;
+        }
+
+        /* La pieza central invita a hacer click para verla en grande */
+        .home-showcase.sc-bio .sc-slide.is-active { cursor: zoom-in; }
+
+/* El resto del estilo (coverflow, dots, transiciones) viene de
+   css/components/home_showcase.css. */
+
+/* ---------- Lightbox: imagen en grande al hacer click ---------- */
+.sc-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4vmin;
+    background: rgba(8, 8, 9, 0.92);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+    .sc-lightbox.open { opacity: 1; visibility: visible; }
+
+    .sc-lightbox .sc-lb-img {
+        max-width: 92vw;
+        max-height: 92vh;
+        object-fit: contain;
+        border-radius: 6px;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+        transform: scale(0.96);
+        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .sc-lightbox.open .sc-lb-img { transform: scale(1); }
+
+    .sc-lightbox .sc-lb-close {
+        position: absolute;
+        top: 24px;
+        right: 28px;
+        width: 52px;
+        height: 52px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-size: 2rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+        .sc-lightbox .sc-lb-close:hover { background: var(--accent, #c2a878); color: #11100c; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
     .biografia { padding: 100px 18px 70px; }
     .biografia .bio-head { margin-bottom: 32px; }
     .biografia .bio-main { flex-direction: column; gap: 22px; }
-    .biografia .bio-photo { flex-basis: auto; max-width: none; }
-    .biografia .bio-video { margin-bottom: 34px; border-radius: 14px; }
+    .biografia .bio-video { flex-basis: auto; max-width: none; width: 100%; border-radius: 14px; }
     .biografia .bio-text { font-size: 1.05rem; }
+
+    .home-showcase.sc-bio {
+        --bio-size: min(380px, 80vw);
+        margin: -16px auto 80px;
+        padding: 0 16px;
+    }
+    .home-showcase.sc-bio .sc-info h3 { font-size: 1.4rem; }
 }

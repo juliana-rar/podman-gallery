@@ -27,6 +27,40 @@
     .home-logo img { height: 180px; }
 }
 
+/* Texto descriptivo centrado, debajo del hero */
+.hero-desc {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 34px 24px 40px;
+    text-align: center;
+}
+
+    .hero-desc::before {
+        content: '';
+        display: block;
+        width: 54px;
+        height: 2px;
+        background: var(--accent, #c2a878);
+        margin: 0 auto 22px;
+    }
+
+    .hero-desc .hero-desc-text {
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-size: clamp(1.35rem, 2.4vw, 1.95rem);
+        line-height: 1.6;
+        font-weight: 500;
+        color: #d8d2c6;
+        letter-spacing: 0.3px;
+    }
+
+        .hero-desc .hero-desc-text p { margin: 0 0 1rem; }
+        .hero-desc .hero-desc-text p:last-child { margin-bottom: 0; }
+
+@media (max-width: 768px) {
+    .hero-desc { padding: 52px 18px 8px; }
+    .hero-desc::before { margin-bottom: 22px; }
+}
+
 .herophotos {
     --brass: var(--accent, #c2a878);
     --ink: #f4f1e9;

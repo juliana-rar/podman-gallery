@@ -9,6 +9,10 @@
     </button>
 
     <nav class="site-menu" id="siteMenu" aria-hidden="true">
+        <video class="menu-video" id="menuVideo" muted loop playsinline preload="auto">
+            <source src="{% if site_settings.hero_video %}{{ site_settings.hero_video.url }}{% else %}{% static 'dessign/exilium-video.mp4' %}{% endif %}" type="video/mp4">
+        </video>
+        <div class="menu-video-overlay"></div>
         <ul>
             <li><a href="{% url 'blog:home' %}">Home</a></li>
             <li><a href="{% url 'blog:biografia' %}">Biografía</a></li>
@@ -17,7 +21,6 @@
             <li><a href="/events/">{{ site_settings.nav_events|default:"Tips" }}</a></li>
             {% if request.user.is_authenticated %}
             <li><a href="{% url 'user_profile:profile' %}">Perfil</a></li>
-            <li><a href="{% url 'user_profile:logout' %}">Logout</a></li>
             {% else %}
             <li><a href="{% url 'user_profile:login' %}">Login</a></li>
             {% endif %}
@@ -29,6 +32,7 @@
 (function () {
     var toggle = document.getElementById('menuToggle');
     var menu = document.getElementById('siteMenu');
+    var video = document.getElementById('menuVideo');
     if (!toggle || !menu) return;
 
     function setOpen(open) {
@@ -37,14 +41,18 @@
         toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
         menu.setAttribute('aria-hidden', open ? 'false' : 'true');
         document.body.classList.toggle('menu-open', open);
+        if (video) {
+            if (open) { video.play().catch(function () {}); }
+            else { video.pause(); }
+        }
     }
 
     toggle.addEventListener('click', function () {
         setOpen(!menu.classList.contains('open'));
     });
-    // Clic al fons (fora dels enllaços) tanca
+    // Clic fora dels enllaços (fons, vídeo o overlay) tanca
     menu.addEventListener('click', function (e) {
-        if (e.target === menu || e.target.tagName === 'UL') setOpen(false);
+        if (!e.target.closest('a')) setOpen(false);
     });
     menu.querySelectorAll('a').forEach(function (a) {
         a.addEventListener('click', function () { setOpen(false); });
