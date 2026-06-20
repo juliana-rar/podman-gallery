@@ -9,7 +9,6 @@ from rest_framework import viewsets
 from .models import Proyecto
 from .api import ProyectoSerializer
 from django.views.decorators.csrf import ensure_csrf_cookie
-from ollama import Client
 
 @ensure_csrf_cookie
 def dashboard_proyectos(request):
@@ -68,6 +67,9 @@ def mejorar_descripcion(request):
         if not texto:
             return JsonResponse({'ok': False, 'error': 'Texto vacío'}, status=400)
 
+        # Import perezoso: ollama es opcional y no es una dependencia del proyecto.
+        # Si el paquete/servidor no está disponible, el except devuelve el error.
+        from ollama import Client
         client = Client()
 
         response = client.chat(

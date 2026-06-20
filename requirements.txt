@@ -2,7 +2,6 @@ Django==5.2.4
 sqlparse==0.5.3
 django-environ==0.11.2
 django-ckeditor==6.2.0
-flask==3.1.2
 django-crispy-forms==2.1
 crispy-bootstrap4==2023.1
 Pillow==10.4.0
@@ -13,4 +12,3 @@ djangorestframework==3.15.0
 django-cors-headers==4.3.0
 coreapi==2.3.3
 bcrypt==4.0.1
-ollama==0.6.1
