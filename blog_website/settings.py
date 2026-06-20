@@ -50,10 +50,6 @@ STORAGES = {
     },
 }
 
-SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'assets')
-SASS_PROCESSOR_ENABLED = False
-SASS_PROCESSOR_AUTO_INCLUDE = False
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user_profile.User'
@@ -66,7 +62,6 @@ CKEDITOR_CONFIGS = {
         'width': '100%',
     },
 }
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=['127.0.0.1', 'localhost'])
 

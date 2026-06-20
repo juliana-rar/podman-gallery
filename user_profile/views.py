@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 
 import calendar as _calendar
+import logging
 from datetime import date
 
 from django.shortcuts import get_object_or_404, redirect, render
@@ -10,6 +11,8 @@ from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.db.models import Q
+
+logger = logging.getLogger(__name__)
 
 from .forms import (
     UserRegistrationForm,
@@ -309,7 +312,7 @@ def profile(request):
             messages.success(request, "Profile has been updated sucessfully")
             return redirect('user_profile:profile')
         else:
-            print(form.errors)
+            logger.warning("UserProfileUpdateForm invalid: %s", form.errors)
 
     context = {
         "account": account,
@@ -336,7 +339,7 @@ def change_profile_picture(request):
             messages.success(request, "Profile image updated successfully")
 
         else:
-            print(form.errors)
+            logger.warning("ProfilePictureUpdateForm invalid: %s", form.errors)
 
     return redirect('user_profile:profile')
 

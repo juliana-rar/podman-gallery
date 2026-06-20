@@ -29,9 +29,9 @@ fondo, cuyos assets `staticfiles/dessign/` solo están en `podman-gallery`) — 
 
 ## Stack
 
-- **Django 5.2** (Python 3.12), **PostgreSQL 16**, **Django REST Framework**.
-- **CKEditor** (editor de texto enriquecido), **crispy-forms** (bootstrap4), **Pillow** (imágenes).
-- **whitenoise** + **gunicorn** para producción; `ollama` está en requirements (integración IA).
+- **Django 5.2** (Python 3.12), **PostgreSQL 16**.
+- **CKEditor** (editor de texto enriquecido), **Pillow** (imágenes).
+- **whitenoise** + **gunicorn** para producción.
 - Usuario custom: `AUTH_USER_MODEL = 'user_profile.User'`, login por email
   (`user_profile.backends.EmailAuthenticationBackend`).
 

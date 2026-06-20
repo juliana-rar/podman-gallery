@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+import logging
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .models import HeroPhoto
 from .forms import HeroPhotoForm
+
+logger = logging.getLogger(__name__)
 
 
 @login_required(login_url='user_profile:login')
@@ -20,7 +24,7 @@ def manage(request):
             messages.success(request, "Foto añadida al hero")
             return redirect("herophotos:manage")
         else:
-            print(form.errors)
+            logger.warning("HeroPhotoForm invalid: %s", form.errors)
 
     context = {
         "form": form,

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import logging
+
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product
 from .forms import ProductForm
@@ -6,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.http import JsonResponse
+
+logger = logging.getLogger(__name__)
 
 
 def product_list(request):
@@ -52,7 +56,7 @@ def add_product(request):
             messages.success(request, "Producto creado correctamente")
             return redirect("products:my_products")
         else:
-            print(form.errors)
+            logger.warning("ProductForm invalid: %s", form.errors)
 
     context = {
         "form": form,
@@ -80,7 +84,7 @@ def update_product(request, slug):
             messages.success(request, "Producto actualizado correctamente")
             return redirect("products:product_list")
         else:
-            print(form.errors)
+            logger.warning("ProductForm invalid: %s", form.errors)
 
     context = {
         "form": form,

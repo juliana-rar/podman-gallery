@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import logging
+
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Miscellany, MiscellanyCategory
 from .forms import MiscellanyForm
@@ -9,7 +11,7 @@ from django.utils.text import slugify
 from django.db.models import Count
 from django.http import JsonResponse
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+logger = logging.getLogger(__name__)
 
 def miscellany_list(request):
     queryset = Miscellany.objects.order_by('order', '-id')
@@ -88,7 +90,7 @@ def add_miscellany(request):
             messages.success(request, "Pieza creada correctamente")
             return redirect("miscellany:my_miscellany")
         else:
-            print(form.errors)
+            logger.warning("MiscellanyForm invalid: %s", form.errors)
 
 
 
@@ -120,7 +122,7 @@ def update_miscellany(request, slug):
             messages.success(request, "Pieza actualizada correctamente")
             return redirect("miscellany:miscellany_list")
         else:
-            print(form.errors)
+            logger.warning("MiscellanyForm invalid: %s", form.errors)
 
     context = {
         "form": form,

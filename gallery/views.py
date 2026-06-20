@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import logging
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -9,6 +11,8 @@ from django.utils.text import slugify
 
 from .models import GalleryImage, GalleryCategory
 from .forms import GalleryImageForm
+
+logger = logging.getLogger(__name__)
 
 
 def _paginate(request, queryset, per_page=12):
@@ -93,7 +97,7 @@ def add_image(request):
             messages.success(request, "Obra publicada correctamente")
             return redirect("gallery:gallery_list")
         else:
-            print(form.errors)
+            logger.warning("GalleryImageForm invalid: %s", form.errors)
 
     context = {
         "form": form,
@@ -135,7 +139,7 @@ def edit_image(request, pk):
             messages.success(request, "Obra actualizada")
             return redirect('gallery:image_details', slug=image.slug)
         else:
-            print(form.errors)
+            logger.warning("GalleryImageForm invalid: %s", form.errors)
 
     context = {
         "form": form,
