@@ -20,6 +20,18 @@
             {% else %}Una selección de pinturas originales{% endif %}
         </p>
 
+        <!-- Buscador de obras por texto -->
+        <form class="ag-search" method="get" action="{% url 'gallery:gallery_list' %}" role="search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="q" value="{{ q }}" placeholder="Buscar obra por título, técnica, tamaño de papel…" aria-label="Buscar obras">
+            {% if q %}<a class="ag-search-clear" href="{% url 'gallery:gallery_list' %}" title="Limpiar">&times;</a>{% endif %}
+            <button type="submit">Buscar</button>
+        </form>
+
+        {% if q %}
+        <p class="ag-sub">{{ total_count }} resultado{{ total_count|pluralize }} para «{{ q }}»</p>
+        {% endif %}
+
         <!-- Filtros por colección — justo debajo del título -->
         <nav class="ag-filters">
             <a href="{% url 'gallery:gallery_list' %}" class="{% if not active_slug and not mine %}active{% endif %}">Todas</a>
@@ -51,6 +63,7 @@
             <a href="{% url 'gallery:image_details' img.slug %}" class="ag-frame">
                 <span class="ag-canvas">
                     <img src="{{ img.image.url }}" alt="{{ img.title }}" loading="lazy">
+                    {% if img.is_premium %}<span class="ag-premium"><i class="fa-solid fa-crown"></i> Premium</span>{% endif %}
                     <span class="ag-hover">
                         <span class="ag-hover-inner">
                             {% if not category and img.category %}<span class="ag-hover-cat">{{ img.category.title }}</span>{% endif %}
@@ -81,15 +94,19 @@
             </figcaption>
         </figure>
         {% empty %}
+        {% if q %}
+        <p class="ag-empty">No se encontraron obras para «{{ q }}».</p>
+        {% else %}
         <p class="ag-empty">Todavía no hay obras expuestas.</p>
+        {% endif %}
         {% endfor %}
     </div>
 
     {% if images.has_other_pages %}
     <div class="ag-pagination">
-        {% if images.has_previous %}<a href="?page={{ images.previous_page_number }}"><i class="fa-solid fa-arrow-left"></i></a>{% endif %}
+        {% if images.has_previous %}<a href="?page={{ images.previous_page_number }}{% if q %}&q={{ q|urlencode }}{% endif %}"><i class="fa-solid fa-arrow-left"></i></a>{% endif %}
         <span>{{ images.number }} / {{ images.paginator.num_pages }}</span>
-        {% if images.has_next %}<a href="?page={{ images.next_page_number }}"><i class="fa-solid fa-arrow-right"></i></a>{% endif %}
+        {% if images.has_next %}<a href="?page={{ images.next_page_number }}{% if q %}&q={{ q|urlencode }}{% endif %}"><i class="fa-solid fa-arrow-right"></i></a>{% endif %}
     </div>
     {% endif %}
 

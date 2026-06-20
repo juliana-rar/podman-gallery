@@ -51,26 +51,38 @@
                     <input type="text" name="technique" placeholder="Óleo sobre lienzo" value="{{ form.data.technique|default:'' }}">
                 </div>
                 <div class="gf-field">
-                    <label><i class="fa-solid fa-ruler-combined"></i> Dimensiones</label>
-                    <input type="text" name="dimensions" placeholder="100 × 80 cm" value="{{ form.data.dimensions|default:'' }}">
+                    <label><i class="fa-solid fa-file"></i> Tamaño de papel</label>
+                    <input type="text" name="paper_size" placeholder="A3 (29,7 × 42 cm)" value="{{ form.data.paper_size|default:'' }}">
                 </div>
             </div>
 
             <div class="gf-row">
                 <div class="gf-field">
+                    <label><i class="fa-solid fa-ruler-combined"></i> Dimensiones</label>
+                    <input type="text" name="dimensions" placeholder="100 × 80 cm" value="{{ form.data.dimensions|default:'' }}">
+                </div>
+                <div class="gf-field">
                     <label><i class="fa-solid fa-calendar"></i> Año</label>
                     <input type="text" name="year" placeholder="2026" value="{{ form.data.year|default:'' }}">
                 </div>
-                <div class="gf-field">
-                    <label><i class="fa-solid fa-euro-sign"></i> Precio (opcional)</label>
-                    <input type="number" step="0.01" name="price" placeholder="0.00" value="{{ form.data.price|default:'' }}">
-                </div>
+            </div>
+
+            <div class="gf-field">
+                <label><i class="fa-solid fa-euro-sign"></i> Precio (opcional)</label>
+                <input type="number" step="0.01" name="price" placeholder="0.00" value="{{ form.data.price|default:'' }}">
             </div>
 
             <div class="gf-field gf-check">
                 <label class="gf-switch">
                     <input type="checkbox" name="available" checked>
                     <span></span> Disponible para venta
+                </label>
+            </div>
+
+            <div class="gf-field gf-check">
+                <label class="gf-switch">
+                    <input type="checkbox" name="is_premium">
+                    <span></span> <i class="fa-solid fa-crown"></i> Obra premium
                 </label>
             </div>
 

@@ -7,8 +7,8 @@ from .models import GalleryImage, GalleryCategory
 
 @admin.register(GalleryImage)
 class GalleryImageAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "user", "image_tag", "created_date")
-    search_fields = ("title", "description")
+    list_display = ("title", "category", "technique", "paper_size", "user", "image_tag", "created_date")
+    search_fields = ("title", "description", "technique", "paper_size", "dimensions")
     list_filter = ("category", "user")
 
     def image_tag(self, obj):

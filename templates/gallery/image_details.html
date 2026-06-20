@@ -26,6 +26,7 @@
                    onclick="return confirm('¿Eliminar «{{ image.title|escapejs }}»?');"><i class="fa-solid fa-trash"></i> Eliminar</a>
             </div>
             {% endif %}
+            {% if image.is_premium %}<span class="aw-premium"><i class="fa-solid fa-crown"></i> Premium</span>{% endif %}
             {% if image.category %}
             <a class="aw-collection" href="{% url 'gallery:category_gallery' image.category.slug %}">{{ image.category.title }}</a>
             {% endif %}
@@ -38,6 +39,7 @@
 
             <dl class="aw-specs">
                 {% if image.technique %}<dt>Técnica</dt><dd>{{ image.technique }}</dd>{% endif %}
+                {% if image.paper_size %}<dt>Tamaño de papel</dt><dd>{{ image.paper_size }}</dd>{% endif %}
                 {% if image.dimensions %}<dt>Dimensiones</dt><dd>{{ image.dimensions }}</dd>{% endif %}
                 {% if image.year %}<dt>Año</dt><dd>{{ image.year }}</dd>{% endif %}
             </dl>

@@ -52,26 +52,38 @@
                     <input type="text" name="technique" placeholder="Óleo sobre lienzo" value="{{ image.technique }}">
                 </div>
                 <div class="gf-field">
-                    <label><i class="fa-solid fa-ruler-combined"></i> Dimensiones</label>
-                    <input type="text" name="dimensions" placeholder="100 × 80 cm" value="{{ image.dimensions }}">
+                    <label><i class="fa-solid fa-file"></i> Tamaño de papel</label>
+                    <input type="text" name="paper_size" placeholder="A3 (29,7 × 42 cm)" value="{{ image.paper_size }}">
                 </div>
             </div>
 
             <div class="gf-row">
                 <div class="gf-field">
+                    <label><i class="fa-solid fa-ruler-combined"></i> Dimensiones</label>
+                    <input type="text" name="dimensions" placeholder="100 × 80 cm" value="{{ image.dimensions }}">
+                </div>
+                <div class="gf-field">
                     <label><i class="fa-solid fa-calendar"></i> Año</label>
                     <input type="text" name="year" placeholder="2026" value="{{ image.year }}">
                 </div>
-                <div class="gf-field">
-                    <label><i class="fa-solid fa-euro-sign"></i> Precio (opcional)</label>
-                    <input type="number" step="0.01" name="price" placeholder="0.00" value="{{ image.price|default_if_none:'' }}">
-                </div>
+            </div>
+
+            <div class="gf-field">
+                <label><i class="fa-solid fa-euro-sign"></i> Precio (opcional)</label>
+                <input type="number" step="0.01" name="price" placeholder="0.00" value="{{ image.price|default_if_none:'' }}">
             </div>
 
             <div class="gf-field gf-check">
                 <label class="gf-switch">
                     <input type="checkbox" name="available" {% if image.available %}checked{% endif %}>
                     <span></span> Disponible para venta
+                </label>
+            </div>
+
+            <div class="gf-field gf-check">
+                <label class="gf-switch">
+                    <input type="checkbox" name="is_premium" {% if image.is_premium %}checked{% endif %}>
+                    <span></span> <i class="fa-solid fa-crown"></i> Obra premium
                 </label>
             </div>
 

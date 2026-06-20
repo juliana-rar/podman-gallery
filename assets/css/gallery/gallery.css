@@ -61,6 +61,70 @@
         background: var(--brass);
     }
 
+    /* ---------- Buscador de obras ---------- */
+    .ag-search {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        max-width: 560px;
+        margin: 26px auto 0;
+        padding: 0 16px;
+        border: 1px solid var(--line);
+        border-radius: 2px;
+        background: rgba(255, 255, 255, 0.02);
+        transition: border-color 0.25s ease;
+    }
+
+        .ag-search:focus-within { border-color: var(--brass); }
+
+        .ag-search > i { color: var(--brass); font-size: 0.9rem; }
+
+        .ag-search input {
+            flex: 1 1 auto;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--ink);
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 300;
+            padding: 13px 0;
+        }
+
+            .ag-search input::placeholder { color: var(--muted); }
+
+        .ag-search-clear {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 1.3rem;
+            line-height: 1;
+            padding: 0 4px;
+            transition: color 0.2s ease;
+        }
+
+            .ag-search-clear:hover { color: var(--brass); }
+
+        .ag-search button {
+            border: none;
+            cursor: pointer;
+            color: #11100c;
+            background: var(--brass);
+            font-family: inherit;
+            font-size: 0.74rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            border-radius: 2px;
+            transition: background 0.25s ease;
+        }
+
+            .ag-search button:hover { background: #d4bd92; }
+
+    @media (max-width: 480px) {
+        .ag-search { flex-wrap: wrap; }
+        .ag-search button { width: 100%; }
+    }
+
     /* Botón "Subir obra" (vista Mis obras) */
     .art-gallery .ag-upload {
         display: inline-flex;
@@ -295,12 +359,11 @@
     .ag-frame {
         display: block;
         position: relative;
-        background: var(--mat);
-        padding: 22px;
-        border: 1px solid rgba(0, 0, 0, 0.5);
-        box-shadow:
-            0 2px 4px rgba(0, 0, 0, 0.4),
-            0 26px 55px rgba(0, 0, 0, 0.55);
+        /* Sin passe-partout: la imagen va a sangre, sin recuadro ni margen */
+        background: transparent;
+        padding: 0;
+        border: none;
+        box-shadow: 0 26px 55px rgba(0, 0, 0, 0.45);
         transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
                     box-shadow 0.6s cubic-bezier(0.22, 1, 0.36, 1);
         will-change: transform;
@@ -313,22 +376,50 @@
             overflow: hidden;
         }
 
+        /* Tag "Premium" sobre la obra */
+        .ag-premium {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            z-index: 4;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 6px 13px;
+            font-size: 0.66rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #1a1813;
+            background: var(--brass);
+            border-radius: 100px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+            .ag-premium i { font-size: 0.72rem; }
+
+    /* Tag "Premium" en la ficha de detalle */
+    .aw-premium {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        padding: 6px 14px;
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #1a1813;
+        background: var(--brass);
+        border-radius: 100px;
+    }
+
         .ag-frame img {
             display: block;
             width: 100%;
             height: auto;
             transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
                         filter 0.6s ease;
-        }
-
-        .ag-frame::after {
-            /* bisel interior del marco, por encima de la obra */
-            content: "";
-            position: absolute;
-            inset: 22px;
-            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
-            pointer-events: none;
-            z-index: 3;
         }
 
         /* Velo elegante sobre la obra */
@@ -750,6 +841,4 @@
 
 @media (max-width: 520px) {
     .art-gallery, .artwork { padding: 64px 18px 80px; }
-    .ag-frame { padding: 16px; }
-    .ag-frame::after { inset: 16px; }
 }

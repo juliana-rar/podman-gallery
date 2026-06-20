@@ -43,10 +43,13 @@ class GalleryImage(models.Model):
     # Ficha técnica de la obra
     technique = models.CharField("Técnica", max_length=150, blank=True,
                                  help_text="Ej. Óleo sobre lienzo")
+    paper_size = models.CharField("Tamaño de papel", max_length=100, blank=True,
+                                  help_text="Ej. A3 (29,7 × 42 cm)")
     dimensions = models.CharField("Dimensiones", max_length=100, blank=True,
                                   help_text="Ej. 100 × 80 cm")
     year = models.CharField("Año", max_length=10, blank=True)
     available = models.BooleanField("Disponible", default=True)
+    is_premium = models.BooleanField("Premium", default=False)
     price = models.DecimalField("Precio (€)", max_digits=10, decimal_places=2,
                                 null=True, blank=True)
 

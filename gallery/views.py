@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.utils.text import slugify
 
@@ -22,10 +22,28 @@ def _paginate(request, queryset, per_page=12):
         return paginator.page(paginator.num_pages)
 
 
+def _search(queryset, q):
+    """Filtra las obras por texto: título, técnica, tamaño de papel,
+    dimensiones, año, descripción y nombre de la colección."""
+    if not q:
+        return queryset
+    return queryset.filter(
+        Q(title__icontains=q)
+        | Q(technique__icontains=q)
+        | Q(paper_size__icontains=q)
+        | Q(dimensions__icontains=q)
+        | Q(year__icontains=q)
+        | Q(description__icontains=q)
+        | Q(category__title__icontains=q)
+    ).distinct()
+
+
 def _gallery_context(request, queryset, active_slug=None, category=None, mine=False):
     categories = (GalleryCategory.objects
                   .annotate(num=Count('category_gallery'))
                   .order_by('title'))
+    q = (request.GET.get('q') or '').strip()
+    queryset = _search(queryset, q)
     return {
         "images": _paginate(request, queryset),
         "categories": categories,
@@ -33,6 +51,7 @@ def _gallery_context(request, queryset, active_slug=None, category=None, mine=Fa
         "active_slug": active_slug,
         "category": category,
         "mine": mine,
+        "q": q,
     }
 
 

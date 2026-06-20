@@ -12,5 +12,5 @@ class GalleryImageForm(forms.ModelForm):
 
     class Meta:
         model = GalleryImage
-        fields = ['title', 'category', 'image', 'technique',
-                  'dimensions', 'year', 'available', 'price', 'description']
+        fields = ['title', 'category', 'image', 'technique', 'paper_size',
+                  'dimensions', 'year', 'available', 'is_premium', 'price', 'description']

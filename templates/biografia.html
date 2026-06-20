@@ -12,25 +12,27 @@
 
 {% block content %}
 <section class="biografia">
-    <header class="bio-head">
-        <p class="bio-eyebrow">Sobre el artista</p>
-        <h1>{{ site_settings.site_title|default:"Sigfrid" }}</h1>
-    </header>
-
     <div class="bio-main">
-        <div class="bio-video">
-            <video autoplay loop muted playsinline preload="auto"
-                   disablepictureinpicture controlslist="nofullscreen nodownload noremoteplayback">
-                <source src="{% if site_settings.bio_video %}{{ site_settings.bio_video.url }}{% else %}{% static 'dessign/sigfrid-biografia.mp4' %}{% endif %}" type="video/mp4">
-            </video>
-        </div>
+        <figure class="bio-portrait">
+            <div class="bio-video">
+                <video autoplay loop muted playsinline preload="auto"
+                       disablepictureinpicture controlslist="nofullscreen nodownload noremoteplayback">
+                    <source src="{% if site_settings.bio_video %}{{ site_settings.bio_video.url }}{% else %}{% static 'dessign/sigfrid-biografia.mp4' %}{% endif %}" type="video/mp4">
+                </video>
+            </div>
+        </figure>
 
-        <div class="bio-text">
-            {% if site_settings.bio_text %}
-                {{ site_settings.bio_text|linebreaks }}
-            {% else %}
-                <p>Aún no se ha escrito la biografía. Puedes añadirla desde tu perfil → Biografía.</p>
-            {% endif %}
+        <div class="bio-intro">
+            <p class="bio-eyebrow">Sobre el artista</p>
+            <h1 class="bio-name">{{ site_settings.site_title|default:"Sigfrid" }}</h1>
+            <span class="bio-rule"></span>
+            <div class="bio-text">
+                {% if site_settings.bio_text %}
+                    {{ site_settings.bio_text|linebreaks }}
+                {% else %}
+                    <p>Aún no se ha escrito la biografía. Puedes añadirla desde tu perfil → Biografía.</p>
+                {% endif %}
+            </div>
         </div>
     </div>
 </section>
@@ -82,20 +84,25 @@
         });
         const dots = Array.from(dotsWrap.children);
 
+        // 5 piezas visibles: la del medio grande (is-active) y las laterales
+        // cada vez más pequeñas (is-prev/is-next y is-prev2/is-next2).
         function render() {
             slides.forEach((s, i) => {
-                s.classList.remove('is-active', 'is-prev', 'is-next');
+                s.classList.remove('is-active', 'is-prev', 'is-next', 'is-prev2', 'is-next2');
                 let diff = i - index;
                 if (diff > n / 2) diff -= n;
                 if (diff < -n / 2) diff += n;
-                if (diff === 0) s.classList.add('is-active');
-                else if (diff === -1) s.classList.add('is-prev');
-                else if (diff === 1) s.classList.add('is-next');
+                if (diff === 0) s.classList.add('is-active');        // centro (grande)
+                else if (diff === -1) s.classList.add('is-prev');    // 1ª izquierda
+                else if (diff === 1) s.classList.add('is-next');     // 1ª derecha
+                else if (diff === -2) s.classList.add('is-prev2');   // 2ª izquierda (más chica)
+                else if (diff === 2) s.classList.add('is-next2');    // 2ª derecha (más chica)
             });
             dots.forEach((d, i) => d.classList.toggle('active', i === index));
         }
         function go(i, user) { index = (i + n) % n; render(); if (user) restart(); }
-        function restart() { clearInterval(timer); timer = setInterval(() => go(index + 1), 5000); }
+        // Más lento y profesional: 7s entre pasos.
+        function restart() { clearInterval(timer); timer = setInterval(() => go(index + 1), 7000); }
 
         // Lightbox: ver la imagen en grande
         const lb = document.querySelector('.sc-lightbox');
@@ -116,13 +123,14 @@
         if (lb) lb.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
-        // Click en la pieza central -> abrir en grande; en las laterales -> centrarla
+        // Click en una pieza grande -> abrir en grande; en las laterales -> avanzar
         slides.forEach((s, i) => s.addEventListener('click', function (e) {
             e.preventDefault();
             if (s.classList.contains('is-active')) {
                 const img = s.querySelector('img');
                 if (img) openLightbox(img.currentSrc || img.src, img.alt);
             } else {
+                // Click en una lateral -> la lleva al centro
                 go(i, true);
             }
         }));
